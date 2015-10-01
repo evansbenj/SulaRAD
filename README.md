@@ -13,4 +13,18 @@ We have single end reads from 95-sample multipleded RADseq library that was run 
 I also have 1 lane of RADseq data paired end reads from 9 M. tonkeana individuals (1 female and 8 males).
 
 ## The approach
-I have combined the forward read from the M. tonkeana data with the single end reads from the other newer data.  I have aligned these against the rhesus genome using `bwa` and `samtools` and done base recalibration with `GATK`.  
+I have combined the forward read from the M. tonkeana data with the single end reads from the other newer data.  I have aligned these against the rhesus genome using `bwa` and `samtools` and done base recalibration with `GATK`. This resulted in ~60% of the reads mapping to the rhesus genome.
+
+I am now going to try this with stampy.  First I need to format the rhesus genome with these two commands (on info):
+
+`/usr/local/stampy/stampy.py -G /home/ben/2015_BIO720/rhesus_genome/rhesus_masked /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta`
+
+this creates a .stidx file
+
+the next step is to build a hash table for the reference genome using this command:
+
+`/usr/local/stampy/stampy.py -g /home/ben/2015_BIO720/rhesus_genome/rhesus_masked -H /home/ben/2015_BIO720/rhesus_genome/rhesus_masked`
+
+This should create a .sthash file.
+
+
