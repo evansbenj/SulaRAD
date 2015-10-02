@@ -76,9 +76,10 @@ for each_individual in $individuals
 do
 
 echo ${each_individual}
-    $path_to_stampy/stampy.py -g $path_to_genome/$genome -h $path_to_genome/$genome -M $path_to_data/${each_individual}.fq
+     $path_to_stampy/stampy.py -g $path_to_genome/$genome -h $path_to_genome/$genome --substitutionrate=0.013 -t8 --bamkeepgoodreads -M $path_to_bam/${each_individual}_sorted.realigned.bam
 done
 
 ```
 
+This command uses bam files that were previously created to speed up the stampy alignments.  It keeps the good matches from bwa and then uses stampy to match other reads assuming a substitution rate per site of 0.013, which is what we observed in the 2014 tonkeana paper.  This also is using the `-t` flag to thread the run over 8 processors.
 
