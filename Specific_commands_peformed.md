@@ -172,4 +172,56 @@ done
 ```
 Using the samtools flagstat command (after converting the sam to bam files, I had originally mapped about 60% of the reads and after stampy I managed to map about 70% of the reads.  Of note is that although the original input bam files had been realigned with GATK to maximally align indels, the new reads could still be misaligned, so this will have to be done again. I am also not sure whether the new bam files made from the stampy sam files will retain the header information I added earlier, so I may have to do this again.
 
-Here is a script that makes sorted bam files out of the stampy bam files and also makes a bam index for these files.
+Here is a script called `stampy_sam_to_bam.sh` that makes sorted bam files out of the stampy bam files and also makes a bam index for these files. 
+
+```bash
+#!/bin/bash                                                                                                                                                                                                
+
+path_to_bwa="/usr/local/bin"
+path_to_samtools="/usr/local/bin"
+path_to_data="."
+path_to_chromosome="/home/ben/2015_BIO720/rhesus_genome"
+chromosome="macaque_masked_chromosomes_ym.fasta"
+
+individuals="brunescens_PF707                                                                                                                                                                              
+hecki_PF643                                                                                                                                                                                                
+hecki_PF644                                                                                                                                                                                                
+hecki_PF648                                                                                                                                                                                                
+hecki_PF651                                                                                                                                                                                                
+hecki_PM639                                                                                                                                                                                                
+hecki_PM645                                                                                                                                                                                                
+maura_PF615                                                                                                                                                                                                
+maura_PF713                                                                                                                                                                                                
+maura_PM613                                                                                                                                                                                                
+maura_PM614                                                                                                                                                                                                
+maura_PM616                                                                                                                                                                                                
+maura_PM618                                                                                                                                                                                                
+nem_Gumgum                                                                                                                                                                                                 
+nem_Kedurang                                                                                                                                                                                               
+nem_Malay                                                                                                                                                                                                  
+nem_Ngasang                                                                                                                                                                                                
+nem_pagensis                                                                                                                                                                                               
+nem_PM664                                                                                                                                                                                                  
+nem_PM665                                                                                                                                                                                                  
+nem_Sukai_male                                                                                                                                                                                             
+nigra_PF1001                                                                                                                                                                                               
+nigra_PF660                                                                                                                                                                                                
+nigra_PM1000                                                                                                                                                                                               
+nigra_PM1003                                                                                                                                                                                               
+nigrescens_PF654                                                                                                                                                                                           
+ochreata_PF625                                                                                                                                                                                             
+ochreata_PM571                                                                                                                                                                                             
+ochreata_PM596                                                                                                                                                                                             
+togeanus_PF549                                                                                                                                                                                             
+togeanus_PM545"
+
+for each_individual in $individuals
+do
+
+echo ${each_individual}
+    $path_to_samtools/samtools view -bt $path_to_chromosome/$chromosome -o $path_to_data/${each_individual}_stampy.bam $path_to_data/${each_individual}_stampy.sam
+    $path_to_samtools/samtools sort $path_to_data/${each_individual}_stampy.bam $path_to_data/${each_individual}_stampy_sorted
+    $path_to_samtools/samtools index $path_to_data/${each_individual}_stampy_sorted.bam
+    rm -f $path_to_data/${each_individual}_stampy.bam $path_to_data/${each_individual}_stampy.sam
+done
+```
