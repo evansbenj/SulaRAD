@@ -118,7 +118,11 @@ $status = system($commandline);
 
 
 ## Stampy
-THen I used stampy to map some more reads using these bam files as a starting point.  This was accomplished using this a bash script called `stampy_alignment.sh`
+Then I used stampy to map some more reads using these bam files as a starting point.  This was accomplished using this a bash script called `stampy_alignment.sh`.  But before this is executed, we need to load python 2.7 like this (on info):
+
+`scl enable python27 bash`
+
+
 
 ``` bash
 #!/bin/bash                                                                                                                  
