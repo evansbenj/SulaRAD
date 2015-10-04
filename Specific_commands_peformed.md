@@ -170,4 +170,6 @@ echo ${each_individual}
 h_to_bam/${each_individual}_stampy.sam
 done
 ```
-Using the samtools flagstat command (after converting the sam to bam files, I had originally mapped about 60% of the reads and after stampy I managed to map about 70% of the reads.  Of note is that the input bam files 
+Using the samtools flagstat command (after converting the sam to bam files, I had originally mapped about 60% of the reads and after stampy I managed to map about 70% of the reads.  Of note is that although the original input bam files had been realigned with GATK to maximally align indels, the new reads could still be misaligned, so this will have to be done again. I am also not sure whether the new bam files made from the stampy sam files will retain the header information I added earlier, so I may have to do this again.
+
+Here is a script that makes sorted bam files out of the stampy bam files and also makes a bam index for these files.
