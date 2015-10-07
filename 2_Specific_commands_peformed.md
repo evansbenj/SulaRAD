@@ -4,7 +4,7 @@ I used `process_radtags` from `Stacks` to demultiplex and trim the reads. This w
 
 `/usr/local/bin/process_radtags -f ./UO_C479_1.fastq -b ./sula.barcodes --barcode_dist_1 3 -o ./good_samples/ -e sbfI -t 75 -r -c -q --adapter_1 TAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGAT --adapter_mm 3 --filter_illumina`
 
-And a similar command was used for the forward read only from the *M. tonkeana* data from the 2014 MBE paper.
+And a similar command was used for the forward read only from the *M. tonkeana* data from the 2014 MBE paper.  The `-t` flag truncates the reads to 75bp, the `-r` flag rescues barcodes, the `-c` flag removes reads with any uncalled bases, the `-q` flag discards reads with low quality scores, and the `--barcode_dist_1` flag provides a maximum distance from barcodes in order for the read to be included.  This is based on an analysis of distance of the barcodes I did.
 
 
 ## BWA, Samtools
