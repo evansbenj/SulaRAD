@@ -6,6 +6,7 @@ The bwa-assisted mapping with Stampy produced sam files that had ~10% more mappe
 The bam files recovered from Stampy lacked readgroup header information; this is needed by GATK for base recalibration so I ran this script:
 
 ``` perl
+#!/usr/bin/perl
 # This command will add read groups to stampy bam files
 # I read on the GATK forum that each sample from multiplexed samples should have 
 # a different readgroup ID, so that is what I am going to do
