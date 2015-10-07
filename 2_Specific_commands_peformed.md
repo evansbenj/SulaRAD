@@ -1,4 +1,13 @@
-# BWA, Samtools, and GATK
+# Trimming and Mapping
+## Trimming with `process_radtags` from `Stacks`
+I used `process_radtags` from `Stacks` to demultiplex and trim the reads. This was the command used from the lane with the non-*M. tonkeana* samples:
+
+`/usr/local/bin/process_radtags -f ./UO_C479_1.fastq -b ./sula.barcodes --barcode_dist_1 3 -o ./good_samples/ -e sbfI -t 75 -r -c -q --adapter_1 TAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGAT --adapter_mm 3 --filter_illumina`
+
+And a similar command was used for the forward read only from the *M. tonkeana* data from the 2014 MBE paper.
+
+
+## BWA, Samtools
 On info, I demultiplexed the data with Stacks.  I then combined the redundant reads within the 95 samples using the cat command. I then added the forward read from the *M. tonkeana* data.
 
 Then I moved these fastq files into a directory called `/home/ben/2015_SulaRADtag/good_merged_samples/fastq`
