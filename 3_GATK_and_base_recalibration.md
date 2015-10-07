@@ -278,4 +278,4 @@ SN	Number of ALT mismatches:	162
 SN	Number of samples in GT comparison:	0
 ```
 
-As you can see, there were 23.3% fewer snps called after base recalibration. This seems like a lot. Howver, the next round of recalibration produces almost dientical results. So let's go with that!
+As you can see, there were 23.3% fewer snps called after base recalibration. This seems like a lot. However, the next round of recalibration produces almost dientical results. So let's go with that! 
