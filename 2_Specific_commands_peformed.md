@@ -1,6 +1,4 @@
-# This is a specific list of commands and scripts I have performed.
-
-## BWA, Samtools, and GATK
+# BWA, Samtools, and GATK
 On info, I demultiplexed the data with Stacks.  I then combined the redundant reads within the 95 samples using the cat command. I then added the forward read from the *M. tonkeana* data.
 
 Then I moved these fastq files into a directory called `/home/ben/2015_SulaRADtag/good_merged_samples/fastq`
