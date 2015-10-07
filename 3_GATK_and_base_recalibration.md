@@ -220,3 +220,15 @@ $status = system($commandline);
 
 Then I used vcftools to compare the new variants to the original genotype calls. I found that the new variants were almost entirely a subset of the original calls (>99.7%), but that the original calls had a substantial fraction that were not in the new variants (~22%). These presumably are errors.  I then repeated the base recalibration using the new and improved set of known SNPs, made a new bam file, repeated the genotype calls, and output a new "round2" set of snps.  This can be compared to "round1" snps and hopefully it will be similar.
 
+This can be accomplished by first gzipping and tabixing the vcf files as follows:
+
+`/usr/local/tabix/bgzip recal_stampy_varonly_round2_all.vcf`
+
+and then
+
+`/usr/local/tabix/tabix -p vcf recal_stampy_varonly_round2_all.vcf.gz`
+
+and then comparing two bgzipped vcf files like this:
+
+`/usr/local/vcftools/src/perl/vcf-compare xxx.vcf.gz yyy.vcf.gz > compare.out`
+
