@@ -155,7 +155,7 @@ $status = system($commandline);
 ```
 
 ## Print Reads
-Then I output a vcf file as follows
+Then I output a new bam file with recalibrated base quality scores as follows
 
 ``` perl
 
@@ -182,3 +182,40 @@ $commandline = $commandline."-BQSR recal_data.table -o recal_stampy_round1_all.b
 
 $status = system($commandline);
 ```
+## Genotype the new bam file
+
+Then I genotyped the new and improved bam file as follows
+
+``` perl
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+# This script will read in the *_sorted.bam file names in a directory, and 
+# make and execute a GATK commandline on these files.  
+
+my $status;
+my $file = "recal_stampy_round1_all.bam";
+#my @files;
+   
+#@files = glob("*_sorted.realigned.bam");
+
+
+my $commandline = "java -Xmx3G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T UnifiedGenotyper -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
+
+$commandline = $commandline." -I ".$file;
+
+#foreach(@files){
+#    $commandline = $commandline." -I ".$_." ";
+#}
+
+$commandline = $commandline." -o recal_stampy_varonly_round1_all.vcf";
+
+
+$status = system($commandline);
+```
+
+## Compare the new variants to the Variants from the non-recalibrated genotyping
+
+Then I used vcftools to compare the new variants to the original genotype calls. I found that the new variants were almost entirely a subset of the original calls (>99.7%), but that the original calls had a substantial fraction that were not in the new variants (~22%). These presumably are errors.  I then repeated the base recalibration using the new and improved set of known SNPs, made a new bam file, repeated the genotype calls, and output a new "round2" set of snps.  This can be compared to "round1" snps and hopefully it will be similar.
+
