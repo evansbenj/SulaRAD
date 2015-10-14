@@ -18,7 +18,7 @@ my $commandline = "java -Xmx3G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T Unif
 
 $commandline = $commandline." -I ".$file;
 
-$commandline = $commandline." -out_mode EMIT_ALL_CONFIDENT_SITES --genotype_likelihoods_model BOTH -o recal_stampy_allsites_round2_all.vcf";
+$commandline = $commandline." -out_mode EMIT_ALL_SITES --genotype_likelihoods_model BOTH -o recal_stampy_allsites_round2_all.vcf";
 
 $status = system($commandline);
 
