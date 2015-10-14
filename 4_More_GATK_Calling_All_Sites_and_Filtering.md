@@ -24,3 +24,19 @@ $status = system($commandline);
 
 ```
 
+Now I need to make a vcf file with only indels for use in filtering.  Here is a perl script that will do that:
+
+```perl
+# This script will read in the *_sorted.bam file names in a directory, and 
+# make and execute a GATK commandline on these files that makes a vcf
+# file with homozygous and heterozygous high quality calls, including INDELs.  
+
+my $status;
+my $file = "recal_stampy_allsites_round2_all.vcf";
+
+my $commandline = "java -Xmx2g -jar GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o round2_indels.vcf --variant ".$file." -selectType INDEL";
+
+$status = system($commandline);
+
+```
