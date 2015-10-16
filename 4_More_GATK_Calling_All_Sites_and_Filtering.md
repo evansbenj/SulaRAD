@@ -52,7 +52,7 @@ my $status;
 my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
 
 my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
-$commandline = $commandline." -o round2_marked.vcf --variant ".$file." -selectType INDEL --filterExpression "MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)" --filterName "HARD_TO_VALIDATE" --filterExpression "DP < 5 " --filterName "TooLowCoverage" --filterExpression "DP > 50 " --filterName "TooHighCoverage" --filterExpression "QUAL > 30.0 && QUAL < 50.0 && CHROM != 'chrY' && CHROM != 'chrX'" --filterName "LowQual_aDNA" --mask round2_indels_only.vcf --maskName INDEL --maskExtension 5";
+$commandline = $commandline." -o round2_marked.vcf --variant ".$file." -selectType INDEL --filterExpression "MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)" --filterName "HARD_TO_VALIDATE" --filterExpression "DP < 5 " --filterName "TooLowCoverage" --filterExpression "DP > 50 " --filterName "TooHighCoverage" --filterExpression "QUAL < 40.0 && CHROM != 'chrY' && CHROM != 'chrX'" --filterName "LowQual_aDNA" --mask round2_indels_only.vcf --maskName INDEL --maskExtension 5";
 
 
 $status = system($commandline);
