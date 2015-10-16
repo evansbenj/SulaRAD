@@ -96,9 +96,13 @@ foreach (@males){
     $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && vc.getGenotype(\'".$_."\').isHet()\" --filterName \"male_Yhet_chrom_filter_".$_."\"";
 }
 
-# filter the PAR from everyone
+# filter the PAR from everyone, which, based on Hughes et al. 2012 Suppl Fig. 7b is everything less than position 77221 in the chrY from that paper
+    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && POS < 77221\" --filterName \"Y_PAR_\"";
+# also filter PAR for chrX, which based on analysis of the softmasked rhesus chrX from rhemac2, is everything below 403514
+# in the 2014 paper I deleted everything between 335872 and 403514.  The thing I do not understand is how the size of the 
+# par could be different between chrY and chrX (???)
+    $commandline=$commandline." --filterExpression \"CHROM == \'chrX\' && POS < 403514\" --filterName \"X_PAR_\"";
 
-    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\'\" --filterName \"Y_PAR_\"";
 
 print $commandline,"\n";
 
