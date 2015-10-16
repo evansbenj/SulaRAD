@@ -28,7 +28,7 @@ Now I need to make a vcf file with only indels for use in filtering.  Here is a 
 
 ```perl
 # This script will read in a vcf file names and 
-# make and execute a GATK commandline that marks INDELs
+# make and execute a GATK commandline that outputs only INDELs
 # in a new vcf file.  
 
 my $status;
@@ -40,3 +40,23 @@ $commandline = $commandline." -o round2_indels_only.vcf --variant ".$file." -sel
 $status = system($commandline);
 
 ```
+
+OK, now mark indels, bits near indels, and other low quality stuff.
+
+``` perl
+# This script will read in a vcf file and 
+# make and execute a GATK commandline that marks INDELs and other stuff
+# in this vcf file.  
+
+my $status;
+my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
+
+my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o round2_marked.vcf --variant ".$file." -selectType INDEL --filterExpression "MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)" --filterName "HARD_TO_VALIDATE" --filterExpression "DP < 5 " --filterName "TooLowCoverage" --filterExpression "DP > 50 " --filterName "TooHighCoverage" --filterExpression "QUAL > 30.0 && QUAL < 50.0 && CHROM != 'chrY' && CHROM != 'chrX'" --filterName "LowQual_aDNA" --mask round2_indels_only.vcf --maskName INDEL --maskExtension 5";
+
+
+$status = system($commandline);
+
+```
+
+
