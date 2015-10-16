@@ -51,7 +51,8 @@ my $status;
 my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
 
 my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
-$commandline = $commandline." -o round2_marked.vcf --variant ".$file." --filterExpression \"MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)\" --filterName \"HARD_TO_VALIDATE\" --filterExpressio\
+$commandline = $commandline." -o round2_marked.vcf --variant ".$file.";
+$commandline = $commandline." --filterExpression \"MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)\" --filterName \"HARD_TO_VALIDATE\" --filterExpressio\
 n \"DP < 5\" --filterName \"TooLowCoverage\" --filterExpression \"DP > 50\" --filterName \"TooHighCoverage\" --filterExpression \"QUAL < 40.0 && CHROM != \'chrY\' && CHROM != \'chrX\'\\
 " --filterName \"LowQual_aDNA\" --filterExpression \"QUAL < 20.0 && CHROM == \'chrX\'\" --filterName \"LowQual_xDNA\" --filterExpression \"QUAL < 20.0 && CHROM == \'chrY\'\" --filterNa\
 me \"LowQual_yDNA\" --mask round2_indels_only.vcf --maskName INDEL --maskExtension 5";
@@ -79,8 +80,12 @@ rted","nem_Sukai_male_stampy_sorted","nigra_PM1000_stampy_sorted","nigra_PM1003_
 
 my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
 $commandline = $commandline." -o round2_marked.vcf --variant ".$file;
-# filter sites in which a female genotype is called (homoz or heteroz) on chrY                                                                                                                                                    
 
+# aDNA filtering and indels
+$commandline = $commandline." --filterExpression \"CHROM != \'chrY\' && CHROM != \'chrX\' && MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)\" --filterName \"HARD_TO_VALIDATE\" --filterExpressio\
+n \"CHROM != \'chrY\' && CHROM != \'chrX\' && DP < 5\" --filterName \"TooLowCoverage\" --filterExpression \"CHROM != \'chrY\' && CHROM != \'chrX\' && DP > 50\" --filterName \"TooHighCoverage\" --filterExpression \"CHROM != \'chrY\' && CHROM != \'chrX\' && QUAL < 40.0\" --filterName \"LowQual_aDNA\" --mask round2_indels_only.vcf --maskName INDEL --maskExtension 5";
+
+# filter sites in which a female genotype is called (homoz or heteroz) on chrY 
 foreach (@females){
     $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && vc.getGenotype(\'".$_."\').isHom()\" --filterName \"female_Y_chrom_filter_".$_."\"";
     $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && vc.getGenotype(\'".$_."\').isHet()\" --filterName \"female_Y_chrom_filter_".$_."\"";
