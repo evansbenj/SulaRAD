@@ -96,6 +96,10 @@ foreach (@males){
     $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && vc.getGenotype(\'".$_."\').isHet()\" --filterName \"male_Yhet_chrom_filter_".$_."\"";
 }
 
+# filter the PAR from everyone
+
+    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\'\" --filterName \"Y_PAR_\"";
+
 print $commandline,"\n";
 
 $status = system($commandline);
