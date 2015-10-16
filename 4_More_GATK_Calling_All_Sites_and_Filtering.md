@@ -44,15 +44,18 @@ $status = system($commandline);
 OK, now mark indels, bits near indels, and other low quality stuff.  This command should mark indels plus and minus 5 bp, aDNA with genotype qualities lower than 40, sites with 1/5th or more of the reads with good map qualities to other parts of the genome, and any site with a coverage less than 5.
 
 ``` perl
-# This script will read in a vcf file and 
-# make and execute a GATK commandline that marks INDELs and other stuff
-# in this vcf file.  
+# This script will read in a vcf file and                                                                                                                                                
+# make and execute a GATK commandline that marks INDELs and other stuff                                                                                                                  
+# in this vcf file.                                                                                                                                                                      
 
 my $status;
 my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
 
-my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
-$commandline = $commandline." -o round2_marked.vcf --variant ".$file." -selectType INDEL --filterExpression \"MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)\" --filterName \"HARD_TO_VALIDATE\" --filterExpression \"DP < 5 \" --filterName \"TooLowCoverage\" --filterExpression \"DP > 50 \" --filterName \"TooHighCoverage\" --filterExpression \"QUAL < 40.0 && CHROM != \'chrY\' && CHROM != \'chrX\'\" --filterName \"LowQual_aDNA\" --filterExpression \"QUAL < 20.0 && CHROM = \'chrX\' --filterName \"LowQual_xDNA\" --filterExpression \"QUAL < 20.0 && CHROM = \'chrY\' --filterName \"LowQual_yDNA\" --mask round2_indels_only.vcf --maskName INDEL --maskExtension 5";
+my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
+$commandline = $commandline." -o round2_marked.vcf --variant ".$file." --filterExpression \"MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)\" --filterName \"HARD_TO_VALIDATE\" --filterExpressio\
+n \"DP < 5\" --filterName \"TooLowCoverage\" --filterExpression \"DP > 50\" --filterName \"TooHighCoverage\" --filterExpression \"QUAL < 40.0 && CHROM != \'chrY\' && CHROM != \'chrX\'\\
+" --filterName \"LowQual_aDNA\" --filterExpression \"QUAL < 20.0 && CHROM == \'chrX\'\" --filterName \"LowQual_xDNA\" --filterExpression \"QUAL < 20.0 && CHROM == \'chrY\'\" --filterNa\
+me \"LowQual_yDNA\" --mask round2_indels_only.vcf --maskName INDEL --maskExtension 5";
 
 $status = system($commandline);
 
