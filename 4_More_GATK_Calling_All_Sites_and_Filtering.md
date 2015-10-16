@@ -18,7 +18,7 @@ my $commandline = "java -Xmx3G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T Unif
 
 $commandline = $commandline." -I ".$file;
 
-$commandline = $commandline." -out_mode EMIT_ALL_SITES --genotype_likelihoods_model BOTH -o recal_stampy_allsites_round2_all.vcf";
+$commandline = $commandline." -out_mode EMIT_ALL_CONFIDENT_SITES --genotype_likelihoods_model BOTH -o recal_stampy_allsites_round2_all_confident_sites.vcf";
 
 $status = system($commandline);
 
@@ -32,9 +32,9 @@ Now I need to make a vcf file with only indels for use in filtering.  Here is a 
 # in a new vcf file.  
 
 my $status;
-my $file = "recal_stampy_allsites_round2_all.vcf";
+my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
 
-my $commandline = "java -Xmx2g -jar GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o round2_indels_only.vcf --variant ".$file." -selectType INDEL";
 
 $status = system($commandline);
