@@ -1,6 +1,6 @@
 # Calling invariant and variant sites with GATK and then filtering
 
-OK so we have finished the base calling.  Now we can export a vcf file with the full data, including homozygous sites, SNPs, and indels.  To get indels as well (which will be used for filtering purposes in the next step), I need to  "EMIT_ALL_CONFIDENT_SITES".  I did do the latter and named the file this: "recal_stampy_allsites_round2_all_confident_sites.vcf".
+OK so we have finished the base calling.  Now we can export a vcf file with the full data, including homozygous sites, SNPs, and indels.  To get indels as well (which will be used for filtering purposes in the next step), I need to  "EMIT_ALL_CONFIDENT_SITES".  I named the file this: "recal_stampy_allsites_round2_all_confident_sites.vcf".
 
 I did this with this script:
 
