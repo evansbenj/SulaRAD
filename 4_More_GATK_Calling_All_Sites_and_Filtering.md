@@ -5,6 +5,7 @@ OK so we have finished the base calling.  Now we can export a vcf file with the 
 I did this with this script:
 
 ```perl
+#!/usr/bin/perl
 # This script will read in the *_sorted.bam file names in a directory, and 
 # make and execute a GATK commandline on these files that makes a vcf
 # file with homozygous and heterozygous high quality calls, including INDELs.  
@@ -27,6 +28,7 @@ $status = system($commandline);
 Now I need to make a vcf file with only indels for use in filtering.  Here is a perl script that will do that:
 
 ```perl
+#!/usr/bin/perl
 # This script will read in a vcf file names and 
 # make and execute a GATK commandline that outputs only INDELs
 # in a new vcf file.  
@@ -44,8 +46,8 @@ $status = system($commandline);
 OK, now mark indels, bits near indels, and other low quality stuff.  This command should mark indels plus and minus 5 bp, aDNA with genotype qualities lower than 40, sites with 1/5th or more of the reads with good map qualities to other parts of the genome, and any site with a coverage less than 5.
 
 ``` perl
-# This script will read in a vcf file and                                                                                                                                                
-# make and execute a GATK commandline that marks INDELs and other stuff                                                                                                                  
+#!/usr/bin/perl
+# This script will read in a vcf file and                                                                                       # make and execute a GATK commandline that marks INDELs and other stuff                                                     
 # in this vcf file.                                                                                                                                                                     
 my $status;
 my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
@@ -64,6 +66,7 @@ $status = system($commandline);
 Now I am going to add soem cool filtering for sex chromosomes based on the sex of the individual.  Eventually I want to tweak this so it also filters by coverage depending on the sex of each individual
 
 ``` perl
+#!/usr/bin/perl
 # This script will read in a vcf file and                                                                                       # make and execute a GATK commandline that marks INDELs and other stuff                                                         # in this vcf file.                                                                                                                                                                                                                     
 my $status;
 my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
