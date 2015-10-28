@@ -61,7 +61,7 @@ $status = system($commandline);
 
 ```
 
-Now I am going to add soem cool filtering for sex chromosomes based on the sex of the individual.  Eventually I want to tweak this so it also filters by coverage depending on the sex of each individual
+Now I am going to add some cool filtering for sex chromosomes based on the sex of the individual.  Eventually I want to tweak this so it also filters by coverage depending on the sex of each individual
 
 ``` perl
 #!/usr/bin/perl
