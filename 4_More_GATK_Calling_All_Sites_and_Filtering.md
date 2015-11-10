@@ -536,3 +536,4 @@ And then use a script to add to this tab deimited file data from baboons.  Here 
 
 ```
 
+** unfortunately this did not work because my filter script based on individual genotypes broke the vcf file so tabix cannot index the file.  Instead I should do the filtering after converting it to a tab delimited file using the scripts I wrote previously **
