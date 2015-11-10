@@ -518,3 +518,19 @@ foreach(@unique){
 }
 
 ```
+
+When this is done I am ready to convert the vcf file to a tab delimited file like this:
+``` 
+cd /work/ben/macaque_RAD_TAGs/tabix-0.2.6
+./bgzip /path_to/final_filtered.vcf
+./tabix -p vcf /path_to/final_filtered.vcf.gz
+cd /work/ben/macaque_RAD_TAGs/vcftools_0.1.9/perl/ 
+zcat /path_to/final_filtered.vcf.gz | ./vcf-to-tab > /path_to/final_filtered.vcf.gz.tab
+```
+
+And then use a script to add to this tab deimited file data from baboons.  Here is that script:
+
+``` perl
+
+```
+
