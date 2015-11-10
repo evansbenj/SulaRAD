@@ -518,8 +518,10 @@ foreach(@unique){
 }
 
 ```
+In the 2014 analysis, at this stage I used bed files and GATK to output subsets of the data that spanned genes, that were near, genes, and that were progressively farther from genes.  For now, I'll skip this step and analyze the whole dataset (which is mostly far from genes anyhow).
 
 When this is done I am ready to convert the vcf file to a tab delimited file like this:
+
 ``` 
 cd /work/ben/macaque_RAD_TAGs/tabix-0.2.6
 ./bgzip /path_to/final_filtered.vcf
