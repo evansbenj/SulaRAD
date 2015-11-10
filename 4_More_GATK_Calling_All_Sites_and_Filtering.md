@@ -129,7 +129,7 @@ $status = system($commandline);
 $commandline = "rm -f ".$outfile1." ".$outfile2;
 $status = system($commandline);
 ```
-OK, now using a perl script, I filtered individual genotypes on the basis of the depth of coverage.  Here is that script (14_Vcf_filter.pl):
+OK, now using a perl script, I filtered individual genotypes on the basis of the depth of coverage.  This inserts a missing (./.) genotype for any diploid locus with less than 4X coverage and any haploid locus with less than 2X coverage.  Here is that script (14_Vcf_filter.pl):
 
 ``` perl
 #!/usr/bin/env perl
@@ -147,7 +147,7 @@ use warnings;
 # where 1111100110000111100011100110010100000000 refers to whether or not each individual 
 # in the vcf file is (1) or is not (0) female
 
-# Vcf_filter.pl recal_stampy_allsites_round2_all_confident_sites.vcf 1111100110000111100011100110010100000000 filtered.vcf
+# Vcf_filter.pl round2_filtered.vcf 1111100110000111100011100110010100000000 final_filtered.vcf
 
 my $inputfile = $ARGV[0];
 my $outputfile = $ARGV[2];
@@ -171,7 +171,7 @@ my @sexes = split("",$ARGV[1]);
 # done in the 2014 paper but had not much effect.  Additionally by filtering 
 # based on sites with many genotype calls and with all of them being heterozygous 
 # we probably get rid of most repetitive mappings
-my $minimum_depth_of_coverage_per_diploid_genotype=5;
+my $minimum_depth_of_coverage_per_diploid_genotype=4;
 my $minimum_depth_of_coverage_per_haploid_genotype=2;
 my $number_of_ref_seq_microsats=0;
 my $number_of_nonref_microsats=0;
