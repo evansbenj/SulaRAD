@@ -129,3 +129,392 @@ $status = system($commandline);
 $commandline = "rm -f ".$outfile1." ".$outfile2;
 $status = system($commandline);
 ```
+OK, now using a perl script, I filtered individual genotypes on the basis of the depth of coverage.  Here is that script (14_Vcf_filter.pl):
+
+``` perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# This program reads in a vcf file and filters individual genotypes by replacing their
+# genotypes with "./." 
+# This only affects the patricular genotype in question and will not change the other
+# genotypes at that position
+# This was not possible to do with GATK - once can filter by an individual genotype but 
+# all of the genotypes appear to be removed at any position with one filter
+
+# to execute type Vcf_filter.pl inputfile.vcf 1111100110000111100011100110010100000000 outputfile.vcf  
+# where 1111100110000111100011100110010100000000 refers to whether or not each individual 
+# in the vcf file is (1) or is not (0) female
+
+# Vcf_filter.pl recal_stampy_allsites_round2_all_confident_sites.vcf 1111100110000111100011100110010100000000 filtered.vcf
+
+my $inputfile = $ARGV[0];
+my $outputfile = $ARGV[2];
+
+unless (open DATAINPUT, $inputfile) {
+	print "Can not find the input file.\n";
+	exit;
+}
+
+unless (open(OUTFILE, ">$outputfile"))  {
+	print "I can\'t write to $outputfile\n";
+	exit;
+}
+print "Creating output file: $outputfile\n";
+
+
+my @sexes = split("",$ARGV[1]);
+
+# Because these data were collected with two difference levels of coverage,
+# I am not going to impose an upper limit on depth of coverage.  This was
+# done in the 2014 paper but had not much effect.  Additionally by filtering 
+# based on sites with many genotype calls and with all of them being heterozygous 
+# we probably get rid of most repetitive mappings
+my $minimum_depth_of_coverage_per_diploid_genotype=5;
+my $minimum_depth_of_coverage_per_haploid_genotype=2;
+my $number_of_ref_seq_microsats=0;
+my $number_of_nonref_microsats=0;
+my @male_chrX_hets=();
+my @male_chrY_hets=();
+my @male_chrX_lowcoverage=();
+my @female_chrX_lowcoverage=();
+my @male_chrY_lowcoverage=();
+my @female_chrY=();
+my @autosomal_lowcoverage=();
+my @male_Yhet_sites;
+my @male_Xhet_sites;
+my @female_Y_sites;
+my $y;
+my @columns=();
+my @DP;
+my $DP;
+my $GT;
+my @genotypes;
+my @tempp;
+
+while ( my $line = <DATAINPUT>) {
+	# print all commented lines to the outfile
+	if(substr($line,0,1) eq "#"){
+		print OUTFILE $line;
+	}
+	else{
+		@columns=split(/\s/,$line);
+			# filter microsatellites
+			if((defined($columns[3]))&&(length($columns[3]) > 1)){
+				# this is a microsat in the ref seq
+				# delete the genotypes in the whole line
+				# print the first 8 columns
+				for ($y=0; $y<= 8; $y ++){
+					print OUTFILE $columns[$y],"\t";
+				}
+				for ($y=0; $y<= ($#sexes); $y ++){
+					print OUTFILE "./.\t";
+				}
+				print OUTFILE "./.\n";
+				$number_of_ref_seq_microsats+=1;
+			}
+			elsif((defined($columns[3]))&&(length($columns[3]) == 1)){	
+				# this is not a microsat in the ref seq
+				# first find out where the depth of coverage is			
+				@DP = split(":",$columns[8]);
+				$DP=-1;
+				$GT=-1;
+				for ($y=0; $y<= $#DP; $y += 1){
+					if($DP[$y] eq "DP"){
+						$DP=$y;
+					}
+					if($DP[$y] eq "GT"){
+						$GT=$y;
+					}
+				}
+				# now print the first 8 columns
+				for ($y=0; $y<= 8; $y ++){
+					print OUTFILE $columns[$y],"\t";
+				}
+				# now filter based on coverage and location and print or delete each passing genotype
+				for ($y=9; $y<= ($#sexes +9); $y ++){
+					# check each individual genotype in the ingroup
+					@genotypes=split(":",$columns[$y]);
+					# if a call was made, check if either genotupe is more than one base
+					if($#genotypes == 0){
+						# no call made, print genotype
+						if($y < ($#sexes + 9)){
+							print OUTFILE "./.\t";
+						}	
+						else{
+							print OUTFILE "./.\n";
+						}	
+					}
+					elsif(($#genotypes > 0)&&(length($genotypes[0]) > 3)){ 
+						# this is a microsat in the ingroup, so delete it
+						if($y < ($#sexes + 9)){
+							print OUTFILE "./.\t";
+						}	
+						else{
+							print OUTFILE "./.\n";
+						}
+						$number_of_nonref_microsats+=1;	
+					}
+					elsif(($#genotypes > 0)&&(length($genotypes[0]) == 3)){
+						# a non-microsat call was made, so now treat aDNA differently from xDNA
+						if(($columns[0] eq "chrX") && ($sexes[$y-9] == 1)){
+							# female genotype on the X
+							if($genotypes[$DP] < $minimum_depth_of_coverage_per_diploid_genotype){
+								# not enough coverage
+								if($y < ($#sexes + 9)){
+									print OUTFILE "./.\t";
+								}	
+								else{
+									print OUTFILE "./.\n";
+								}
+								$female_chrX_lowcoverage[$y-9]+=1;
+							}
+							else{
+								if($y < ($#sexes + 9)){
+									print OUTFILE $columns[$y],"\t";
+								}	
+								else{
+									print OUTFILE $columns[$y],"\n";
+								}
+							}
+						}	
+						elsif(($columns[0] eq "chrX") &&($sexes[$y-9] == 0)){
+							# male genotype on the X
+							if($genotypes[$DP] < $minimum_depth_of_coverage_per_haploid_genotype){
+								# not enough coverage
+								if($y < ($#sexes + 9)){
+									print OUTFILE "./.\t";
+								}	
+								else{
+									print OUTFILE "./.\n";
+								}
+								$male_chrX_lowcoverage[$y-9]+=1;
+							}
+							else{
+								# check if the male is heterozygous on the X
+								@tempp=split("/",$genotypes[$GT]);
+								if(($tempp[0] ne $tempp[1])){
+									# this is a heterozygous call on the X for a male, delete it
+									if($y < ($#sexes + 9)){
+										print OUTFILE "./.\t";
+									}	
+									else{
+										print OUTFILE "./.\n";
+									}
+									$male_chrX_hets[$y-9]+=1;
+									push(@male_Xhet_sites, $columns[1]);
+								}
+								else{
+									if($y < ($#sexes + 9)){
+										print OUTFILE $columns[$y],"\t";
+									}	
+									else{
+										print OUTFILE $columns[$y],"\n";
+									}
+								}
+							}
+						}	
+						if(($columns[0] eq "chrY") && ($sexes[$y-9] == 1)){
+							# possible female genotype on the Y! Delete it.
+							if($y < ($#sexes + 9)){
+								print OUTFILE "./.\t";
+							}	
+							else{
+								print OUTFILE "./.\n";
+							}
+							if($genotypes[$GT] ne "./."){
+								$female_chrY[$y-9]+=1;
+								push(@female_Y_sites, $columns[1]);
+							}
+						}	
+						elsif(($columns[0] eq "chrY") && ($sexes[$y-9] == 0)){
+							# male genotype on the Y
+							if($genotypes[$DP] < $minimum_depth_of_coverage_per_haploid_genotype){
+								# not enough coverage
+								if($y < ($#sexes + 9)){
+									print OUTFILE "./.\t";
+								}	
+								else{
+									print OUTFILE "./.\n";
+								}
+								$male_chrY_lowcoverage[$y-9]+=1;
+							}
+							else{
+								# check if the male is heterozygous on the Y
+								@tempp=split("/",$genotypes[$GT]);
+								if(($tempp[0] ne $tempp[1])){
+									# this is a heterozygous call on the Y for a male, delete it
+									if($y < ($#sexes + 9)){
+										print OUTFILE "./.\t";
+									}	
+									else{
+										print OUTFILE "./.\n";
+									}
+									$male_chrY_hets[$y-9]+=1;
+									push(@male_Yhet_sites, $columns[1]);
+								}
+								else{
+									if($y < ($#sexes + 9)){
+										print OUTFILE $columns[$y],"\t";
+									}	
+									else{
+										print OUTFILE $columns[$y],"\n";
+									}
+								}
+							}
+						}	
+						else{
+							# autosomal genotype
+							if($genotypes[$DP] < $minimum_depth_of_coverage_per_diploid_genotype){
+								# not enough coverage
+								if($y < ($#sexes + 9)){
+									print OUTFILE "./.\t";
+								}	
+								else{
+									print OUTFILE "./.\n";
+								}
+								$autosomal_lowcoverage[$y-9]+=1;
+							}
+							else{
+								if($y < ($#sexes + 9)){
+									print OUTFILE $columns[$y],"\t";
+								}	
+								else{
+									print OUTFILE $columns[$y],"\n";
+								}
+							}
+						}	
+					}
+				} # end for loop over each genotype within a base position
+			}# end of elsif
+	} # end else	
+}# end while
+close DATAINPUT;
+close OUTFILE;
+
+# OK print out numbers
+print "male_chrX_hets\n";
+
+for ($y=0; $y<= $#sexes; $y ++){
+	if(defined($male_chrX_hets[$y])){
+		print $male_chrX_hets[$y]," ";
+	}
+	else{
+		print "0 ";
+	}
+}
+print "\n";
+print "male_chrY_hets\n";
+for ($y=0; $y<= $#sexes; $y ++){
+	if(defined($male_chrY_hets[$y])){
+		print $male_chrY_hets[$y]," ";
+	}
+	else{
+		print "0 ";
+	}
+}
+print "\n";
+print "male_chrX_lowcoverage\n";
+for ($y=0; $y<= $#sexes; $y ++){
+	if(defined($male_chrX_lowcoverage[$y])){
+		print $male_chrX_lowcoverage[$y]," ";
+	}
+	else{
+		print "0 ";
+	}
+}
+print "\n";
+print "female_chrX_lowcoverage\n";
+for ($y=0; $y<= $#sexes; $y ++){
+	if(defined($female_chrX_lowcoverage[$y])){
+		print $female_chrX_lowcoverage[$y]," ";
+	}
+	else{
+		print "0 ";
+	}
+}
+print "\n";
+print "male_chrY_lowcoverage\n";
+for ($y=0; $y<= $#sexes; $y ++){
+	if(defined($male_chrY_lowcoverage[$y])){
+		print $male_chrY_lowcoverage[$y]," ";
+	}
+	else{
+		print "0 ";
+	}
+}
+print "\n";
+print "female_chrY\n";
+for ($y=0; $y<= $#sexes; $y ++){	
+	if(defined($female_chrY[$y])){
+		print $female_chrY[$y]," ";
+	}
+	else{
+		print "0 ";
+	}
+}
+print "\n";
+print "autosomal_lowcoverage\n";
+for ($y=0; $y<= $#sexes; $y ++){
+	if(defined($autosomal_lowcoverage[$y])){
+		print $autosomal_lowcoverage[$y]," ";
+	}
+	else{
+		print "0 ";
+	}
+}
+print "\n";
+print "male_Yhet_sites\n";
+print "@male_Yhet_sites\n";
+print "male_Xhet_sites\n";
+print "@male_Xhet_sites\n";
+print "female_Y_sites\n";
+print "@female_Y_sites\n";
+
+
+my $outputfile2 = "male_Xhet_sites.txt";
+my $outputfile3 = "male_Yhet_sites.txt";
+my $outputfile4 = "female_Y_sites.txt";
+my @unique=();
+
+unless (open(OUTFILE2, ">$outputfile2"))  {
+    print "I can\'t write to $outputfile2\n";
+    exit;
+}
+print "Creating output file: $outputfile2\n";
+
+@unique = do { my %seen; grep { !$seen{$_}++ } @male_Xhet_sites };
+
+foreach(@unique){
+    print OUTFILE2 $_,"\n";
+}
+
+@unique=();
+
+
+unless (open(OUTFILE3, ">$outputfile3"))  {
+    print "I can\'t write to $outputfile3\n";
+    exit;
+}
+print "Creating output file: $outputfile3\n";
+
+@unique = do { my %seen; grep { !$seen{$_}++ } @male_Yhet_sites };
+
+foreach(@unique){
+    print OUTFILE3 $_,"\n";
+}
+
+unless (open(OUTFILE4, ">$outputfile4"))  {
+    print "I can\'t write to $outputfile4\n";
+    exit;
+}
+print "Creating output file: $outputfile4\n";
+
+@unique = do { my %seen; grep { !$seen{$_}++ } @female_Y_sites };
+
+foreach(@unique){
+    print OUTFILE4 $_,"\n";
+}
+
+```
