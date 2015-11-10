@@ -129,7 +129,7 @@ $status = system($commandline);
 $commandline = "rm -f ".$outfile1." ".$outfile2;
 $status = system($commandline);
 ```
-OK, now using a perl script, I filtered individual genotypes on the basis of the depth of coverage.  This inserts a missing (./.) genotype for any diploid locus with less than 4X coverage and any haploid locus with less than 2X coverage.  Here is that script (14_Vcf_filter.pl):
+OK, now using a perl script, I filtered individual genotypes on the basis of the depth of coverage.  This inserts a missing (./.) genotype for any diploid locus with less than 4X coverage and any haploid locus with less than 2X coverage.  This script has some additional checks for bad sex genotypes that *should* be unnecessary because they should have been filtered by the previous scripts. Here is that script (14_Vcf_filter.pl):
 
 ``` perl
 #!/usr/bin/env perl
