@@ -236,11 +236,9 @@ In the 2014 analysis, at this stage I used bed files and GATK to output subsets 
 When this is done I am ready to convert the vcf file to a tab delimited file like this:
 
 ``` 
-cd /work/ben/macaque_RAD_TAGs/tabix-0.2.6
-./bgzip /path_to/final_filtered.vcf
-./tabix -p vcf /path_to/final_filtered.vcf.gz
-cd /work/ben/macaque_RAD_TAGs/vcftools_0.1.9/perl/ 
-zcat /path_to/final_filtered.vcf.gz | ./vcf-to-tab > /path_to/final_filtered.vcf.gz.tab
+~/tabix-0.2.6/bgzip final_filtered.vcf
+~/tabix-0.2.6/tabix -p vcf final_filtered.vcf.gz
+/work/ben/macaque_RAD_TAGs/vcftools_0.1.9/perl/zcat final_filtered.vcf.gz | /work/ben/macaque_RAD_TAGs/vcftools_0.1.9/perl/vcf-to-tab > final_filtered.vcf.gz.tab
 ```
 
 And then use a script to add to this tab deimited file data from baboons.  Here is that script:
@@ -249,4 +247,4 @@ And then use a script to add to this tab deimited file data from baboons.  Here 
 
 ```
 
-** unfortunately this did not work because my filter script based on individual genotypes broke the vcf file so tabix cannot index the file.  Instead I should do the filtering after converting it to a tab delimited file using the scripts I wrote previously **
+
