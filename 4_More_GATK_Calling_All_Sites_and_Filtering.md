@@ -238,7 +238,7 @@ When this is done I am ready to convert the vcf file to a tab delimited file lik
 ``` 
 ~/tabix-0.2.6/bgzip final_filtered.vcf
 ~/tabix-0.2.6/tabix -p vcf final_filtered.vcf.gz
-/work/ben/macaque_RAD_TAGs/vcftools_0.1.9/perl/zcat final_filtered.vcf.gz | /work/ben/macaque_RAD_TAGs/vcftools_0.1.9/perl/vcf-to-tab > final_filtered.vcf.gz.tab
+zcat final_filtered.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > final_filtered.vcf.gz.tab
 ```
 
 And then use a script to add to this tab deimited file data from baboons.  Here is that script:
