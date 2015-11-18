@@ -56,7 +56,7 @@ Now make a vcf file with only the sites with bad sex chromosome genotypes using 
 my $status;
 my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
 my $outfile1="round2_BADSEX_marked.vcf";
-
+my $outfile2="round2_BADSEX_only.vcf";
 
 my @females=("brunescens_PF707_stampy_sorted","hecki_PF643_stampy_sorted","hecki_PF644_stampy_sorted","hecki_PF648_stampy_sorted","hecki_PF651_stampy_sorted","maura_PF615_stampy_sorted","maura_PF713_stampy_sorted","nem_Gumgum_stampy_sorted","nem_Kedurang_stampy_sorted","nem_Malay_stampy_sorted","nem_Ngasang_stampy_sorted","nem_pagensis_stampy_sorted","nigra_PF1001_stampy_sorted","nigra_PF660_stampy_sorted","nigrescens_PF654_stampy_sorted","ochreata_PF625_stampy_sorted","togeanus_PF549_stampy_sorted","tonk_PF515_stampy_sorted");
 
@@ -84,10 +84,9 @@ $status = system($commandline);
 
 # Now output a vcf file that contains only the sites with a BAD_SEX flag
 my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
-$commandline = $commandline." -o round2_BAD_SEX_only.vcf --variant ".$file." -select \'vc.isFiltered()\' -invertSelect";
+$commandline = $commandline." -o ".$outfile2." --variant ".$outfile1." -select \'vc.isFiltered()\'";
 
 $status = system($commandline);
-
 ```
 
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
