@@ -186,11 +186,11 @@ foreach(@file_names){
 		$commandline = $commandline." -o ".$_."_marked.vcf --variant ".$_.".vcf ";
 		$commandline = $commandline." --filterExpression \"DP < ".$minimum_depth_of_coverage_per_diploid_genotype." && CHROM != \'chrX\' && CHROM != \'chrY\'\" --filterName \"LowDCoverage\"";
 		$commandline = $commandline." --filterExpression \"DP < ".$minimum_depth_of_coverage_per_haploid_genotype." && CHROM == \'chrX\'\" --filterName \"LowXCoverage\"";
-		$commandline = $commandline." --filterExpression \"DP < ".$minimum_depth_of_coverage_per_haploid_genotype." && CHROM == \'chrY\'\" --filterName \"LowYCoverage\" --setFilteredGtToNocall";		
+		$commandline = $commandline." --filterExpression \"DP < ".$minimum_depth_of_coverage_per_haploid_genotype." && CHROM == \'chrY\'\" --filterName \"LowYCoverage\"";		
 		$status = system($commandline);
 		$commandline = "awk -v OFS=\'\\t\' \'{ if ((\$7 == \"LowDCoverage\")||(\$7 == \"LowXCoverage\")||(\$7 == \"LowYCoverage\")) \$10=\"./.\"; print \$0 }\' ".$_."_marked.vcf > ".$_."_filtered.vcf";
 		$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
-		$commandline = $commandline." -o ".$_."_filtered.vcf --variant ".$_."_marked.vcf --setFilteredGtToNocall";
+		$commandline = $commandline." -o ".$_."_filtered.vcf --variant ".$_."_marked.vcf";
 		$status = system($commandline);
 	}
 	else{
