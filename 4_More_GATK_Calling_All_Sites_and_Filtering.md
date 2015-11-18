@@ -173,11 +173,11 @@ foreach(@file_names){
 		# filter female files; all sites are diploid so use the minimum criteria 
 		$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
 		$commandline = $commandline." -o ".$_."_marked.vcf --variant ".$_.".vcf ";
-		$commandline = $commandline." --filterExpression \"DP < ".$minimum_depth_of_coverage_per_diploid_genotype."\" --filterName \"LowDCoverage\" --setFilteredGtToNocall";
+		$commandline = $commandline." --filterExpression \"DP < ".$minimum_depth_of_coverage_per_diploid_genotype."\" --filterName \"LowDCoverage\"";
 		$status = system($commandline);
 		$commandline = "awk -v OFS=\'\\t\' \'{ if (\$7 == \"LowDCoverage\") \$10=\"./.\"; print \$0 }\' ".$_."_marked.vcf > ".$_."_filtered.vcf";
 		$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
-		$commandline = $commandline." -o ".$_."_filtered.vcf --variant ".$_."_marked.vcf --setFilteredGtToNocall";
+		$commandline = $commandline." -o ".$_."_filtered.vcf --variant ".$_."_marked.vcf";
 		$status = system($commandline);
 	}
 	elsif(in_array( \@males, $_) == 1){
