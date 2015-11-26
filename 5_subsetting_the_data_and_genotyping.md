@@ -806,6 +806,7 @@ cat bedfile3_51000_to_101000.bed bedfile4_101000_to_151000.bed bedfile5_151000_a
 sed -i -e 's/ /\t/g' bedfile_51000_and_higher.bed
 sort -V -k 1,1 -k2,2 bedfile_51000_and_higher.bed > bedfile_51000_and_higher_sorted.bed
 ```
+But this did not work so I instead ended up using the Galaxy webserver to merge the beds for regions >51000 bp away from genes from the 2014 paper.
 
 And now I used this script to split up the vcf files into different sections depending on the distance of the sites from genes:
 
