@@ -826,16 +826,16 @@ my $bedfile3 = "bedfile_51000_and_higher.bed";
 
 my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile1." --variant ".$infile;
-$commandline = $commandline." --mask /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile1;
+$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile1;
 $status = system($commandline);
 
 $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile2." --variant ".$infile;
-$commandline = $commandline." --mask /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile2;
+$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile2;
 $status = system($commandline);
 
 $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile3." --variant ".$infile;
-$commandline = $commandline." --mask /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile3;
+$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile3;
 $status = system($commandline);
 ```
