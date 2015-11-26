@@ -806,3 +806,36 @@ cat bedfile3_51000_to_101000.bed bedfile4_101000_to_151000.bed bedfile5_151000_a
 sed -i -e 's/ /\t/g' bedfile_51000_and_higher.bed
 sort -V -k 1,1 -k2,2 bedfile_51000_and_higher.bed > bedfile_51000_and_higher_sorted.bed
 ```
+
+And now I used this script to split up the vcf files into different sections depending on the distance of the sites from genes:
+
+```perl
+#!/usr/bin/perl
+# This script will read in a vcf file names and 
+# make and execute a GATK commandline that marks INDELs
+# in a new vcf file.  
+
+my $status;
+my $infile = "recal_stampy_allsites_round2_all_confident_sites.vcf";
+my $outfile1 = "recal_plusminus_1000.vcf";
+my $bedfile1 = "bedfile1_genes_plusminus_1000.bed";
+my $outfile2 = "recal_1000_51000.vcf";
+my $bedfile2 = "bedfile2_1001_to_51000.bed";
+my $outfile3 = "recal_51000plus.vcf";
+my $bedfile3 = "bedfile_51000_and_higher.bed";
+
+my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile1." --variant ".$infile;
+$commandline = $commandline." --mask /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile1;
+$status = system($commandline);
+
+$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile2." --variant ".$infile;
+$commandline = $commandline." --mask /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile2;
+$status = system($commandline);
+
+$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile3." --variant ".$infile;
+$commandline = $commandline." --mask /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile3;
+$status = system($commandline);
+```
