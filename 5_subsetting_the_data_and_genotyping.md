@@ -839,3 +839,14 @@ $commandline = $commandline." -o ".$outfile3." --variant ".$infile;
 $commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile3;
 $status = system($commandline);
 ```
+
+As previously, now we are ready to convert the vcf files to tab delimited files like this:
+
+```bash
+~/tabix-0.2.6/bgzip XXX.vcf
+~/tabix-0.2.6/tabix -p vcf XXX.vcf.gz
+zcat XXX.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > XXX.vcf.gz.tab
+
+```
+
+And this can be followed up by adding the outgroup sequences and calculating the popgen stats as above.
