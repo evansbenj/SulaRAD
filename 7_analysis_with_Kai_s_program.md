@@ -329,3 +329,58 @@ foreach my $value (@$arr) {
 
 
 ```
+
+We then run Kai's program using different models 100-500 times to ensure convergence on the maximum likelihood parameter values.  His program is run like this:
+
+```
+#!/bin/bash
+for i in {501..1000}
+do
+#sqsub -r 7d -q serial -o myout ../data_2a_step_xa_m1 control_file_3_epoch $i
+    /work/ben/2013.09.16_kai_program/data_2a_step_xa_m1 control_file_3_epoch $i
+done
+```
+
+and uses a control file that looks like this:
+```
+outputFile: ../3epoch.txt
+dataFile: ../../tonkeana_kai_input.txt
+K: 200
+nstep: 2
+maxTA: 0.5 0.5
+tau: 0.01
+useNrSimplex: 0
+nlopt_alg: NLOPT_LN_NELDERMEAD
+initThetaRange:	1e-10	0.5
+initGammaRange:	-50	50
+initLambdaRange:	0.01	100
+initRhoRange:		0.01	100
+seed:
+thetaOnLn: 1
+lambdaOnLn: 1
+rhoOnLn: 1
+setBound: 1
+rftol: 1e-15
+maxeval: 100000
+maxtime: 600
+imprftol: 1e-15
+nnoimp: 3
+maximp: 100
+
+```
+
+
+Results can be summarized with Kai's java program 'Parsefolder' as follows:
+
+```
+java ParseFolder /work/ben/new_kai_program_2013.10.13/2015_Sularad/tonkeana/epoch3_full 1e-15 true
+```
+
+Occasionally there are problems with the outputfile because of an '-inf' value for the likelihood.  This can be solved by going to the directory and typing this:
+
+```
+sed -i -n '/inf/!p' *
+```
+which deletes any lines containing `inf`.
+
+
