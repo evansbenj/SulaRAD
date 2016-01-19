@@ -104,7 +104,7 @@ vcftools --vcf XXX.vcf --hardy
 which generates a file called `out.hwe`, the last column of which has the probability of heterozygote excess.  We can get the entries that are less than 0.001 using this command:
 
 ```
-sed XXX
+awk '(NR==1) || ($8 < 0.001 ) ' out.hwe > bad_sites
 ```
 
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
