@@ -116,14 +116,14 @@ This can be merged with the `round2_BADSEX_only.vcf` file we generated above and
 
 
 
-``
+```bash
 bgzip round2_BADSEX_only.vcf
 tabix -p vcf round2_BADSEX_only.vcf.gz
 bgzip bad_het_sitez.vcf
 tabix -p vcf bad_het_sitez.vcf.gz
 vcf-concat round2_BADSEX_only.vcf.gz bad_het_sitez.vcf.gz | gzip -c > bad_sex_bad_het.vcf.gz
 gunzip bad_sex_bad_het.vcf.gz
-``
+```
 
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
 (still need to change the mask file below to "bad_sex_bad_hwe.vcf.gz"
