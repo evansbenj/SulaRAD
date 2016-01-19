@@ -67,19 +67,19 @@ $commandline = $commandline." -o ".$outfile1." --variant ".$file;
 
 # filter all sites in which a female genotype is calledon chrY
 foreach (@females){
-    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\'\" --filterName \"BAD_SEX\"";
+    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\'\" --filterName BAD_SEXfY";
 }   
 
 # filter all sites in which a male heteroz genotype is called on chrX
 foreach (@males){
-    $commandline=$commandline." --filterExpression \"CHROM == \'chrX\' && vc.getGenotype(\'".$_."\').isHet()\" --filterName \"BAD_SEX\""; 
+    $commandline=$commandline." --filterExpression \"CHROM == \'chrX\' && vc.getGenotype(\'".$_."\').isHet()\" --filterName BAD_SEXmX"; 
 }   
 
 # filter all sites in which a male heteroz genotype is called on chrY
 foreach (@males){
-    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && vc.getGenotype(\'".$_."\').isHet()\" --filterName \"BAD_SEX\"";
+    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && vc.getGenotype(\'".$_."\').isHet()\" --filterName BAD_SEXmY";
 }
-
+print $commandline,"\n";
 $status = system($commandline);
 
 # Now output a vcf file that contains only the sites with a BAD_SEX flag
