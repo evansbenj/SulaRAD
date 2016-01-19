@@ -126,7 +126,7 @@ gunzip bad_sex_bad_het.vcf.gz
 ```
 
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
-(still need to change the mask file below to "bad_sex_bad_het.vcf"
+
 
 ``` perl
 #!/usr/bin/perl
@@ -139,6 +139,8 @@ Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp res
 
 my $status;
 my $file = "recal_stampy_allsites_round2_all_confident_sites.vcf";
+my $indel_only_file = "round2_indels_only.vcf";
+my $bad_sex_file = "bad_sex_bad_het.vcf";
 my $outfile1 = "temp1.vcf";
 my $outfile2 = "temp2.vcf";
 my $outfile3 = "round2_filtered.vcf";
@@ -146,13 +148,13 @@ my $outfile3 = "round2_filtered.vcf";
 # Mark sites that map poorly and that are in or within 3 bp of an indel
 my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile1." --variant ".$file." --filterExpression \"MQ0 >= 4 && ((MQ0 / (1.0 * DP)) > 0.1)\" --filterName \"HARD_TO_VALIDATE\"";
-$commandline = $commandline." --mask round2_indels_only.vcf --maskName INDEL --maskExtension 3";
+$commandline = $commandline." --mask ".$indel_only_file." --maskName INDEL --maskExtension 3";
 $status = system($commandline);
 
 # Mark sites that have inappropriate sex chromosome genotypes
 $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile2." --variant ".$outfile1;
-$commandline = $commandline." --mask bad_sex_bad_het.vcf --maskName BADSEX_badhet --maskExtension 200";
+$commandline = $commandline." --mask ".$bad_sex_file." --maskName BADSEX_badhet --maskExtension 200";
 print $commandline,"\n";
 $status = system($commandline);
 
@@ -162,8 +164,8 @@ $commandline = $commandline." -o ".$outfile3." --variant ".$outfile2." -select '
 $status = system($commandline);
 
 # now clean up the intermediate vcf files
-$commandline = "rm -f ".$outfile1." ".$outfile2;
-$status = system($commandline);
+#$commandline = "rm -f ".$outfile1." ".$outfile2;
+#$status = system($commandline);
 ```
 OK, I am going to divide the multi-individual vcf file into individual vcf files, and then filtered individual genotypes on the basis of the depth of coverage and sex.  This will include using `awk` to insert a missing (./.) genotype for any diploid locus with less than 4X coverage and any haploid locus with less than 2X coverage.  Then I combine the filtered files back together.  This procedure allows me to not completely delete sites that need a site filteted in only one or a few individuals. The GATK option `SetFilteredGtToNoCall` did not work, which is why I used `awk`. Here is that script (14_Executes_GATK_commands_divide_mask_filter_merge):
 
