@@ -119,9 +119,9 @@ This can be merged with the `round2_BADSEX_only.vcf` file we generated above and
 ```bash
 /usr/local/tabix/bgzip round2_BADSEX_only.vcf
 /usr/local/tabix/tabix -p vcf round2_BADSEX_only.vcf.gz
-/usr/local/tabix/bgzip bad_het_sitez.vcf
-/usr/local/tabix/tabix -p vcf bad_het_sitez.vcf.gz
-/usr/local/vcftools/src/perl/vcf-concat round2_BADSEX_only.vcf.gz bad_het_sitez.vcf.gz | gzip -c > bad_sex_bad_het.vcf.gz
+/usr/local/tabix/bgzip bad_het_sitez.recode.vcf
+/usr/local/tabix/tabix -p vcf bad_het_sitez.recode.vcf.gz
+/usr/local/vcftools/src/perl/vcf-concat round2_BADSEX_only.vcf.gz bad_het_sitez.recode.vcf.gz | gzip -c > bad_sex_bad_het.vcf.gz
 gunzip bad_sex_bad_het.vcf.gz
 ```
 
