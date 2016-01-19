@@ -104,16 +104,16 @@ vcftools --vcf XXX.vcf --hardy
 which generates a file called `out.hwe`, the last column of which has the probability of heterozygote excess.  We can get the entries that are less than 0.001 using this command:
 
 ```
-awk '(NR==1) || ($8 < 0.001 ) ' out.hwe > bad_sites
+awk -v OFS='\t' '(NR!=1) && ($8 < 0.001 ) {print $1,$2}' out.hwe >  bad_hwe_sites.txt
 ```
 
-This command needs to be altered so it outputs a tab-delimted file with two columns including only the chromosome and position
+This command outputs a tab-delimted file with two columns including only the chromosome and position.  The header of the original file is skipped and not printed to the output file
 
 Now we can use vcftools to make a vcf file with sites that have excess heterozygotes.  
 
 for unzipped files:
 ```
-vcftools --vcf XXX.vcf --positions bad_sites --out bad_hwe_sitez --recode
+vcftools --vcf XXX.vcf --positions bad_hwe_sites.txt --out bad_hwe_sitez --recode
 ```
 
 This can be merged with the `round2_BADSEX_only.vcf` file we generated above and then used with the next per script to exclude these sites plus a buffer.
