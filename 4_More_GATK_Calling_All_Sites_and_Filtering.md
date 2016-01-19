@@ -107,7 +107,30 @@ which generates a file called `out.hwe`, the last column of which has the probab
 awk '(NR==1) || ($8 < 0.001 ) ' out.hwe > bad_sites
 ```
 
+This command needs to be altered so it outputs a tab-delimted file with two columns including only the chromosome and position
+
+Now we can use vcftools to make a vcf file with sites that have excess heterozygotes.  
+
+for unzipped files:
+```
+vcftools --vcf XXX.vcf --positions bad_sites --out bad_hwe_sitez --recode
+```
+
+This can be merged with the `round2_BADSEX_only.vcf` file we generated above and then used with the next per script to exclude these sites plus a buffer.
+
+
+
+``
+bgzip round2_BADSEX_only.vcf
+tabix -p vcf round2_BADSEX_only.vcf.gz
+bgzip bad_hwe_sitez.vcf
+tabix -p vcf bad_hwe_sitez.vcf.gz
+vcf-concat round2_BADSEX_only.vcf.gz bad_sitez.vcf.gz | gzip -c > bad_sex_bad_hwe.vcf.gz
+gunzip bad_sex_bad_hwe.vcf.gz
+``
+
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
+(still need to change the mask file below to "bad_sex_bad_hwe.vcf.gz"
 
 ``` perl
 #!/usr/bin/perl
