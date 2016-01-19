@@ -91,8 +91,21 @@ $status = system($commandline);
 
 At this point I need to also exclude sites that have an excess of heterozygosity.  I do not want to exclude any site that departs from HWE because, due to the Wahlund effect, we expect many sites to have homozygote excess. The excess heterozygosity is likely due to duplicated regions that are slightly diverged.  We can identify the sites with excess heterozygosity like this:
 
+```
 vcftools --gzvcf XXX.vcf.gz --hardy
+```
 
+or, for unzipped files:
+```
+vcftools --vcf XXX.vcf --hardy
+```
+
+
+which generates a file called `out.hwe`, the last column of which has the probability of heterozygote excess.  We can get the entries that are less than 0.001 using this command:
+
+```
+sed XXX
+```
 
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
 
