@@ -89,6 +89,11 @@ $commandline = $commandline." -o ".$outfile2." --variant ".$outfile1." -select \
 $status = system($commandline);
 ```
 
+At this point I need to also exclude sites that have an excess of heterozygosity.  I do not want to exclude any site that departs from HWE because, due to the Wahlund effect, we expect many sites to have homozygote excess. The excess heterozygosity is likely due to duplicated regions that are slightly diverged.  We can identify the sites with excess heterozygosity like this:
+
+vcftools --gzvcf XXX.vcf.gz --hardy
+
+
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
 
 ``` perl
