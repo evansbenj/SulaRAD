@@ -100,7 +100,7 @@ vcftools --vcf round2_BADSEX_marked.vcf --hardy --out round2_BADSEX_marked
 which generates a file called `round2_BADSEX_marked.hwe`, the last column of which has the probability of heterozygote excess.  We can get the entries that are less than 0.001 using this command:
 
 ```
-awk -v OFS='\t' '(NR!=1) && ($8 < 0.001 ) {print $1,$2}' round2_BADSEX_marked.hwe >  bad_het_sites.txt
+awk -v OFS='\t' '(NR!=1) && ($8 < 0.005 ) {print $1,$2}' round2_BADSEX_marked.hwe >  bad_het_sites.txt
 ```
 
 This command outputs a tab-delimted file with two columns including only the chromosome and position.  The header of the original file is skipped and not printed to the output file
