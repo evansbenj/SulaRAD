@@ -126,7 +126,7 @@ gunzip bad_sex_bad_het.vcf.gz
 ```
 
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
-(still need to change the mask file below to "bad_sex_bad_hwe.vcf.gz"
+(still need to change the mask file below to "bad_sex_bad_het.vcf"
 
 ``` perl
 #!/usr/bin/perl
@@ -152,7 +152,7 @@ $status = system($commandline);
 # Mark sites that have inappropriate sex chromosome genotypes
 $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile2." --variant ".$outfile1;
-$commandline = $commandline." --mask round2_BAD_SEX_only.vcf --maskName BADSEX --maskExtension 200";
+$commandline = $commandline." --mask bad_sex_bad_het.vcf --maskName BADSEX_badhet --maskExtension 200";
 print $commandline,"\n";
 $status = system($commandline);
 
