@@ -8,7 +8,7 @@ sort -V -k 1,1 -k2,2 bedfile_51000_and_higher.bed > bedfile_51000_and_higher_sor
 ```
 But this did not work so I instead ended up using the Galaxy webserver to merge the beds for regions >51000 bp away from genes from the 2014 paper.
 
-And now I used this script to split up the vcf files into different sections depending on the distance of the sites from genes (16_Executes_GATK_commands_SelectVariants_output_bed.pl):
+And now I used this script to split up the vcf files into different sections depending on the distance of the sites from genes (15_Executes_GATK_commands_SelectVariants_output_bed.pl):
 
 ```perl
 #!/usr/bin/perl
@@ -61,7 +61,7 @@ First, convert the vcf file to a tab delimited file like this:
 zcat final_filtered.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > final_filtered.vcf.gz.tab
 ```
 
-And then use this script to add to this tab deimited file data from baboons (`15_Gets_outgroup_sequence_from_axt_files_NEW2015.pl`). This needs to be executed from with a directory that has axt alignment files. Here is that script:
+And then use this script to add to this tab deimited file data from baboons (`16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl`). This needs to be executed from with a directory that has axt alignment files. Here is that script:
 
 ``` perl
 #!/usr/bin/env perl
