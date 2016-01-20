@@ -13,17 +13,25 @@ And now I used this script to split up the vcf files into different sections dep
 ```perl
 #!/usr/bin/perl
 # This script will read in a vcf file names and 
-# make and execute a GATK commandline that marks INDELs
-# in a new vcf file.  
+# make and execute a GATK commandline that divide up
+# a vcf file into bunch of 
+# new vcf files based on some bed files.
+
+# then it will convert them to tab delimited format 
+
 
 my $status;
-my $infile = "recal_stampy_allsites_round2_all_confident_sites.vcf";
+my $infile = "final_round2_filtered.vcf";
+#my $infile = "nonrecal_final_filtered.vcf";
 my $outfile1 = "recal_plusminus_1000.vcf";
+#my $outfile1 = "nonrecal_plusminus_1000.vcf";
 my $bedfile1 = "bedfile1_genes_plusminus_1000.bed";
 my $outfile2 = "recal_1000_51000.vcf";
+#my $outfile2 = "nonrecal_1000_51000.vcf";
 my $bedfile2 = "bedfile2_1001_to_51000.bed";
 my $outfile3 = "recal_51000plus.vcf";
-my $bedfile3 = "bedfile_51000_and_higher.bed";
+#my $outfile3 = "nonrecal_51000plus.vcf";
+my $bedfile3 = "51000_and_more_galaxy.bed";
 
 my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile1." --variant ".$infile;
@@ -39,16 +47,31 @@ $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectV
 $commandline = $commandline." -o ".$outfile3." --variant ".$infile;
 $commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile3;
 $status = system($commandline);
+
+
+$commandline = "~/tabix-0.2.6/bgzip ".$outfile1;
+$status = system($commandline);
+$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile1.".gz";
+$status = system($commandline);
+$commandline = "zcat ".$outfile1.".gz | /usr/local/vcftools/src/perl/vcf-to-tab > ".$outfile1.".gz.tab";
+$status = system($commandline);
+
+$commandline = "~/tabix-0.2.6/bgzip ".$outfile2;
+$status = system($commandline);
+$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile2.".gz";
+$status = system($commandline);
+$commandline = "zcat ".$outfile2.".gz | /usr/local/vcftools/src/perl/vcf-to-tab > ".$outfile2.".gz.tab";
+$status = system($commandline);
+
+$commandline = "~/tabix-0.2.6/bgzip ".$outfile3;
+$status = system($commandline);
+$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile3.".gz";
+$status = system($commandline);
+$commandline = "zcat ".$outfile3.".gz | /usr/local/vcftools/src/perl/vcf-to-tab > ".$outfile3.".gz.tab";
+$status = system($commandline);
+
 ```
 
-As previously, now we are ready to convert the vcf files to tab delimited files like this:
-
-```bash
-~/tabix-0.2.6/bgzip XXX.vcf
-~/tabix-0.2.6/tabix -p vcf XXX.vcf.gz
-zcat XXX.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > XXX.vcf.gz.tab
-
-```
 ## Add outgroup sequences
 
 And this can be followed up by adding the outgroup sequences using the script below and calculating the popgen stats using the script after that.
