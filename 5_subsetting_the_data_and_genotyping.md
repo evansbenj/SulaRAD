@@ -49,8 +49,186 @@ As previously, now we are ready to convert the vcf files to tab delimited files 
 zcat XXX.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > XXX.vcf.gz.tab
 
 ```
+## Add outgroup sequences
 
-And this can be followed up by adding the outgroup sequences using the previous script and calculating the popgen stats below.
+And this can be followed up by adding the outgroup sequences using the script below and calculating the popgen stats using the script after that.
+
+First, convert the vcf file to a tab delimited file like this:
+
+``` 
+~/tabix-0.2.6/bgzip final_filtered.vcf
+~/tabix-0.2.6/tabix -p vcf final_filtered.vcf.gz
+zcat final_filtered.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > final_filtered.vcf.gz.tab
+```
+
+And then use this script to add to this tab deimited file data from baboons (`15_Gets_outgroup_sequence_from_axt_files_NEW2015.pl`). This needs to be executed from with a directory that has axt alignment files. Here is that script:
+
+``` perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+
+# This program reads in a tab delimited file created by 
+# vcftools and then extracts an outgroup sequence
+# from all axt files that are in the directory
+
+# It will then make a new file that has the outgroup
+# sequence inserted in a column after the reference sequence.
+
+# run it like this:
+# Gets_outgroup_sequence_from_axt_files_NEW2015.pl in_tabfile out_tabfile
+
+# the main concern here is that theaxt files have gaps inserted so that the 
+# number of bases don't necessarily match the difference between the coordinates
+# although hopefully the coordinates match.  So I need to count the gaps in the
+# rhesus sequence and adjust the coordinates of the outgroup sequence appropriately
+
+my $inputfile = $ARGV[0];
+my $outputfile = $ARGV[1];
+
+unless (open DATAINPUT, $inputfile) {
+	print "Can not find the input file.\n";
+	exit;
+}
+
+unless (open(OUTFILE, ">$outputfile"))  {
+	print "I can\'t write to $outputfile\n";
+	exit;
+}
+print "Creating output file: $outputfile\n";
+
+
+my @files = glob("*.axt");
+
+my @macaque_coordinates;
+my @ingroup;
+my @outgroup;
+my $coordinate;
+my %macaque_coordinates_key;
+my $line;
+my @line;
+my @axt;
+my $y;
+my $switch;
+my $source;
+my $begin;
+my $chr;
+
+
+while ( my $line = <DATAINPUT>) {
+	@macaque_coordinates=split("	",$line);
+	if ($macaque_coordinates[0] ne "#CHROM"){
+		#$macaque_coordinates_key{$macaque_coordinates[0]."_".$macaque_coordinates[1]}=$macaque_coordinates[2];
+		$macaque_coordinates_key{$macaque_coordinates[0]."_".$macaque_coordinates[1]}="N";
+	}
+}
+
+close DATAINPUT;
+print "Done with input file 1\n";
+
+foreach(@files){
+	print $_,"\n";
+	unless (open DATAINPUT1, $_) {
+		print "Can not find the axt files, jackass.\n";
+		exit;
+	}
+
+	LINE: while ( my $line1 = <DATAINPUT1>) {	
+		@axt=split(" ",$line1);
+		if(defined($axt[1])){
+			if($axt[1] =~ /^chr/){
+				$switch=1;
+				$chr=$axt[1];
+				$begin=$axt[2];
+				next LINE;
+			}
+		}
+		elsif((defined($axt[0]))&&($switch == 1)){
+			# we need to find out where the gaps are in the reference sequence
+			@ingroup=split("",$line1);	
+			$switch = 2;
+			next LINE;
+		}
+		elsif((defined($axt[0]))&&($switch == 2)){	
+			$switch = 0;
+			#print "papio ",$line1;
+			@outgroup=split("",$line1);
+			#print "yo ",$outgroup[0]," hey ",$#outgroup," ey ",$outgroup[$#outgroup-1],"\n";
+			$coordinate=$begin-1;
+			for ($y = 0 ; $y < $#outgroup ; $y++ ) {
+				if($ingroup[$y] ne "-"){
+					$coordinate+=1;
+				}
+				#print $chr."_".$coordinate,"\n";
+				# check if this position is a gap in the ingroup
+				if(defined($macaque_coordinates_key{$chr."_".$coordinate})){
+					#print $chr,"_",$coordinate,"  ",$macaque_coordinates_key{$chr."_".$coordinate}," ";
+					if($outgroup[$y] ne "-"){
+						$macaque_coordinates_key{$chr."_".$coordinate} = $outgroup[$y];
+					}
+					else{
+						$macaque_coordinates_key{$chr."_".$coordinate} = "N";
+					}	
+					#print $macaque_coordinates_key{$chr."_".$coordinate},"\n";
+					if($y == 0){
+						print "begin ",$chr,"_",$coordinate,"  ",$macaque_coordinates_key{$chr."_".$coordinate}," ";
+						print $macaque_coordinates_key{$chr."_".$coordinate},"\n";
+					}
+					elsif($y == ($#outgroup)){
+						print "end ",$chr,"_",$coordinate,"  ",$macaque_coordinates_key{$chr."_".$coordinate}," ";
+						print $macaque_coordinates_key{$chr."_".$coordinate},"\n";
+					}
+				}
+			}	
+		}
+	}
+close DATAINPUT1;	
+}
+
+# now add the outgroup data to the output file in a new column
+my @data; 
+unless (open DATAINPUT, $inputfile) {
+	print "Can not find the input file.\n";
+	exit;
+}
+while ( my $line = <DATAINPUT>) {
+	@data=split(/\s+/,$line);
+	if ($data[0] ne "#CHROM"){
+		for ($y = 0 ; $y <= 2 ; $y++ ) {
+			print OUTFILE $data[$y],"\t";
+		}
+		if(defined($macaque_coordinates_key{$data[0]."_".$data[1]})){
+			print OUTFILE $macaque_coordinates_key{$data[0]."_".$data[1]},"\t";	
+		}
+		else{
+			print "Missed one; problem!\n";	
+			print OUTFILE "N\t";	
+		}	
+		for ($y = 3 ; $y < $#data ; $y++ ) {
+			print OUTFILE $data[$y],"\t";
+		}
+		print OUTFILE $data[$#data],"\n";
+	}
+	else{
+		for ($y = 0 ; $y <= 2 ; $y++ ) {
+			print OUTFILE $data[$y],"\t";
+		}
+		print OUTFILE "papAnu2\t";	
+		for ($y = 3 ; $y < $#data ; $y++ ) {
+			print OUTFILE $data[$y],"\t";
+		}
+		print OUTFILE $data[$#data],"\n";
+	}
+}
+
+
+```
+This works quite well and I have also used it to add the human outgroup sequence.  A small correction to the header is then required using sed:
+
+`sed -i -e 's/papAnu2\tpapAnu2/hg19\tpapAnu2/g' final_round2_filtered.vcf.gz_with_baboon_and_human.tab`
+
+
 
 ## Popgen stats
 
