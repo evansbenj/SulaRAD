@@ -43,7 +43,7 @@ $status = system($commandline);
 
 ```
 
-Now make a vcf file with only the sites with bad sex chromosome genotypes using this script (12_Executes_GATK_commands_makes_sex_mask.pl):
+Now make a vcf file with only the sites with bad sex chromosome genotypes using this script (12_Executes_GATK_commands_makes_sex_mask_VariantFiltration.pl):
 
 ``` perl
 #!/usr/bin/perl
