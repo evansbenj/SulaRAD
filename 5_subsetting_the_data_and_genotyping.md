@@ -255,7 +255,7 @@ This works quite well and I have also used it to add the human outgroup sequence
 
 ## Popgen stats
 
-I've polished up a script that calculates the important population statistics.  This script is quite flexible and it also does bootstrapping to provide confidence intervals:
+I've polished up a script that calculates the important population statistics.  This script is quite flexible and it also does bootstrapping to provide confidence intervals (Boot_from_tab_diverge_poly_2015.pl):
 
 ```perl
 #!/usr/bin/env perl
