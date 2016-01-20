@@ -65,10 +65,10 @@ my @males=("hecki_PM639_stampy_sorted","hecki_PM645_stampy_sorted","maura_PM613_
 my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
 $commandline = $commandline." -o ".$outfile1." --variant ".$file;
 
-# filter all sites in which a female genotype is calledon chrY
+# filter all sites in which a female genotype is called on chrY
 foreach (@females){
-    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\'\" --filterName BAD_SEXfY";
-}   
+    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && vc.getGenotype(\'".$_."\').isHet()\" --filterName BAD_SEXfY";
+    $commandline=$commandline." --filterExpression \"CHROM == \'chrY\' && vc.getGenotype(\'".$_."\').isHom()\" --filterName BAD_SEXfY";}   
 
 # filter all sites in which a male heteroz genotype is called on chrX
 foreach (@males){
