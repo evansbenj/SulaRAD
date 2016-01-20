@@ -2,6 +2,34 @@
 
 The script that adds the outgroup species can be executed for each tab file (there are 3 - one including genes plus 1000 bp on each end, one from 1001-51000 bp from genes, and one with the other bits). This needs to be done first for baboons, and then for humans and then a sed command to fix the header.  And for each of the three recal and non recal files (6 total). This can be done by pipine moving the tab delimited files into a folder and then globing them into the script I wrote for adding the outgroup.
 
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# this program will read in all tab delimited files in a folder and
+# add outgroup sequences to them using the script
+# 16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl
+# this should be executed from within the folder containing the axt files
+
+# once this is done for baboons, make a symbolic link to the baboon files and this 
+# script in the folder containing the human axt files, and then run it again
+# to add the human outgroup
+
+my $status;
+my @tabfiles = glob("recal*.vcf.gz.tab");
+my $commandline;
+
+foreach(@tabfiles){
+	$commandline = "16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl ".$_." ".$_."_with_baboon.tab";
+	$status = system($commandline);
+
+}
+
+```
+
+
+
 And then we need to calculate the popgen stats and boostrap CIs for each of the species/populations for each of these files.  There are the following species:
 * tonkeana
 * hecki
