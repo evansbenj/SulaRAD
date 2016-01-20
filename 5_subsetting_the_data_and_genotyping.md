@@ -1,4 +1,56 @@
 # Subsetting the data and popgen stats.
+I wrote a script to split up the master vcf file using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
+
+```bash
+cat bedfile3_51000_to_101000.bed bedfile4_101000_to_151000.bed bedfile5_151000_and_higher.bed > bedfile_51000_and_higher.bed
+sed -i -e 's/ /\t/g' bedfile_51000_and_higher.bed
+sort -V -k 1,1 -k2,2 bedfile_51000_and_higher.bed > bedfile_51000_and_higher_sorted.bed
+```
+But this did not work so I instead ended up using the Galaxy webserver to merge the beds for regions >51000 bp away from genes from the 2014 paper.
+
+And now I used this script to split up the vcf files into different sections depending on the distance of the sites from genes (16_Executes_GATK_commands_SelectVariants_output_bed.pl):
+
+```perl
+#!/usr/bin/perl
+# This script will read in a vcf file names and 
+# make and execute a GATK commandline that marks INDELs
+# in a new vcf file.  
+
+my $status;
+my $infile = "recal_stampy_allsites_round2_all_confident_sites.vcf";
+my $outfile1 = "recal_plusminus_1000.vcf";
+my $bedfile1 = "bedfile1_genes_plusminus_1000.bed";
+my $outfile2 = "recal_1000_51000.vcf";
+my $bedfile2 = "bedfile2_1001_to_51000.bed";
+my $outfile3 = "recal_51000plus.vcf";
+my $bedfile3 = "bedfile_51000_and_higher.bed";
+
+my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile1." --variant ".$infile;
+$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile1;
+$status = system($commandline);
+
+$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile2." --variant ".$infile;
+$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile2;
+$status = system($commandline);
+
+$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile3." --variant ".$infile;
+$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile3;
+$status = system($commandline);
+```
+
+As previously, now we are ready to convert the vcf files to tab delimited files like this:
+
+```bash
+~/tabix-0.2.6/bgzip XXX.vcf
+~/tabix-0.2.6/tabix -p vcf XXX.vcf.gz
+zcat XXX.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > XXX.vcf.gz.tab
+
+```
+
+And this can be followed up by adding the outgroup sequences using the previous script and calculating the popgen stats below.
 
 ## Popgen stats
 
@@ -799,55 +851,3 @@ print "Done with input file 1\n";
 
 ```
 
-And I have developed this script to split up the master files using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
-
-```bash
-cat bedfile3_51000_to_101000.bed bedfile4_101000_to_151000.bed bedfile5_151000_and_higher.bed > bedfile_51000_and_higher.bed
-sed -i -e 's/ /\t/g' bedfile_51000_and_higher.bed
-sort -V -k 1,1 -k2,2 bedfile_51000_and_higher.bed > bedfile_51000_and_higher_sorted.bed
-```
-But this did not work so I instead ended up using the Galaxy webserver to merge the beds for regions >51000 bp away from genes from the 2014 paper.
-
-And now I used this script to split up the vcf files into different sections depending on the distance of the sites from genes:
-
-```perl
-#!/usr/bin/perl
-# This script will read in a vcf file names and 
-# make and execute a GATK commandline that marks INDELs
-# in a new vcf file.  
-
-my $status;
-my $infile = "recal_stampy_allsites_round2_all_confident_sites.vcf";
-my $outfile1 = "recal_plusminus_1000.vcf";
-my $bedfile1 = "bedfile1_genes_plusminus_1000.bed";
-my $outfile2 = "recal_1000_51000.vcf";
-my $bedfile2 = "bedfile2_1001_to_51000.bed";
-my $outfile3 = "recal_51000plus.vcf";
-my $bedfile3 = "bedfile_51000_and_higher.bed";
-
-my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
-$commandline = $commandline." -o ".$outfile1." --variant ".$infile;
-$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile1;
-$status = system($commandline);
-
-$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
-$commandline = $commandline." -o ".$outfile2." --variant ".$infile;
-$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile2;
-$status = system($commandline);
-
-$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
-$commandline = $commandline." -o ".$outfile3." --variant ".$infile;
-$commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile3;
-$status = system($commandline);
-```
-
-As previously, now we are ready to convert the vcf files to tab delimited files like this:
-
-```bash
-~/tabix-0.2.6/bgzip XXX.vcf
-~/tabix-0.2.6/tabix -p vcf XXX.vcf.gz
-zcat XXX.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > XXX.vcf.gz.tab
-
-```
-
-And this can be followed up by adding the outgroup sequences and calculating the popgen stats as above.
