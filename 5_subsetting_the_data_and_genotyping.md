@@ -8,7 +8,7 @@ sort -V -k 1,1 -k2,2 bedfile_51000_and_higher.bed > bedfile_51000_and_higher_sor
 ```
 But this did not work so I instead ended up using the Galaxy webserver to merge the beds for regions >51000 bp away from genes from the 2014 paper.
 
-And now I used this script to split up the vcf files into different sections depending on the distance of the sites from genes (15_Executes_GATK_commands_SelectVariants_output_bed.pl):
+And now I used this script to split up the vcf files into different sections depending on the distance of the sites from genes and then make tab delimited files (15_Executes_GATK_commands_SelectVariants_output_bed.pl):
 
 ```perl
 #!/usr/bin/perl
