@@ -122,7 +122,8 @@ This can be merged with the `round2_BADSEX_only.vcf` file we generated above and
 /usr/local/tabix/bgzip bad_het_sitez.recode.vcf
 /usr/local/tabix/tabix -p vcf bad_het_sitez.recode.vcf.gz
 /usr/local/vcftools/src/perl/vcf-concat round2_BADSEX_only.vcf.gz bad_het_sitez.recode.vcf.gz | gzip -c > bad_sex_bad_het.vcf.gz
-/usr/local/vcftools/src/perl/vcf-sort bad_sex_bad_het.vcf.gz > bad_sex_bad_het_sorted.vcf
+gunzip bad_sex_bad_het.vcf.gz
+java -jar ~/picard-tools-1.131/picard.jar SortVcf I=bad_sex_bad_het.vcf O=bad_sex_bad_het_sorted.vcf SEQUENCE_DICTIONARY=/home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta.dict
 mv bad_sex_bad_het_sorted.vcf bad_sex_bad_het.vcf
 ```
 
