@@ -638,7 +638,7 @@ while ( my $line = <DATAINPUT>) {
 	if($temp[0] ne '#CHROM'){
 		#base the genomic location on the outgroup	
 		# this could be changed later to always rely on the most closely related ingroup
-		if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")){
+		if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")&&($temp[0] ne "chrM")){
 				# load the autosomal data
 				$string=();
 				for ($y = 0 ; $y < $number_of_individuals_genotyped; $y++ ) {
