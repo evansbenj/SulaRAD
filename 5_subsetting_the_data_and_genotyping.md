@@ -84,7 +84,7 @@ First, convert the vcf file to a tab delimited file like this:
 zcat final_filtered.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > final_filtered.vcf.gz.tab
 ```
 
-And then use this script to add to this tab deimited file data from baboons (`16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl`). This needs to be executed from with a directory that has axt alignment files. Here is that script:
+And then use this script to add to this tab deimited file data from baboons (`16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl`). This needs to be executed from with a directory that has axt alignment files. I also batch processed this script with another script called `17_adds_outgroup_to_lots_of_tab_files.pl`.  Here is the first script:
 
 ``` perl
 #!/usr/bin/env perl
@@ -251,6 +251,33 @@ This works quite well and I have also used it to add the human outgroup sequence
 
 `sed -i -e 's/papAnu2\tpapAnu2/hg19\tpapAnu2/g' final_round2_filtered.vcf.gz_with_baboon_and_human.tab`
 
+Here is the second script (`17_adds_outgroup_to_lots_of_tab_files.pl`):
+
+``` perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# this program will read in all tab delimited files in a folder and
+# add outgroup sequences to them using the script
+# 16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl
+# this should be executed from within the folder containing the axt files
+
+# once this is done for baboons, make a symbolic link to the baboon files and this 
+# script in the folder containing the human axt files, and then run it again
+# to add the human outgroup
+
+my $status;
+my @tabfiles = glob("recal*.vcf.gz.tab");
+my $commandline;
+
+foreach(@tabfiles){
+	$commandline = "16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl ".$_." ".$_."_with_baboon.tab"
+;
+	$status = system($commandline);
+
+}
+```
 
 
 ## Popgen stats
