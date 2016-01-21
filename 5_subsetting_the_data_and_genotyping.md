@@ -251,7 +251,11 @@ This works quite well and I have also used it to add the human outgroup sequence
 
 `sed -i -e 's/papAnu2\tpapAnu2/hg19\tpapAnu2/g' final_round2_filtered.vcf.gz_with_baboon_and_human.tab`
 
-Here is the second script (`17_adds_outgroup_to_lots_of_tab_files.pl`):
+# Automating addition of outgroups and calculation of popgen stats for each species
+
+The script below adds the outgroup species can be executed for each tab file (there are 3 - one including genes plus 1000 bp on each end, one from 1001-51000 bp from genes, and one with the other bits). This needs to be done first for baboons, and then for humans and then a sed command to fix the header.  And for each of the three recal and non recal files (6 total). This can be done by pipine moving the tab delimited files into a folder and then globing them into the script I wrote for adding the outgroup.
+
+Here is the script (`17_adds_outgroup_to_lots_of_tab_files.pl`):
 
 ``` perl
 #!/usr/bin/env perl
