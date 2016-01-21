@@ -122,8 +122,8 @@ This can be merged with the `round2_BADSEX_only.vcf` file we generated above and
 /usr/local/tabix/bgzip bad_het_sitez.recode.vcf
 /usr/local/tabix/tabix -p vcf bad_het_sitez.recode.vcf.gz
 /usr/local/vcftools/src/perl/vcf-concat round2_BADSEX_only.vcf.gz bad_het_sitez.recode.vcf.gz | gzip -c > bad_sex_bad_het.vcf.gz
-/usr/local/vcftools/src/perl/vcf-sort bad_sex_bad_het.vcf.gz
-gunzip bad_sex_bad_het.vcf.gz
+/usr/local/vcftools/src/perl/vcf-sort bad_sex_bad_het.vcf.gz > bad_sex_bad_het_sorted.vcf
+mv bad_sex_bad_het_sorted.vcf bad_sex_bad_het.vcf
 ```
 
 Now get rid of indels and bad_sex genotypes plus a buffer of 3 bp and 200 bp respectively (13_Executes_GATK_commands_VariantFiltration_doublemask.pl):
