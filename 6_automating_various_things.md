@@ -241,12 +241,7 @@ and then printed a pretty plot using these R commands:
 
 ```R
 library (ggplot2)
-
 pdf("recal_X_to_A_plot.pdf",w=8, h=4, version="1.4", bg="transparent")
-
-#par(mfrow=c(3,2),mar=c(4, 4, 0.5, 1))
-
-
 data<-read.table("recal_X_to_A.tab",header=FALSE)
 pd <- position_dodge(0.3)
 data$V2 <- factor(data$V2,levels=c("plusminus","1000_to_50000","51000plus"))
