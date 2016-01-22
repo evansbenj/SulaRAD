@@ -190,7 +190,7 @@ while ( my $line = <DATAINPUT>) {
 	chomp($line);
 	@temp=split(/[\/'\t']+/,$line);
 	if($temp[0] ne '#CHROM'){
-		if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")&&(length($temp[2]) == 1)){
+		if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")&&($temp[0] ne "chrM")&&(length($temp[2]) == 1)){
 			# load the autosomal data
 			$string=();
 			for ($y = 0 ; $y < $number_of_individuals_genotyped; $y++ ) {
