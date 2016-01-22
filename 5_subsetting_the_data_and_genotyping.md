@@ -493,12 +493,19 @@ my $yDNA_divergence=0;
 my $string;
 my $m;
 my $n;
-my $number_of_bootstraps=10;
+my $number_of_bootstraps=1000;
 my $lower=int($number_of_bootstraps*0.025);
 my $upper=int($number_of_bootstraps*0.975);
 my $JC_divergence_aDNA;
 my $JC_divergence_xDNA;
 my $JC_divergence_yDNA;
+my $RAD_tag_count_aDNA;
+my $RAD_tag_count_xDNA;
+my $RAD_tag_count_yDNA;
+my $distance_between_RAD_tags=500;
+my $previousone_aDNA=0-$distance_between_RAD_tags;
+my $previousone_xDNA=0-$distance_between_RAD_tags;
+my $previousone_yDNA=0-$distance_between_RAD_tags;
 
 print "bootlower ", $lower," bootupper ",$upper,"\n";
 
@@ -548,7 +555,7 @@ my $n_aDNA=(2*$number_of_individuals_genotyped);  # this is the number of allele
 my $n_xDNA=(2*$number_of_female_individuals_genotyped)+($number_of_individuals_genotyped-$number_of_female_individuals_genotyped);  # this is the number of alleles required for xDNA
 my $n_yDNA=$number_of_individuals_genotyped-$number_of_female_individuals_genotyped;  # this is the number of alleles required for yDNA
 
-print "Num ausomomal alleles: ",$n_aDNA,"\n";
+print "Num automomal alleles: ",$n_aDNA,"\n";
 print "Num chrX alleles: ",$n_xDNA,"\n";
 print "Num chrY alleles: ",$n_yDNA,"\n";
 my $expected_number_of_adna_pairwise_comparisons=0;
@@ -559,12 +566,28 @@ for ($y = 1 ; $y < $n_aDNA ; $y++ ) {
 	$expected_number_of_adna_pairwise_comparisons+=$y;	
 }
 
+my $singleton_pi_aDNA = (($n_aDNA-1)/$expected_number_of_adna_pairwise_comparisons);
+my $aDNA_singleton_sites;
+my @aDNA_singleton_sites;
+
 for ($y = 1 ; $y < $n_xDNA ; $y++ ) {
 	$expected_number_of_xdna_pairwise_comparisons+=$y;	
 }
 
+my $singleton_pi_xDNA = (($n_xDNA-1)/$expected_number_of_xdna_pairwise_comparisons);
+my $xDNA_singleton_sites;
+my @xDNA_singleton_sites;
+
 for ($y = 1 ; $y < $n_yDNA ; $y++ ) {
 	$expected_number_of_ydna_pairwise_comparisons+=$y;	
+}
+
+my $singleton_pi_yDNA;
+my $yDNA_singleton_sites;
+my @yDNA_singleton_sites;
+
+if($expected_number_of_ydna_pairwise_comparisons > 1){
+	$singleton_pi_yDNA = (($n_yDNA-1)/$expected_number_of_ydna_pairwise_comparisons);
 }
 
 my $TajD_aDNA;
@@ -675,25 +698,35 @@ while ( my $line = <DATAINPUT>) {
 									print "problem with number of pairwise comparisons aDNA\n";
 								}
 								push(@pi_aDNA,$diff/$pi_counter);
+								if(($diff/$pi_counter) == $singleton_pi_aDNA){
+									$aDNA_singleton_sites+=1;
+									push(@aDNA_singleton_sites,1);
+								}
+								else{
+									push(@aDNA_singleton_sites,0);
+								}
 								$diff=0;
 								$aDNA_segregating_sites+=1;	
 								push(@S_aDNA,1);					
 								$pi_counter=0;	
+
 						}
 						if(($x_uniq == 1)||($x_uniq == 2)){
-								$aDNA_sites+=1;
-								if(uc $temp[$whotoinclude[0]-1] ne uc $temp1[0]){
-									#print $temp[0],"\t",$temp[1],"\t",$temp[2],"\t",$temp[3],"\n";
-									#print uc $temp[$whotoinclude[0]-1]," hey ", uc $temp1[0],"\n";
-									$aDNA_divergence+=1;
-									push(@d_aDNA,1);
-								}
-								else{
-									push(@d_aDNA,0);
-								}
+							$aDNA_sites+=1;
+							if(uc $temp[$whotoinclude[0]-1] ne uc $temp1[0]){
+								$aDNA_divergence+=1;
+								push(@d_aDNA,1);
+							}
+							else{
+								push(@d_aDNA,0);
+							}
+							if($temp[1] > ($previousone_aDNA+$distance_between_RAD_tags)){
+								$RAD_tag_count_aDNA+=1;
+							}
+							$previousone_aDNA=$temp[1];
 						}	
 						if($aDNA_sites != ($#S_aDNA+1)){
-							print $aDNA_sites,"\t",$#S_aDNA+1,"\t",$line,"\n";
+							print $aDNA_sites,"a\t",$#S_aDNA+1,"a\t",$line,"a\n";
 						}
 					}
 				}	
@@ -751,6 +784,13 @@ while ( my $line = <DATAINPUT>) {
 							print "problem with number of pairwise comparisons XDNA\n";
 						}
 						push(@pi_xDNA,$diff/$pi_counter);
+						if(($diff/$pi_counter) == $singleton_pi_xDNA){
+							$xDNA_singleton_sites+=1;
+							push(@xDNA_singleton_sites,1);
+						}
+						else{
+							push(@xDNA_singleton_sites,0);
+						}
 						$diff=0;
 						$xDNA_segregating_sites+=1;	
 						push(@S_xDNA,1);					
@@ -765,9 +805,14 @@ while ( my $line = <DATAINPUT>) {
 						else{
 							push(@d_xDNA,0);
 						}
+						if($temp[1] > ($previousone_xDNA+$distance_between_RAD_tags)){
+							$RAD_tag_count_xDNA+=1;
+						}
+						$previousone_xDNA=$temp[1];
+
 					}	
 					if($xDNA_sites != ($#S_xDNA+1)){
-						print $xDNA_sites,"\t",$#S_xDNA+1,"\t",$line,"\n";
+						print $xDNA_sites,"x\t",$#S_xDNA+1,"x\t",$line,"\n";
 					}
 				}
 			}
@@ -811,6 +856,13 @@ while ( my $line = <DATAINPUT>) {
 							print "problem with number of pairwise comparisons yDNA\n";
 						}
 						push(@pi_yDNA,$diff/$pi_counter);
+						if(($diff/$pi_counter) == $singleton_pi_yDNA){
+							$yDNA_singleton_sites+=1;
+							push(@yDNA_singleton_sites,1);
+						}
+						else{
+							push(@yDNA_singleton_sites,0);
+						}
 						$diff=0;
 						$yDNA_segregating_sites+=1;	
 						push(@S_yDNA,1);					
@@ -825,9 +877,13 @@ while ( my $line = <DATAINPUT>) {
 						else{
 							push(@d_yDNA,0);
 						}
+						if($temp[1] > ($previousone_yDNA+$distance_between_RAD_tags)){
+							$RAD_tag_count_yDNA+=1;
+						}
+						$previousone_yDNA=$temp[1];
 					}	
 					if($yDNA_sites != ($#S_yDNA+1)){
-						print $yDNA_sites,"\t",$#S_yDNA+1,"\t",$line,"\n";
+						print $yDNA_sites,"y\t",$#S_yDNA+1,"y\t",$line,"\n";
 					}
 				}
 			}
@@ -885,6 +941,10 @@ my @JC_AP_divergence_xDNA_boot;
 my @thetapi_over_divergence_aDNA;
 my @thetapi_over_divergence_xDNA;
 
+my @aDNA_singleton_sites_boot;
+my @xDNA_singleton_sites_boot;
+my @aDNA_singleton_sites_indexes;
+my @xDNA_singleton_sites_indexes;
 
 for ($m = 0 ; $m < $number_of_bootstraps ; $m++ ) {
 	# generate an array with bootstrapped indexes
@@ -895,6 +955,11 @@ for ($m = 0 ; $m < $number_of_bootstraps ; $m++ ) {
 		push(@aDNA_bootstrapped_indexes,int(rand($aDNA_sites)));
 	} # end $n
 
+	# same for segregating sites
+	for ($n = 0 ; $n < $aDNA_segregating_sites ; $n++ ) {
+		push(@aDNA_singleton_sites_indexes,int(rand($aDNA_segregating_sites)));
+	} # end $n
+
 	for ($n = 0 ; $n < $aDNA_sites ; $n++ ) {
 		# calculate segregating sites and pi and d for bootstrap replicates
 		$S_aDNA_boot[$m]+=$S_aDNA[$aDNA_bootstrapped_indexes[$n]];
@@ -902,8 +967,8 @@ for ($m = 0 ; $m < $number_of_bootstraps ; $m++ ) {
 		$d_aDNA_boot[$m]+=$d_aDNA[$aDNA_bootstrapped_indexes[$n]];
 	} # end $n
 	
-	
 	push(@pi_aDNA_persite_boot,$pi_aDNA_boot[$m]/$aDNA_sites);
+
 
 	# apply JC correction to divergence
 	$JC_AP_divergence_aDNA_boot[$m]  = (-3/4)*log(1-(4/3)*($d_aDNA_boot[$m]/$aDNA_sites));
@@ -914,8 +979,20 @@ for ($m = 0 ; $m < $number_of_bootstraps ; $m++ ) {
 	push(@thetapi_over_divergence_aDNA,($pi_aDNA_boot[$m]/$aDNA_sites)/$JC_AP_divergence_aDNA_boot[$m]);
 
 	# calculate TajD for bootstrapped data
-	push(@aDNA_TajD_boot,($pi_aDNA_boot[$m] - ($S_aDNA_boot[$m]/$a1_obs_aDNA))/((($e1_obs_aDNA*$S_aDNA_boot[$m])+($e2_obs_aDNA*$S_aDNA_boot[$m]*($S_aDNA_boot[$m]-1)))**0.5));
-   
+
+	if((($e1_obs_aDNA*$S_aDNA_boot[$m])+($e2_obs_aDNA*$S_aDNA_boot[$m]*($S_aDNA_boot[$m]-1))) > 0){
+		push(@aDNA_TajD_boot,($pi_aDNA_boot[$m] - ($S_aDNA_boot[$m]/$a1_obs_aDNA))/((($e1_obs_aDNA*$S_aDNA_boot[$m])+($e2_obs_aDNA*$S_aDNA_boot[$m]*($S_aDNA_boot[$m]-1)))**0.5));
+ 	}
+
+	# singleton bootstrap
+ 	for ($n = 0 ; $n < $aDNA_segregating_sites ; $n++ ) {
+		#calculate number of singletons for each replicate
+		$aDNA_singleton_sites_boot[$m]+=$aDNA_singleton_sites[$aDNA_singleton_sites_indexes[$n]]
+	} # end $n
+	
+	# now convert to a proportion
+	$aDNA_singleton_sites_boot[$m]=($aDNA_singleton_sites_boot[$m]/$aDNA_segregating_sites);
+  
 
 	# now do xDNA
 	for ($n = 0 ; $n < $xDNA_sites ; $n++ ) {
@@ -929,6 +1006,10 @@ for ($m = 0 ; $m < $number_of_bootstraps ; $m++ ) {
 		$d_xDNA_boot[$m]+=$d_xDNA[$xDNA_bootstrapped_indexes[$n]];
 	} # end $n
 
+	# same for segregating sites X
+	for ($n = 0 ; $n < $xDNA_segregating_sites ; $n++ ) {
+		push(@xDNA_singleton_sites_indexes,int(rand($xDNA_segregating_sites)));
+	} # end $n
 
 	push(@pi_xDNA_persite_boot,$pi_xDNA_boot[$m]/$xDNA_sites);
 
@@ -940,10 +1021,28 @@ for ($m = 0 ; $m < $number_of_bootstraps ; $m++ ) {
 	# calculate pi/divergence for bootstrapped data
 	push(@thetapi_over_divergence_xDNA,($pi_xDNA_boot[$m]/$xDNA_sites)/$JC_AP_divergence_xDNA_boot[$m]);
 	# calculate TajD for bootstrapped data
-	push(@xDNA_TajD_boot,($pi_xDNA_boot[$m] - ($S_xDNA_boot[$m]/$a1_obs_xDNA))/((($e1_obs_xDNA*$S_xDNA_boot[$m])+($e2_obs_xDNA*$S_xDNA_boot[$m]*($S_xDNA_boot[$m]-1)))**0.5));
+	if((($e1_obs_xDNA*$S_xDNA_boot[$m])+($e2_obs_xDNA*$S_xDNA_boot[$m]*($S_xDNA_boot[$m]-1))) > 0){
+		push(@xDNA_TajD_boot,($pi_xDNA_boot[$m] - ($S_xDNA_boot[$m]/$a1_obs_xDNA))/((($e1_obs_xDNA*$S_xDNA_boot[$m])+($e2_obs_xDNA*$S_xDNA_boot[$m]*($S_xDNA_boot[$m]-1)))**0.5));
+	}
+
+	# singleton bootstrap
+ 	for ($n = 0 ; $n < $xDNA_segregating_sites ; $n++ ) {
+		#calculate number of singletons for each replicate
+		$xDNA_singleton_sites_boot[$m]+=$xDNA_singleton_sites[$xDNA_singleton_sites_indexes[$n]]
+	} # end $n
+	
+	# now convert to a proportion
+	$xDNA_singleton_sites_boot[$m]=($xDNA_singleton_sites_boot[$m]/$xDNA_segregating_sites);
+
+
 	# reset the indexes for next bootstrap
 	@aDNA_bootstrapped_indexes=();
 	@xDNA_bootstrapped_indexes=();
+	@aDNA_singleton_sites_indexes=();
+	@xDNA_singleton_sites_indexes=();
+
+
+
 } # end $m bootstraps
 
 
@@ -971,14 +1070,19 @@ for ($m = 0 ; $m < $number_of_bootstraps ; $m++ ) {
 @JC_AP_divergence_xDNA_boot  = sort { $a <=> $b } @JC_AP_divergence_xDNA_boot;
 
 
+@aDNA_singleton_sites_boot = sort { $a <=> $b } @aDNA_singleton_sites_boot;
+@xDNA_singleton_sites_boot = sort { $a <=> $b } @xDNA_singleton_sites_boot;
+
 
 
 print OUTFILE "aDNA\n";
-print OUTFILE "# alleles\t",$n_aDNA,"\n";
-print OUTFILE "# Sites\t",$aDNA_sites,"\n";
+print OUTFILE "#_alleles\t",$n_aDNA,"\n";
+print OUTFILE "#_Sites\t",$aDNA_sites,"\n";
+print OUTFILE "RAD_tag_count\t",$RAD_tag_count_aDNA,"\n";
 print OUTFILE "S\t",$aDNA_segregating_sites," (",$S_aDNA_boot[$lower]," - ",$S_aDNA_boot[$upper],")\n";
 print OUTFILE "thetaW\t",sprintf("%.5f",$aDNA_segregating_sites/$a1_obs_aDNA/$aDNA_sites)," (",sprintf("%.5f",$S_aDNA_boot[$lower]/$a1_obs_aDNA/$aDNA_sites)," - ",sprintf("%.5f",$S_aDNA_boot[$upper]/$a1_obs_aDNA/$aDNA_sites),")\n";
 print OUTFILE "pi\t",sprintf("%.5f",$asum/($#pi_aDNA+1))," (",sprintf("%.5f",$pi_aDNA_persite_boot[$lower])," - ",sprintf("%.5f",$pi_aDNA_persite_boot[$upper]),")\n";
+my $pi_a = $asum/($#pi_aDNA+1);
 print OUTFILE "d\t",sprintf("%.5f",$aDNA_divergence/$aDNA_sites)," (",sprintf("%.5f",$d_aDNA_boot[$lower]/$aDNA_sites)," - ",sprintf("%.5f",$d_aDNA_boot[$upper]/$aDNA_sites),")\n";
 # apply JC correction
 $JC_divergence_aDNA = (-3/4)*log(1-(4/3)*($aDNA_divergence/$aDNA_sites));
@@ -987,7 +1091,6 @@ $JC_divergence_aDNA = (-3/4)*log(1-(4/3)*($aDNA_divergence/$aDNA_sites));
 $JC_divergence_aDNA = $JC_divergence_aDNA- $asum/($#pi_aDNA+1);
 print OUTFILE "d_JC_AP\t",sprintf("%.5f",$JC_divergence_aDNA)," (",sprintf("%.5f",$JC_AP_divergence_aDNA_boot[$lower])," - ",sprintf("%.5f",$JC_AP_divergence_aDNA_boot[$upper]),")\n";
 print OUTFILE "pi/d_JC_AP\t",sprintf("%.3f",($asum/($#pi_aDNA+1))/$JC_divergence_aDNA)," (",sprintf("%.5f",$thetapi_over_divergence_aDNA[$lower])," - ",sprintf("%.5f",$thetapi_over_divergence_aDNA[$upper]),")\n";
-
 # TajD aDNA
 if($n_aDNA > 2){
 	$TajD_aDNA = ($asum - ($aDNA_segregating_sites/$a1_obs_aDNA))/((($e1_obs_aDNA*$aDNA_segregating_sites)+($e2_obs_aDNA*$aDNA_segregating_sites*($aDNA_segregating_sites-1)))**0.5);
@@ -997,15 +1100,18 @@ else{
  	$TajD_aDNA = "undefined";
  	print OUTFILE "TajD\tundefined\n";
 }
+#singleton proportion
+print OUTFILE "Se/S\t",sprintf("%.3f",($aDNA_singleton_sites/$aDNA_segregating_sites))," (",sprintf("%.3f",($aDNA_singleton_sites_boot[$lower]))," - ",sprintf("%.3f",($aDNA_singleton_sites_boot[$upper])),")\n";
 
-
-
+print OUTFILE "\n";
 print OUTFILE "xDNA\n";
-print OUTFILE "# alleles\t",$n_xDNA,"\n";
-print OUTFILE "# Sites\t",$xDNA_sites,"\n";
+print OUTFILE "#_alleles\t",$n_xDNA,"\n";
+print OUTFILE "#_Sites\t",$xDNA_sites,"\n";
+print OUTFILE "RAD_tag_count\t",$RAD_tag_count_xDNA,"\n";
 print OUTFILE "S\t",$xDNA_segregating_sites," (",$S_xDNA_boot[$lower]," - ",$S_xDNA_boot[$upper],")\n";
 print OUTFILE "thetaW\t",sprintf("%.5f",$xDNA_segregating_sites/$a1_obs_xDNA/$xDNA_sites)," (",sprintf("%.5f",$S_xDNA_boot[$lower]/$a1_obs_xDNA/$xDNA_sites)," - ",sprintf("%.5f",$S_xDNA_boot[$upper]/$a1_obs_xDNA/$xDNA_sites),")\n";
 print OUTFILE "pi\t",sprintf("%.5f",$xsum/($#pi_xDNA+1))," (",sprintf("%.5f",$pi_xDNA_persite_boot[$lower])," - ",sprintf("%.5f",$pi_xDNA_persite_boot[$upper]),")\n";
+my $pi_x = $xsum/($#pi_xDNA+1);
 print OUTFILE "d\t",sprintf("%.5f",$xDNA_divergence/$xDNA_sites)," (",sprintf("%.5f",$d_xDNA_boot[$lower]/$xDNA_sites)," - ",sprintf("%.5f",$d_xDNA_boot[$upper]/$xDNA_sites),")\n";
 # apply JC correction
 $JC_divergence_xDNA = (-3/4)*log(1-(4/3)*($xDNA_divergence/$xDNA_sites));
@@ -1015,7 +1121,7 @@ $JC_divergence_xDNA = $JC_divergence_xDNA- $xsum/($#pi_xDNA+1);
 print OUTFILE "d_JC_AP\t",sprintf("%.5f",$JC_divergence_xDNA)," (",sprintf("%.5f",$JC_AP_divergence_xDNA_boot[$lower])," - ",sprintf("%.5f",$JC_AP_divergence_xDNA_boot[$upper]),")\n";
 print OUTFILE "pi/d_JC_AP\t",sprintf("%.3f",($xsum/($#pi_xDNA+1))/$JC_divergence_xDNA)," (",sprintf("%.5f",$thetapi_over_divergence_xDNA[$lower])," - ",sprintf("%.5f",$thetapi_over_divergence_xDNA[$upper]),")\n";
 # TajD xDNA
-if($n_xDNA > 2){
+if(($n_xDNA > 2)&&(((($e1_obs_xDNA*$xDNA_segregating_sites)+($e2_obs_xDNA*$xDNA_segregating_sites*($xDNA_segregating_sites-1))))>0)){
 	$TajD_xDNA = ($xsum - ($xDNA_segregating_sites/$a1_obs_xDNA))/((($e1_obs_xDNA*$xDNA_segregating_sites)+($e2_obs_xDNA*$xDNA_segregating_sites*($xDNA_segregating_sites-1)))**0.5);
 	print OUTFILE "TajD\t",sprintf("%.3f",$TajD_xDNA)," (",sprintf("%.3f",$xDNA_TajD_boot[$lower])," - ",sprintf("%.3f",$xDNA_TajD_boot[$upper]),")\n";
 }
@@ -1023,63 +1129,62 @@ else{
 	$TajD_xDNA = "undefined";
  	print OUTFILE "TajD\tundefined\n";
 }
+#singleton proportion
+print OUTFILE "Se/S\t",sprintf("%.3f",($xDNA_singleton_sites/$xDNA_segregating_sites))," (",sprintf("%.3f",($xDNA_singleton_sites_boot[$lower]))," - ",sprintf("%.3f",($xDNA_singleton_sites_boot[$upper])),")\n";
 
 print OUTFILE "\n";
-if(($number_of_individuals_genotyped-$number_of_female_individuals_genotyped)>0){
-print OUTFILE "yDNA\n";
-print OUTFILE "# alleles\t",$n_yDNA,"\n";
-print OUTFILE "# Sites\t",$yDNA_sites,"\n";
-print OUTFILE "S\t",$yDNA_segregating_sites,"\n";
-print OUTFILE "thetaW\t",sprintf("%.5f",$yDNA_segregating_sites/$a1_obs_yDNA/$yDNA_sites),"\n";
-print OUTFILE "pi\t",sprintf("%.5f",$ysum/($#pi_yDNA+1)),"\n";
-print OUTFILE "d\t",sprintf("%.5f",$yDNA_divergence/$yDNA_sites),"\n";
-# apply JC correction
-$JC_divergence_yDNA = (-3/4)*log(1-(4/3)*($yDNA_divergence/$yDNA_sites));
-#print OUTFILE "d_JC\t",sprintf("%.5f",$JC_divergence_yDNA),"\n";
-# apply correction for ancestral polymorphism
-$JC_divergence_yDNA = $JC_divergence_yDNA- $ysum/($#pi_yDNA+1);
-print OUTFILE "d_JC_AP\t",sprintf("%.5f",$JC_divergence_yDNA),"\n";
-print OUTFILE "pi/d_JC_AP\t",sprintf("%.3f",($ysum/($#pi_yDNA+1))/$JC_divergence_yDNA),"\n";
+if(($number_of_individuals_genotyped-$number_of_female_individuals_genotyped)>1){
+	print OUTFILE "yDNA\n";
+	print OUTFILE "#_alleles\t",$n_yDNA,"\n";
+	print OUTFILE "#_Sites\t",$yDNA_sites,"\n";
+	print OUTFILE "RAD_tag_count\t",$RAD_tag_count_yDNA,"\n";
+	print OUTFILE "S\t",$yDNA_segregating_sites,"\n";
+	print OUTFILE "thetaW\t",sprintf("%.5f",$yDNA_segregating_sites/$a1_obs_yDNA/$yDNA_sites),"\n";
+	print OUTFILE "pi\t",sprintf("%.5f",$ysum/($#pi_yDNA+1)),"\n";
+	my $pi_y = $ysum/($#pi_yDNA+1);
+	print OUTFILE "d\t",sprintf("%.5f",$yDNA_divergence/$yDNA_sites),"\n";
+	# apply JC correction
+	$JC_divergence_yDNA = (-3/4)*log(1-(4/3)*($yDNA_divergence/$yDNA_sites));
+	#print OUTFILE "d_JC\t",sprintf("%.5f",$JC_divergence_yDNA),"\n";
+	# apply correction for ancestral polymorphism
+	$JC_divergence_yDNA = $JC_divergence_yDNA- $ysum/($#pi_yDNA+1);
+	print OUTFILE "d_JC_AP\t",sprintf("%.5f",$JC_divergence_yDNA),"\n";
+	print OUTFILE "pi/d_JC_AP\t",sprintf("%.3f",($ysum/($#pi_yDNA+1))/$JC_divergence_yDNA),"\n";
+	# TajD yDNA
+	if(($n_yDNA>2)&&($a1_obs_yDNA>0)&&(($e1_obs_yDNA*$yDNA_segregating_sites)+($e2_obs_yDNA*$yDNA_segregating_sites*($yDNA_segregating_sites-1))>0)){
+		$TajD_yDNA = ($ysum - ($yDNA_segregating_sites/$a1_obs_yDNA))/((($e1_obs_yDNA*$yDNA_segregating_sites)+($e2_obs_yDNA*$yDNA_segregating_sites*($yDNA_segregating_sites-1)))**0.5);
+		print OUTFILE "TajD\t",sprintf("%.3f",$TajD_yDNA),"\n";
+	}
+	else{
+		$TajD_yDNA = "undefined";
+		print OUTFILE "TajD\t",$TajD_yDNA,"\n\n";
+	}
+	#singleton proportion
+	if($yDNA_segregating_sites>0){
+		print OUTFILE "Se/S\t",sprintf("%.3f",($yDNA_singleton_sites/$yDNA_segregating_sites)),"\n\n";
+	}
 }
 
-# TajD yDNA
-if($n_yDNA>2){
-	$TajD_yDNA = ($ysum - ($yDNA_segregating_sites/$a1_obs_yDNA))/((($e1_obs_yDNA*$yDNA_segregating_sites)+($e2_obs_yDNA*$yDNA_segregating_sites*($yDNA_segregating_sites-1)))**0.5);
-	print OUTFILE "TajD\t",sprintf("%.3f",$TajD_yDNA),"\n";
+print OUTFILE "ratio_of_X_to_A_pi_over_d\n";
+print OUTFILE "pi_X/d_jc_ad_X/pi_a/d_jc_ad_a\t",sprintf("%.3f",(($xsum/($#pi_xDNA+1))/$JC_divergence_xDNA)/(($asum/($#pi_aDNA+1))/$JC_divergence_aDNA))," ";
+
+# now calculate and print the confidence intervals for this statistic using the delta method
+# as in Evans et al. 2014
+my $scaled_X_over_A = (($xsum/($#pi_xDNA+1))/$JC_divergence_xDNA)/(($asum/($#pi_aDNA+1))/$JC_divergence_aDNA);
+my $var_dA_over_dX = (($JC_divergence_aDNA**2)/($JC_divergence_xDNA**4))*(sqrt($JC_divergence_xDNA)/sqrt($xDNA_sites))**2+(1/($JC_divergence_xDNA**2))*(sqrt($JC_divergence_aDNA)/sqrt ($aDNA_sites))**2;
+my $dA_over_dX = ($JC_divergence_aDNA/$JC_divergence_xDNA);
+my $var_piA = ((($n_aDNA+1)*$pi_a)/((3*$n_aDNA-1)*$aDNA_sites))+((2*($n_aDNA**2+$n_aDNA+3)*($pi_a**2))/(9*$n_aDNA*($n_aDNA-1)))/$RAD_tag_count_aDNA;
+my $var_piX = ((($n_xDNA+1)*$pi_x)/((3*$n_xDNA-1)*$xDNA_sites))+((2*($n_xDNA**2+$n_xDNA+3)*($pi_x**2))/(9*$n_xDNA*($n_xDNA-1)))/$RAD_tag_count_xDNA;
+my $var_piX_over_piA = ($pi_x**2/$pi_a**4)*$var_piA+(1/($pi_a**2))*$var_piX;
+my $stdev_scaled_X_over_A = sqrt ($scaled_X_over_A**2*$var_dA_over_dX+$dA_over_dX**2*$var_piX_over_piA);
+print OUTFILE " (",sprintf("%.3f",($scaled_X_over_A-1.96*$stdev_scaled_X_over_A))," - ",sprintf("%.3f",($scaled_X_over_A+1.96*$stdev_scaled_X_over_A)),")\n";
+
+if(($number_of_individuals_genotyped-$number_of_female_individuals_genotyped)>1){
+	print OUTFILE "pi_Y/d_jc_ad_Y/pi_a/d_jc_ad_a is\t",(($ysum/($#pi_yDNA+1))/$JC_divergence_yDNA)/(($asum/($#pi_aDNA+1))/$JC_divergence_aDNA),"\n";
 }
-else{
-	$TajD_yDNA = "undefined";
-	print OUTFILE "TajD\t",$TajD_yDNA,"\n";
-}
-print OUTFILE "\n";
-print OUTFILE "pi_X/d_jc_ad_X/pi_a/d_jc_ad_a is ",(($xsum/($#pi_xDNA+1))/$JC_divergence_xDNA)/(($asum/($#pi_aDNA+1))/$JC_divergence_aDNA),"\n";
-print OUTFILE "pi_Y/d_jc_ad_Y/pi_a/d_jc_ad_a is ",(($ysum/($#pi_yDNA+1))/$JC_divergence_yDNA)/(($asum/($#pi_aDNA+1))/$JC_divergence_aDNA),"\n";
-
-print "95% CI for aDNA S\t",$S_aDNA_boot[$lower]," - ",$S_aDNA_boot[$upper],"\n";
-print "95% CI for xDNA  S\t",$S_xDNA_boot[$lower]," - ",$S_xDNA_boot[$upper],"\n";
-
-print "95% CI for aDNA  thetaW\t",sprintf("%.5f",$S_aDNA_boot[$lower]/$a1_obs_aDNA/$aDNA_sites)," - ",sprintf("%.5f",$S_aDNA_boot[$upper]/$a1_obs_aDNA/$aDNA_sites),"\n";
-print "95% CI for xDNA  thetaW\t",sprintf("%.5f",$S_xDNA_boot[$lower]/$a1_obs_xDNA/$xDNA_sites)," - ",sprintf("%.5f",$S_xDNA_boot[$upper]/$a1_obs_xDNA/$xDNA_sites),"\n";
-
-print "95% CI for aDNA pi per site\t",sprintf("%.5f",$pi_aDNA_persite_boot[$lower])," - ",sprintf("%.5f",$pi_aDNA_persite_boot[$upper]),"\n";
-print "95% CI for xDNA  pi per site\t",sprintf("%.5f",$pi_xDNA_persite_boot[$lower])," - ",sprintf("%.5f",$pi_xDNA_persite_boot[$upper]),"\n";
-
-print "95% CI for aDNA thetapi/divergence\t",sprintf("%.5f",$thetapi_over_divergence_aDNA[$lower])," - ",sprintf("%.5f",$thetapi_over_divergence_aDNA[$upper]),"\n";
-print "95% CI for xDNA  thetapi/divergence\t",sprintf("%.5f",$thetapi_over_divergence_xDNA[$lower])," - ",sprintf("%.5f",$thetapi_over_divergence_xDNA[$upper]),"\n";
-
-print "95% CI for aDNA TajD\t",sprintf("%.3f",$aDNA_TajD_boot[$lower])," - ",sprintf("%.3f",$aDNA_TajD_boot[$upper]),"\n";
-print "95% CI for xDNA  TajD\t",sprintf("%.3f",$xDNA_TajD_boot[$lower])," - ",sprintf("%.3f",$xDNA_TajD_boot[$upper]),"\n";
-
-print "95% CI for aDNA d\t",sprintf("%.5f",$d_aDNA_boot[$lower]/$aDNA_sites)," - ",sprintf("%.5f",$d_aDNA_boot[$upper]/$aDNA_sites),"\n";
-print "95% CI for xDNA  d\t",sprintf("%.5f",$d_xDNA_boot[$lower]/$xDNA_sites)," - ",sprintf("%.5f",$d_xDNA_boot[$upper]/$xDNA_sites),"\n";
-
-print "95% CI for JC_AP aDNA d\t",sprintf("%.5f",$JC_AP_divergence_aDNA_boot[$lower])," - ",sprintf("%.5f",$JC_AP_divergence_aDNA_boot[$upper]),"\n";
-print "95% CI for JC_AP xDNA  d\t",sprintf("%.5f",$JC_AP_divergence_xDNA_boot[$lower])," - ",sprintf("%.5f",$JC_AP_divergence_xDNA_boot[$upper]),"\n";
-
 
 close DATAINPUT;
 close OUTFILE;
-print "Done with input file 1\n";
 
 ```
 
