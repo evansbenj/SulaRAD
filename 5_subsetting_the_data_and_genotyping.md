@@ -1179,7 +1179,7 @@ my $var_piX_over_piA = ($pi_x**2/$pi_a**4)*$var_piA+(1/($pi_a**2))*$var_piX;
 my $stdev_scaled_X_over_A = sqrt ($scaled_X_over_A**2*$var_dA_over_dX+$dA_over_dX**2*$var_piX_over_piA);
 print OUTFILE " (",sprintf("%.3f",($scaled_X_over_A-1.96*$stdev_scaled_X_over_A))," - ",sprintf("%.3f",($scaled_X_over_A+1.96*$stdev_scaled_X_over_A)),")\n";
 
-if(($number_of_individuals_genotyped-$number_of_female_individuals_genotyped)>1){
+if((($number_of_individuals_genotyped-$number_of_female_individuals_genotyped)>1)&&($yDNA_sites > 0)){
 	print OUTFILE "pi_Y/d_jc_ad_Y/pi_a/d_jc_ad_a is\t",(($ysum/($#pi_yDNA+1))/$JC_divergence_yDNA)/(($asum/($#pi_aDNA+1))/$JC_divergence_aDNA),"\n";
 }
 
