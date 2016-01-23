@@ -1133,7 +1133,7 @@ else{
 print OUTFILE "Se/S\t",sprintf("%.3f",($xDNA_singleton_sites/$xDNA_segregating_sites))," (",sprintf("%.3f",($xDNA_singleton_sites_boot[$lower]))," - ",sprintf("%.3f",($xDNA_singleton_sites_boot[$upper])),")\n";
 
 print OUTFILE "\n";
-if(($number_of_individuals_genotyped-$number_of_female_individuals_genotyped)>1){
+if((($number_of_individuals_genotyped-$number_of_female_individuals_genotyped)>1)&&($yDNA_sites>0)){
 	print OUTFILE "yDNA\n";
 	print OUTFILE "#_alleles\t",$n_yDNA,"\n";
 	print OUTFILE "#_Sites\t",$yDNA_sites,"\n";
