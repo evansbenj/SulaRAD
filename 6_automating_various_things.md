@@ -237,7 +237,7 @@ close OUTFILE;
 
 ```
 
-and then printed a pretty plot using these R commands:
+and then we need to manually change the names in the file "recal_X_to_A.tab" to match the names we want on the plot (i.e., "nemestrina(Malaysia)","nemestrina(Sumatra)","nemestrina(Borneo)","pagensis","nigra","nigrescens","hecki","tonkeana","togeanus","ochreata","brunnescens","maura").  After that we can make a pretty plot using these R commands:
 
 ```R
 library (ggplot2)
