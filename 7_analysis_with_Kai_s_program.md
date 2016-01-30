@@ -383,4 +383,34 @@ sed -i -n '/inf/!p' *
 ```
 which deletes any lines containing `inf`.
 
+I automated this for each species using this script:
+
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use List::MoreUtils qw/ uniq /;
+
+# this program will execute lots of commando files 
+# that execute sqjobs commands.
+
+
+my @directories=("equilibrium","epoch2_full","epoch2_GAMMA_A_EQ_C_0","epoch2_GAMMA_X_EQ_C_0","epoch2_GAMMA_X_EQ_LAMBDA_GAMMA_A","epoch2_lambda_eq_0.75","epoch2_THETA_01_A_EQ_THETA_10_A","epoch2_THETA_01_X_EQ_LAMBDA_THETA_01_A","epoch2_THETA_01_X_EQ_THETA_10_X","epoch2_THETA_10_X_EQ_LAMBDA_THETA_10_A","epoch3_full","epoch3_GAMMA_A_EQ_C_0","epoch3_GAMMA_X_EQ_3OVER4_GAMMA_A","epoch3_GAMMA_X_EQ_C_0","epoch3_GAMMA_X_EQ_LAMBDA_GAMMA_A","epoch3_THETA_01_A_EQ_THETA_10_A","epoch3_lambda_eq_0.75","epoch3_THETA_01_X_EQ_LAMBDA_THETA_01_A","epoch3_THETA_01_X_EQ_THETA_10_X","epoch3_THETA_10_X_EQ_LAMBDA_THETA_10_A");
+
+my $y;
+my $commandline;
+my $status;
+my $outfile="tonkeana";
+
+$commandline = "java ParseFolder /work/ben/new_kai_program_2013.10.13/2015_Sularad/".$outfile."/".$directories[0]." 1e-15 true > ".$outfile.".out";
+print $commandline,"\n";
+$status = system($commandline);
+
+for ($y = 1 ; $y <= $#directories ; $y++ ) {
+    $commandline = "java ParseFolder /work/ben/new_kai_program_2013.10.13/2015_Sularad/".$outfile."/".$directories[$y]." 1e-15 true >> ".$outfile.".out";
+    print $commandline,"\n";
+    $status = system($commandline);
+}
+
+```
 
