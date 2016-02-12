@@ -17,3 +17,11 @@ Also working on the ABBA BABA test.  Using angsd:
 ```bash
 angsd -vcf-gl /home/ben/2015_SulaRADtag/good_merged_samples/final_round2_filtered.vcf.gz -fai /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta.fai -nind 40 -doAbbababa -anc /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta
 ```
+or with bam files (problem is that they haven't been filtered)
+```
+angsd -out 665_602_545 -doAbbababa 1 -doCounts 1 -b nem665_tonk602_tog545_bamfilez -anc /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta
+```
+```
+Rscript R/jackKnife.R file=665_602_545.abbababa indNames=nem665_tonk602_tog549_bamfilez outfile=665_602_545
+```
+
