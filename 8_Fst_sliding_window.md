@@ -25,3 +25,8 @@ angsd -out 665_602_545 -doAbbababa 1 -doCounts 1 -b nem665_tonk602_tog545_bamfil
 Rscript R/jackKnife.R file=665_602_545.abbababa indNames=nem665_tonk602_tog549_bamfilez outfile=665_602_545
 ```
 
+or first by subsetting the vcf file:
+
+```
+/usr/local/vcftools/src/perl/vcf-subset -c nem_PM665_stampy_sorted,tonk_PM602_stampy_sorted,togeanus_PF549_stampy_sorted /home/ben/2015_SulaRADtag/good_merged_samples/final_round2_filtered.vcf.gz | ~/tabix-0.2.6/bgzip -c > 665_602_549.vcf.gz
+```
