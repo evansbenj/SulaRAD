@@ -30,3 +30,24 @@ or first by subsetting the vcf file:
 ```
 /usr/local/vcftools/src/perl/vcf-subset -c nem_PM665_stampy_sorted,tonk_PM602_stampy_sorted,togeanus_PF549_stampy_sorted /home/ben/2015_SulaRADtag/good_merged_samples/final_round2_filtered.vcf.gz | ~/tabix-0.2.6/bgzip -c > 665_602_549.vcf.gz
 ```
+
+# Making a bed file to use to filter a bam file
+
+First I used a perl script to make a bed file from my vcf files:
+```
+./vcf2bed.pl bad_sex_bad_het.vcf > bad_sex_bad_het.bed
+./vcf2bed.pl round2_indels_only.vcf > round2_indels_only.bed
+```
+then I had to remove an extra column:
+```
+awk '{print $1 "\t" $2 "\t" $3}' bad_sex_bad_het.bed > bad_sex_bad_het_.bed
+awk '{print $1 "\t" $2 "\t" $3}' round2_indels_only.bed > round2_indels_only_.vcf
+mv bad_sex_bad_het_.bed bad_sex_bad_het.bed
+mv round2_indels_only_.vcf round2_indels_only.bed
+```
+then I made bed files for flanking regions:
+```
+~/bedtools2/bin/bedtools flank -b 200 -i bad_sex_bad_het.bed -g rhesus_chromosome_lengths > bad_sex_bad_het_100bp_buffer.bed
+~/bedtools2/bin/bedtools flank -b 3 -i round2_indels_only.vcf -g rhesus_chromosome_lengths > round2_indels_only_3bp_buffer.bed
+```
+
