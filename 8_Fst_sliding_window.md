@@ -162,6 +162,7 @@ and for borneo and Sulawesi:
 
 ```
 angsd -out borneo_sulawesi -doAbbababa 1 -doCounts 1 -b borneo_sulawesi_bamfilez -anc /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta
+Rscript R/jackKnife.R file=borneo_sulawesi.abbababa indNames=nem_bamfilez outfile=borneo_sulawesi_abbababa_out
 ```
 
 where this is the borneo_sulawesi_bamfilez file:
