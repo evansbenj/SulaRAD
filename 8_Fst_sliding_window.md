@@ -50,4 +50,13 @@ then I made bed files for flanking regions:
 ~/bedtools2/bin/bedtools flank -b 200 -i bad_sex_bad_het.bed -g rhesus_chromosome_lengths > bad_sex_bad_het_100bp_buffer.bed
 ~/bedtools2/bin/bedtools flank -b 3 -i round2_indels_only.vcf -g rhesus_chromosome_lengths > round2_indels_only_3bp_buffer.bed
 ```
-
+Then I did a bunch of steps to sort and merge these files into one file:
+```
+sort -k1,1 -k2,2n bad_sex_bad_het.bed > bad_sex_bad_het_sorted.bed
+sort -k1,1 -k2,2n bad_sex_bad_het_200bp_buffer.bed > bad_sex_bad_het_200bp_buffer_sorted.bed
+sort -k1,1 -k2,2n round2_indels_only.bed > round2_indels_only_sorted.bed 
+sort -k1,1 -k2,2n round2_indels_only_3bp_buffer.bed > round2_indels_only_3bp_buffer_sorted.bed
+cat bad_sex_bad_het_sorted.bed bad_sex_bad_het_200bp_buffer_sorted.bed round2_indels_only_sorted.bed round2_indels_only_3bp_buffer_sorted.bed > merge.bed
+sort -k1,1 -k2,2n merge.bed > merge_sorted.bed
+cat merge_sorted.bed | ~/bedtools2/bin/bedtools merge -i stdin > bad_sex_bad_het_and_200bp_buffer_and_round2_indels_and_3bp_buffer_sorted.bed
+```
