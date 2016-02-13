@@ -93,3 +93,52 @@ And then (finally) we can filter the bam file like this:
 ```
 ~/ngsutils-ngsutils-0.5.7/bin/bamutils filter recal_stampy_round2_all.bam recal_stampy_round2_all_filtered.bam -excludebed bad_sex_bad_het_and_200bp_buffer_and_round2_indels_and_3bp_buffer_sorted.bed
 ```
+Now I can divide up the filtered bam file into individual bam files like this:
+
+```
+samtools view -bhl brunescens_PF707_stampy_sorted recal_stampy_round2_all_filtered.bam > brunescens_PF707_stampy_sorted_filtered.bam
+samtools view -bhl hecki_PF643_stampy_sorted recal_stampy_round2_all_filtered.bam > hecki_PF643_stampy_sorted_filtered.bam
+samtools view -bhl tonk_PM582_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM582_stampy_sorted_filtered.bam
+samtools view -bhl nem_pagensis_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_pagensis_stampy_sorted_filtered.bam
+
+samtools view -bhl tonk_PM584_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM584_stampy_sorted_filtered.bam
+samtools view -bhl tonk_PM592_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM592_stampy_sorted_filtered.bam
+samtools view -bhl tonk_PM602_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM602_stampy_sorted_filtered.bam
+samtools view -bhl hecki_PF644_stampy_sorted recal_stampy_round2_all_filtered.bam > hecki_PF644_stampy_sorted_filtered.bam
+samtools view -bhl hecki_PF648_stampy_sorted recal_stampy_round2_all_filtered.bam > hecki_PF648_stampy_sorted_filtered.bam
+samtools view -bhl hecki_PF651_stampy_sorted recal_stampy_round2_all_filtered.bam > hecki_PF651_stampy_sorted_filtered.bam
+samtools view -bhl hecki_PM639_stampy_sorted recal_stampy_round2_all_filtered.bam > hecki_PM639_stampy_sorted_filtered.bam
+samtools view -bhl hecki_PM645_stampy_sorted recal_stampy_round2_all_filtered.bam > hecki_PM645_stampy_sorted_filtered.bam
+samtools view -bhl maura_PF615_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PF615_stampy_sorted_filtered.bam
+samtools view -bhl maura_PF713_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PF713_stampy_sorted_filtered.bam
+samtools view -bhl maura_PM613_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PM613_stampy_sorted_filtered.bam
+samtools view -bhl maura_PM614_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PM614_stampy_sorted_filtered.bam
+samtools view -bhl maura_PM616_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PM616_stampy_sorted_filtered.bam
+samtools view -bhl maura_PM618_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PM618_stampy_sorted_filtered.bam
+
+
+
+
+samtools view -bhl nem_Kedurang_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_Kedurang_stampy_sorted_filtered.bam
+samtools view -bhl nem_Malay_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_Malay_stampy_sorted_filtered.bam
+samtools view -bhl nem_Ngasang_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_Ngasang_stampy_sorted_filtered.bam
+samtools view -bhl nem_Gumgum_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_Gumgum_stampy_sorted_filtered.bam
+samtools view -bhl nem_PM664_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_PM664_stampy_sorted_filtered.bam
+samtools view -bhl nem_PM665_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_PM665_stampy_sorted_filtered.bam
+samtools view -bhl nem_Sukai_male_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_Sukai_male_stampy_sorted_filtered.bam
+samtools view -bhl nigra_PF1001_stampy_sorted recal_stampy_round2_all_filtered.bam > nigra_PF1001_stampy_sorted_filtered.bam
+samtools view -bhl nigra_PF660_stampy_sorted recal_stampy_round2_all_filtered.bam > nigra_PF660_stampy_sorted_filtered.bam
+samtools view -bhl nigra_PM1000_stampy_sorted recal_stampy_round2_all_filtered.bam > nigra_PM1000_stampy_sorted_filtered.bam
+samtools view -bhl nigra_PM1003_stampy_sorted recal_stampy_round2_all_filtered.bam > nigra_PM1003_stampy_sorted_filtered.bam
+samtools view -bhl nigrescens_PF654_stampy_sorted recal_stampy_round2_all_filtered.bam > nigrescens_PF654_stampy_sorted_filtered.bam
+samtools view -bhl ochreata_PF625_stampy_sorted recal_stampy_round2_all_filtered.bam > ochreata_PF625_stampy_sorted
+samtools view -bhl ochreata_PM571_stampy_sorted recal_stampy_round2_all_filtered.bam > ochreata_PM571_stampy_sorted
+samtools view -bhl ochreata_PM596_stampy_sorted recal_stampy_round2_all_filtered.bam > ochreata_PM596_stampy_sorted
+samtools view -bhl togeanus_PF549_stampy_sorted recal_stampy_round2_all_filtered.bam > togeanus_PF549_stampy_sorted
+samtools view -bhl togeanus_PM545_stampy_sorted recal_stampy_round2_all_filtered.bam > togeanus_PM545_stampy_sorted
+samtools view -bhl tonk_PF515_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PF515_stampy_sorted_filtered.bam
+samtools view -bhl tonk_PM561_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM561_stampy_sorted_filtered.bam
+samtools view -bhl tonk_PM565_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM565_stampy_sorted_filtered.bam
+samtools view -bhl tonk_PM566_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM566_stampy_sorted_filtered.bam
+samtools view -bhl tonk_PM567_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM567_stampy_sorted_filtered.bam
+```
