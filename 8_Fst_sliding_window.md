@@ -50,6 +50,33 @@ then I made bed files for flanking regions:
 ~/bedtools2/bin/bedtools flank -b 200 -i bad_sex_bad_het.bed -g rhesus_chromosome_lengths > bad_sex_bad_het_100bp_buffer.bed
 ~/bedtools2/bin/bedtools flank -b 3 -i round2_indels_only.vcf -g rhesus_chromosome_lengths > round2_indels_only_3bp_buffer.bed
 ```
+I made this tab delimited `rhesus_chromosome_lengths` file from the `.dict` genome file:
+```
+chr1	228252215
+chr2	189746636
+chr3	196418989
+chr4	167655696
+chr5	182086969
+chr6	178205221
+chr7	169801366
+chr8	147794981
+chr9	133323859
+chr10	94855758
+chr11	134511895
+chr12	106505843
+chr13	138028943
+chr14	133002572
+chr15	110119387
+chr16	78773432
+chr17	94452569
+chr18	73567989
+chr19	64391591
+chr20	88221753
+chrX	153947521
+chrY	11339300
+chrM	16564
+```
+
 Then I did a bunch of steps to sort and merge these files into one file:
 ```
 sort -k1,1 -k2,2n bad_sex_bad_het.bed > bad_sex_bad_het_sorted.bed
