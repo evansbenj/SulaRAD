@@ -87,3 +87,9 @@ cat bad_sex_bad_het_sorted.bed bad_sex_bad_het_200bp_buffer_sorted.bed round2_in
 sort -k1,1 -k2,2n merge.bed > merge_sorted.bed
 cat merge_sorted.bed | ~/bedtools2/bin/bedtools merge -i stdin > bad_sex_bad_het_and_200bp_buffer_and_round2_indels_and_3bp_buffer_sorted.bed
 ```
+
+And then (finally) we can filter the bam file like this:
+
+```
+~/ngsutils-ngsutils-0.5.7/bin/bamutils filter recal_stampy_round2_all.bam recal_stampy_round2_all_filtered.bam -excludebed bad_sex_bad_het_and_200bp_buffer_and_round2_indels_and_3bp_buffer_sorted.bed
+```
