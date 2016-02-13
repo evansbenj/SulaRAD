@@ -100,7 +100,6 @@ samtools view -bhl brunescens_PF707_stampy_sorted recal_stampy_round2_all_filter
 samtools view -bhl hecki_PF643_stampy_sorted recal_stampy_round2_all_filtered.bam > hecki_PF643_stampy_sorted_filtered.bam
 samtools view -bhl tonk_PM582_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM582_stampy_sorted_filtered.bam
 samtools view -bhl nem_pagensis_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_pagensis_stampy_sorted_filtered.bam
-
 samtools view -bhl tonk_PM584_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM584_stampy_sorted_filtered.bam
 samtools view -bhl tonk_PM592_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM592_stampy_sorted_filtered.bam
 samtools view -bhl tonk_PM602_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM602_stampy_sorted_filtered.bam
@@ -115,10 +114,6 @@ samtools view -bhl maura_PM613_stampy_sorted recal_stampy_round2_all_filtered.ba
 samtools view -bhl maura_PM614_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PM614_stampy_sorted_filtered.bam
 samtools view -bhl maura_PM616_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PM616_stampy_sorted_filtered.bam
 samtools view -bhl maura_PM618_stampy_sorted recal_stampy_round2_all_filtered.bam > maura_PM618_stampy_sorted_filtered.bam
-
-
-
-
 samtools view -bhl nem_Kedurang_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_Kedurang_stampy_sorted_filtered.bam
 samtools view -bhl nem_Malay_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_Malay_stampy_sorted_filtered.bam
 samtools view -bhl nem_Ngasang_stampy_sorted recal_stampy_round2_all_filtered.bam > nem_Ngasang_stampy_sorted_filtered.bam
