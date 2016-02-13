@@ -137,3 +137,80 @@ samtools view -bhl tonk_PM565_stampy_sorted recal_stampy_round2_all_filtered.bam
 samtools view -bhl tonk_PM566_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM566_stampy_sorted_filtered.bam
 samtools view -bhl tonk_PM567_stampy_sorted recal_stampy_round2_all_filtered.bam > tonk_PM567_stampy_sorted_filtered.bam
 ```
+
+Now for Sumatra, Borneo, and pagensis:
+
+```
+angsd -out nem -doAbbababa 1 -doCounts 1 -b nem_bamfilez -anc /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta
+Rscript R/jackKnife.R file=nem.abbababa indNames=nem_bamfilez outfile=nem_abbababa_out
+```
+where this is the `nem_bamfilez` file:
+
+```
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_pagensis_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_Gumgum_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_Kedurang_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_Malay_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_Ngasang_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_PM664_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_PM665_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_Sukai_male_stampy_sorted_filtered.bam
+
+```
+
+and for borneo and Sulawesi:
+
+```
+angsd -out borneo_sulawesi -doAbbababa 1 -doCounts 1 -b borneo_sulawesi_bamfilez -anc /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta
+```
+
+where this is the borneo_sulawesi_bamfilez file:
+```
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_Gumgum_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_PM664_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_PM665_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nem_Sukai_male_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/brunescens_PF707_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/hecki_PF643_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/hecki_PF644_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/hecki_PF648_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/hecki_PF651_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/hecki_PM639_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/hecki_PM645_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PF615_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PF713_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PM613_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PM614_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PM616_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PM618_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigra_PF1001_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigra_PF660_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigra_PM1003_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigra_PM1000_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigrescens_PF654_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/ochreata_PF625_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PM613_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PM614_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PM616_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/maura_PM618_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigra_PF1001_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigra_PF660_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigra_PM1003_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigra_PM1000_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/nigrescens_PF654_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/ochreata_PF625_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/ochreata_PM571_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/ochreata_PM596_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/togeanus_PF549_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/togeanus_PM545_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PF515_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM561_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM565_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM566_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM567_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM582_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM584_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM592_stampy_sorted_filtered.bam
+/home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM602_stampy_sorted_filtered.bam
+```
+
