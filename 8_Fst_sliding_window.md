@@ -184,7 +184,7 @@ where this is the `all_samples_bamfilez` file:
 /home/ben/2015_SulaRADtag/good_merged_samples/tonk_PM602_stampy_sorted_filtered.bam
 ```
 
-Then I wrote a script to parse the output of the R script.  This script (Parse_abba_baba.pl) counts up the significant comparisons that support gene flow for each individual.  I modified this to make it use different outgroups, such as M. pagensis instead of Borneo and Sumatra.  (Actually I think I will just add this)
+Then I wrote a script to parse the output of the R script.  This script (Parse_abba_baba.pl) counts up the significant comparisons that support gene flow for each individual using either Borneo, Sumatra, or pagensis as outgroups.  I used a modified one to do the same thing for Sumatra and Borneo and with pagensis as the outgroup (I will add Sulawesi as the outgroup also).
 
 ```perl
 #!/usr/bin/env perl
@@ -221,14 +221,17 @@ my %borneohash;
 my %borneohash_numcomparisons;
 my %sumatrahash;
 my %sumatrahash_numcomparisons;
-my $critical_value=4;
+my %pagensishash;
+my %pagensishash_numcomparisons;
+
+my $critical_value=3.1; #this is the critical value for anpha = 0.001
 my @temp;
 
 while ( my $line = <DATAINPUT>) {
 	chomp($line);
 	@temp=split('\t',$line);
 	if($temp[0] ne 'H1'){
-		if((in_array(\@borneo,$temp[2]) == 1)&&(in_array(\@borneo,$temp[0]) == 0)&&(in_array(\@borneo,$temp[1]) == 0)&&(in_array(\@sumatra,$temp[0]) == 0)&&(in_array(\@sumatra,$temp[1]) == 0)){
+		if((in_array(\@borneo,$temp[2]) == 1)&&(in_array(\@sulawesi,$temp[0]) == 1)&&(in_array(\@sulawesi,$temp[1]) == 1)){
 			if($temp[8] > $critical_value){
 				# this supports ABBA; geneflow into H2
 				$borneohash{$temp[1]}+=1;
@@ -240,7 +243,7 @@ while ( my $line = <DATAINPUT>) {
 			$borneohash_numcomparisons{$temp[0]}+=1;
 			$borneohash_numcomparisons{$temp[1]}+=1;
 		}
-		elsif((in_array(\@sumatra,$temp[2]) == 1)&&(in_array(\@sumatra,$temp[0]) == 0)&&(in_array(\@sumatra,$temp[1]) == 0)&&(in_array(\@borneo,$temp[0]) == 0)&&(in_array(\@borneo,$temp[1]) == 0)){
+		elsif((in_array(\@sumatra,$temp[2]) == 1)&&(in_array(\@sulawesi,$temp[0]) == 1)&&(in_array(\@sulawesi,$temp[1]) == 1)){
 			if($temp[8] > $critical_value){
 				# this supports ABBA; geneflow into H2
 				$sumatrahash{$temp[1]}+=1;
@@ -251,6 +254,18 @@ while ( my $line = <DATAINPUT>) {
 			}
 			$sumatrahash_numcomparisons{$temp[0]}+=1;
 			$sumatrahash_numcomparisons{$temp[1]}+=1;
+		}
+		elsif(($temp[2] eq $pagensis)&&(in_array(\@sulawesi,$temp[0]) == 1)&&(in_array(\@sulawesi,$temp[1]) == 1)){
+			if($temp[8] > $critical_value){
+				# this supports ABBA; geneflow into H2
+				$pagensishash{$temp[1]}+=1;
+			}
+			elsif($temp[8] < -$critical_value){
+				# this supports BABA; geneflow into H1
+				$pagensishash{$temp[0]}+=1;
+			}
+			$pagensishash_numcomparisons{$temp[0]}+=1;
+			$pagensishash_numcomparisons{$temp[1]}+=1;
 		}
 	}	
 }			
@@ -289,6 +304,22 @@ foreach(@sulawesi){
         }
 }
 
+print "\npagensis\n";
+foreach(@sulawesi){
+        print $_,"\t",;
+        if(defined($pagensishash{$_})){
+        	print $pagensishash{$_},"\t";
+        }
+        else{
+        	print "0\t";
+        }	
+      	if(defined($pagensishash_numcomparisons{$_})){
+        	print $pagensishash_numcomparisons{$_},"\n";
+        }
+        else{
+        	print "0\n";
+        }
+}
 
 
 
