@@ -338,3 +338,253 @@ foreach my $value (@$arr) {
 
 ```
 
+Because ANGSD works with bam files, I wanted to check if a custom script would recover similar results.  I also found it weird that the tonkeana samples, which had much higher coverage than the others, always seemed like they had no evidence of gene flow when compared to the other samples.  So I wrote this script:
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use List::MoreUtils qw/ uniq /;
+
+
+#  This program reads in a tab delimited genotype file generated
+#  by the perl program "Gets_outgroup_sequence_from_axt_files.pl"
+#  or from vcftools and performs the ABBA_BABA test using four individuals
+#  that will be specified in the command line. 
+
+
+# to execute type BPerforms_ABBA_BABA.pl inputfile.tab 1111100110000111100011100110010100000000 
+# 4_5_14_22_32 out.abbababa  
+# where 1111100110000111100011100110010100000000 refers to whether or not each individual in the ingroup 
+# in the vcf file is (1) or is not (0) female ,and 4_5_14_22_32 refers to taxa and columns involved in the 
+# expected (H4(H3,(H1,H2))) relationship as described next.
+
+# To keep the format the same as ANGSD, an ABBA site has the same SNP in H2 and H3
+# and a an BABA site has the same SNP in H1 and H3
+
+# In "4_5_14_22_32", the first number is the column number of the of the outgroup 
+# (4 in this case).  The second number is the column  where the ingroup begins. These begin with 1.
+# The other columns are the ingroup individuals as enumerated below
+
+# Example:
+# Performs_ABBA_BABA.pl recal_1000_51000.vcf.gz.tab_with_baboon.tab_and_human.tab 1111100110000111100011100110010100000000 3_6_14_2_32 out.abbababa
+
+# This should include gumgum, hecki_PF643, and tonk PF515.  If gene flow occurred from gumgum to PF643, 
+
+# Notes: 
+# ##### nigra_PM1000 is actually nigrescens_PM1000 #####
+# ##### these samples have very low coverage (<10x): ####
+# ##### nigrescens_PF654_sorted (7.33X) ####
+# ##### maura_PM613_sorted (8.65X) ####
+# ##### ochreata_PM596_sorted (9.02X)####
+# ##### nigra_660_sorted (9.61X) ####
+# ##### togeanus_PF549 (9.63X) ####
+
+# Here is the order of the samples for the SulaRad project:
+
+#	1	brunescens_PF707_stampy_sorted
+#	2	hecki_PF643_stampy_sorted
+#	3	hecki_PF644_stampy_sorted
+#	4	hecki_PF648_stampy_sorted
+#	5	hecki_PF651_stampy_sorted
+#	6	hecki_PM639_stampy_sorted
+#	7	hecki_PM645_stampy_sorted
+#	8	maura_PF615_stampy_sorted
+#	9	maura_PF713_stampy_sorted
+#	10	maura_PM613_stampy_sorted
+#	11	maura_PM614_stampy_sorted
+#	12	maura_PM616_stampy_sorted
+#	13	maura_PM618_stampy_sorted
+#	14	nem_Gumgum_stampy_sorted
+#	15	nem_Kedurang_stampy_sorted
+#	16	nem_Malay_stampy_sorted
+#	17	nem_Ngasang_stampy_sorted
+#	18	nem_PM664_stampy_sorted
+#	19	nem_PM665_stampy_sorted
+#	20	nem_Sukai_male_stampy_sorted
+#	21	nem_pagensis_stampy_sorted
+#	22	nigra_PF1001_stampy_sorted
+#	23	nigra_PF660_stampy_sorted
+#	24	nigrescens_PM1000_stampy_sorted
+#	25	nigra_PM1003_stampy_sorted
+#	26	nigrescens_PF654_stampy_sorted
+#	27	ochreata_PF625_stampy_sorted
+#	28	ochreata_PM571_stampy_sorted
+#	29	ochreata_PM596_stampy_sorted
+#	30	togeanus_PF549_stampy_sorted
+#	31	togeanus_PM545_stampy_sorted
+#	32	tonk_PF515_stampy_sorted
+#	33	tonk_PM561_stampy_sorted
+#	34	tonk_PM565_stampy_sorted
+#	35	tonk_PM566_stampy_sorted
+#	36	tonk_PM567_stampy_sorted
+#	37	tonk_PM582_stampy_sorted
+#	38	tonk_PM584_stampy_sorted
+#	39	tonk_PM592_stampy_sorted
+#	40	tonk_PM602_stampy_sorted
+
+
+
+
+my $inputfile = $ARGV[0];
+my $input2 = $ARGV[1];
+my $input3 = $ARGV[2];
+my $outputfile = $ARGV[3];
+
+my $string;
+
+unless (open DATAINPUT, $inputfile) {
+	print "Can not find the input file.\n";
+	exit;
+}
+
+unless (open(OUTFILE, ">$outputfile"))  {
+	print "I can\'t write to $outputfile\n";
+	exit;
+}
+print "Creating output file: $outputfile\n";
+
+
+my @sexes = split("",$ARGV[1]);
+my @whotoinclude = split("_",$ARGV[2]);
+
+my $sliding_window=5000000;
+my $current_window=0;
+my $current_chromosome="blah";
+
+my @temp;
+my @temp1;
+
+
+my $w;
+my $y;
+my $x;
+my @unique;
+my $x_uniq;
+
+my $number_of_individuals_genotyped=($#whotoinclude - 1);
+
+print "This number should be 3: ",$number_of_individuals_genotyped,"\n";
+
+my $number_of_female_individuals_genotyped;
+for ($y = 2 ; $y <= $#whotoinclude ; $y++ ) {
+	if($sexes[$whotoinclude[$y]-1] == 1){
+		$number_of_female_individuals_genotyped +=1;
+	}	
+}	
+
+print "This includes ",$number_of_female_individuals_genotyped," female(s)\n";
+
+my %ABBA_hash;
+my %BABA_hash;
+
+
+while ( my $line = <DATAINPUT>) {
+	chomp($line);
+	@temp=split(/[\/'\t']+/,$line);
+	if($temp[0] ne '#CHROM'){
+		# base the genomic location on the outgroup	
+		# this could be changed later to always rely on the most closely related ingroup
+		if($temp[0] ne $current_chromosome){
+			$current_chromosome = $temp[0];
+			$current_window = 0;
+		}
+		until($temp[1] < ($current_window+$sliding_window)){
+			$current_window = $current_window+$sliding_window;
+		}
+		if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")&&($temp[0] ne "chrM")){
+			$string=();
+			if((uc $temp[$whotoinclude[0]-1] eq "A")||(uc $temp[$whotoinclude[0]-1] eq "C")||(uc $temp[$whotoinclude[0]-1] eq "T")||(uc $temp[$whotoinclude[0]-1] eq "G")){
+				# the outgroup is defined
+				$w = uc $temp[$whotoinclude[0]-1];
+				$string=$string.$w;
+				# now load the autosomal ingroup data
+				for ($y = 0 ; $y < $number_of_individuals_genotyped; $y++ ) {
+					# load a random allele from each individual
+					if(rand() < 0.5){
+						# pick the first allele
+						if($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '.'){
+							$w = uc $temp[$whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ];
+							$string=$string.$w;
+						}
+					}
+					else{
+						# pick the second allele
+						if($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '.'){
+							$w = uc $temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]];
+							$string=$string.$w;
+						}	
+					}
+				}
+				if(defined($string)){
+					@temp1=split('',$string);
+					if(($#temp1 == ($number_of_individuals_genotyped))){
+						# there are no missing data
+						$x_uniq = uniq @temp1;
+						if($x_uniq == 2){
+							# this is a polymorphic position 
+							if(($temp1[0] eq $temp1[2])&&($temp1[1] eq $temp1[3])){
+								# this is an ABBA site
+								$ABBA_hash{$current_chromosome."_".$current_window}+=1;
+								# To keep the format the same as ANGSD, an ABBA site has the same SNP in H2 and H3
+							}	
+							elsif(($temp1[0] eq $temp1[3])&&($temp1[1] eq $temp1[2])){
+								# this is an BABA site	
+								$BABA_hash{$current_chromosome."_".$current_window}+=1;
+								# a BABA site has the same SNP in H1 and H3
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+close DATAINPUT;
+
+# now merge the hash keys
+my @common_keys = ();
+
+foreach (keys %ABBA_hash) {
+	push(@common_keys, $_);
+}
+
+foreach (keys %BABA_hash) {
+	push(@common_keys, $_) unless exists $ABBA_hash{$_};
+}
+
+@common_keys = map  { $_->[0] }
+             sort { $a->[1] <=> $b->[1] }
+             map  { [$_, $_=~/(\d+)/] }
+                 @common_keys;
+#@common_keys = sort @common_keys;
+
+
+foreach (@common_keys) {
+	@temp1=split('_',$_);
+	print OUTFILE $temp1[0],"\t",$temp1[1]+1,"\t",$temp1[1]+$sliding_window,"\t";
+	if(defined($ABBA_hash{$_})){
+		print OUTFILE $ABBA_hash{$_},"\t";
+	}
+	else{
+		print OUTFILE "0\t";
+	}
+		if(defined($BABA_hash{$_})){
+		print OUTFILE $BABA_hash{$_},"\t0\t0\t0\t0\n";
+	}
+	else{
+		print OUTFILE "0\t0\t0\t0\t0\n";
+	}
+}
+
+close OUTFILE;
+```
+
+And the results can be analyzed using the ANGSD Rscript like this:
+
+```
+Rscript R/jackKnife.R file=/home/ben/2015_SulaRADtag/good_merged_samples/out.abbababa indNames=temp_bamfilez outfile=temp_abbababa_out
+```
+
+So far my preliminary results did recover support for migration with pagensis and the Ngasang sample from Sumatra (near the Mentawais).  But the Sulawesi comparisons do not appear to be significant and (either way) there are FAR less ABBA and BABA sites identified from teh highly filtered VCF file.  ANGSD has ~10X more sites in each class.  Not sure why!
