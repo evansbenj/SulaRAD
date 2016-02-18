@@ -589,4 +589,83 @@ And the results can be analyzed using the ANGSD Rscript like this:
 Rscript R/jackKnife.R file=/home/ben/2015_SulaRADtag/good_merged_samples/out.abbababa indNames=temp_bamfilez outfile=temp_abbababa_out
 ```
 
-So far my preliminary results did recover support for migration with pagensis and the Ngasang sample from Sumatra (near the Mentawais).  But the Sulawesi comparisons do not appear to be significant and (either way) there are FAR less ABBA and BABA sites identified from teh highly filtered VCF file.  ANGSD has ~10X more sites in each class.  Not sure why!
+So far my preliminary results did recover support for migration with pagensis and the Ngasang sample from Sumatra (near the Mentawais).  
+
+I also wrote a wrapper for `Performs_ABBA_BABA.pl` to automate each comparison.  Here it is (`Wrapper_for_Performs_ABBA_BABA.pl`):
+
+```perl
+
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use List::MoreUtils qw/ uniq /;
+
+# This program is a wrapper for the script "Performs_ABBA_BABA.pl"
+
+# It will feed in commandlines for all of the comparisons I want to do,
+# and then analyze the results with the ANGSD R script 'jackKnife.R'
+# and then compile the results
+
+# to run type this: "Wrapper_for_Performs_abba_babba.pl outputfile"
+
+# outputfile is the name of the summary file
+
+
+
+#my $outputfile = $ARGV[0];
+
+#unless (open(OUTFILE, ">$outputfile"))  {
+#	print "I can\'t write to $outputfile\n";
+#	exit;
+#}
+#print "Creating output file: $outputfile\n";
+
+my @borneo = ("nem_PM664_stampy_sorted_filtered.bam","nem_PM665_stampy_sorted_filtered.bam","nem_Sukai_male_stampy_sorted_filtered.bam","nem_Gumgum_stampy_sorted_filtered.bam");
+my @borneo_numbers = ("14","18","19","20");
+my @sumatra = ("nem_Kedurang_stampy_sorted_filtered.bam","nem_Malay_stampy_sorted_filtered.bam","nem_Ngasang_stampy_sorted_filtered.bam");
+my @sumatra_numbers=("15","16","17");
+my $pagensis = "nem_pagensis_stampy_sorted_filtered.bam";
+my $pagensis_number=21;
+my @sulawesi = ("brunescens_PF707_stampy_sorted_filtered.bam","hecki_PF643_stampy_sorted_filtered.bam","hecki_PF644_stampy_sorted_filtered.bam","hecki_PF648_stampy_sorted_filtered.bam","hecki_PF651_stampy_sorted_filtered.bam","hecki_PM639_stampy_sorted_filtered.bam","hecki_PM645_stampy_sorted_filtered.bam","maura_PF615_stampy_sorted_filtered.bam","maura_PF713_stampy_sorted_filtered.bam","maura_PM613_stampy_sorted_filtered.bam","maura_PM614_stampy_sorted_filtered.bam","maura_PM616_stampy_sorted_filtered.bam","maura_PM618_stampy_sorted_filtered.bam","nigra_PF1001_stampy_sorted_filtered.bam","nigra_PF660_stampy_sorted_filtered.bam","nigra_PM1003_stampy_sorted_filtered.bam","nigra_PM1000_stampy_sorted_filtered.bam","nigrescens_PF654_stampy_sorted_filtered.bam","ochreata_PF625_stampy_sorted_filtered.bam","ochreata_PM571_stampy_sorted_filtered.bam","ochreata_PM596_stampy_sorted_filtered.bam","togeanus_PF549_stampy_sorted_filtered.bam","togeanus_PM545_stampy_sorted_filtered.bam","tonk_PF515_stampy_sorted_filtered.bam","tonk_PM561_stampy_sorted_filtered.bam","tonk_PM565_stampy_sorted_filtered.bam","tonk_PM566_stampy_sorted_filtered.bam","tonk_PM567_stampy_sorted_filtered.bam","tonk_PM582_stampy_sorted_filtered.bam","tonk_PM584_stampy_sorted_filtered.bam","tonk_PM592_stampy_sorted_filtered.bam","tonk_PM602_stampy_sorted_filtered.bam");
+my @sulawesi_numbers=("1","2","3","4","5","6","7","8","9","10","11","12","13","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40");
+#my @sulawesi = ("brunescens_PF707_stampy_sorted_filtered.bam","hecki_PF643_stampy_sorted_filtered.bam","hecki_PF644_stampy_sorted_filtered.bam","hecki_PF648_stampy_sorted_filtered.bam","hecki_PF651_stampy_sorted_filtered.bam","hecki_PM639_stampy_sorted_filtered.bam","hecki_PM645_stampy_sorted_filtered.bam","maura_PF615_stampy_sorted_filtered.bam","maura_PF713_stampy_sorted_filtered.bam","maura_PM613_stampy_sorted_filtered.bam","maura_PM614_stampy_sorted_filtered.bam","maura_PM616_stampy_sorted_filtered.bam","maura_PM618_stampy_sorted_filtered.bam","nigra_PF1001_stampy_sorted_filtered.bam","nigra_PF660_stampy_sorted_filtered.bam","nigra_PM1003_stampy_sorted_filtered.bam","nigra_PM1000_stampy_sorted_filtered.bam","nigrescens_PF654_stampy_sorted_filtered.bam","ochreata_PF625_stampy_sorted_filtered.bam","ochreata_PM571_stampy_sorted_filtered.bam","ochreata_PM596_stampy_sorted_filtered.bam","togeanus_PF549_stampy_sorted_filtered.bam","togeanus_PM545_stampy_sorted_filtered.bam");
+my %borneohash;
+my %borneohash_numcomparisons;
+my %sumatrahash;
+my %sumatrahash_numcomparisons;
+my %pagensishash;
+my %pagensishash_numcomparisons;
+my $sliding_window=5000000;
+my $outgroup_number=3; # for the tab file with human and baboon outgroup, 3=rhesus, 4=human, and 5=baboon
+my $ingroup_column_begin_number=6; # for the tab file with human and baboon outgroup, this is 6
+my $infile_tab = "final_round2_filtered.vcf.gz_with_baboon_and_human.tab";
+my $commandline;
+my $status;
+
+my $critical_value=3.1; #this is the critical value for anpha = 0.001
+my @temp;
+my $x;
+my $y;
+my $z;
+
+# first do all pairs of Sulawesi macaques with each of the Borneo samples
+for ($x = 0 ; $x < $#sulawesi_numbers ; $x++ ) { # This is the first Sulawesi sample
+	for ($y = 0 ; $y <= $#borneo_numbers ; $y++ ) { # This is each of the Borneo samples
+		for ($z = $x+1 ; $z <= $#sulawesi_numbers ; $z++ ) { # This is the second Sulawesi sample
+			$commandline = "Performs_ABBA_BABA.pl ".$infile_tab." 1111100110000111100011100110010100000000 ".$outgroup_number."_".$ingroup_column_begin_number."_".$borneo_numbers[$y]."_".$sulawesi_numbers[$x]."_".$sulawesi_numbers[$z]." ".$sulawesi_numbers[$x]."_".$sulawesi_numbers[$z]."_".$borneo_numbers[$y].".abbababa";
+			$status = system($commandline);
+			# now make a file with the names of the taxa
+			my $outputfile2 = $sulawesi_numbers[$x]."_".$sulawesi_numbers[$z]."_".$borneo_numbers[$y].".names";
+			unless (open(OUTFILE2, ">$outputfile2"))  {
+				print "I can\'t write to $outputfile2\n";
+				exit;
+			}
+			print "Creating output file: $outputfile2\n";
+			print OUTFILE2 $sulawesi[$x],"\n",$sulawesi[$z],"\n",$borneo[$y],"\n";
+			close OUTFILE2;
+		}
+	}
+}
+
+
+```
