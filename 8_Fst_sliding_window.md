@@ -338,7 +338,8 @@ foreach my $value (@$arr) {
 
 ```
 
-Because ANGSD works with bam files, I wanted to check if a custom script would recover similar results.  I also found it weird that the tonkeana samples, which had much higher coverage than the others, always seemed like they had no evidence of gene flow when compared to the other samples.  So I wrote this script:
+Because ANGSD works with bam files, I wanted to check if a custom script would recover similar results.  I also found it weird that the tonkeana samples, which had much higher coverage than the others, always seemed like they had no evidence of gene flow when compared to the other samples.  So I wrote this script (`Performs_ABBA_BABA.pl`):
+
 ```perl
 #!/usr/bin/env perl
 use strict;
@@ -579,6 +580,7 @@ foreach (@common_keys) {
 }
 
 close OUTFILE;
+
 ```
 
 And the results can be analyzed using the ANGSD Rscript like this:
