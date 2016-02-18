@@ -594,7 +594,6 @@ So far my preliminary results did recover support for migration with pagensis an
 I also wrote a wrapper for `Performs_ABBA_BABA.pl` to automate each comparison.  Here it is (`Wrapper_for_Performs_ABBA_BABA.pl`):
 
 ```perl
-
 #!/usr/bin/env perl
 use strict;
 use warnings;
@@ -620,13 +619,13 @@ use List::MoreUtils qw/ uniq /;
 #}
 #print "Creating output file: $outputfile\n";
 
-my @borneo = ("nem_PM664_stampy_sorted_filtered.bam","nem_PM665_stampy_sorted_filtered.bam","nem_Sukai_male_stampy_sorted_filtered.bam","nem_Gumgum_stampy_sorted_filtered.bam");
+my @borneo = ("nem_Gumgum_stampy_sorted","nem_PM664_stampy_sorted","nem_PM665_stampy_sorted","nem_Sukai_male_stampy_sorted");
 my @borneo_numbers = ("14","18","19","20");
-my @sumatra = ("nem_Kedurang_stampy_sorted_filtered.bam","nem_Malay_stampy_sorted_filtered.bam","nem_Ngasang_stampy_sorted_filtered.bam");
+my @sumatra = ("nem_Kedurang_stampy_sorted","nem_Malay_stampy_sorted","nem_Ngasang_stampy_sorted");
 my @sumatra_numbers=("15","16","17");
-my $pagensis = "nem_pagensis_stampy_sorted_filtered.bam";
+my $pagensis = "nem_pagensis_stampy_sorted";
 my $pagensis_number=21;
-my @sulawesi = ("brunescens_PF707_stampy_sorted_filtered.bam","hecki_PF643_stampy_sorted_filtered.bam","hecki_PF644_stampy_sorted_filtered.bam","hecki_PF648_stampy_sorted_filtered.bam","hecki_PF651_stampy_sorted_filtered.bam","hecki_PM639_stampy_sorted_filtered.bam","hecki_PM645_stampy_sorted_filtered.bam","maura_PF615_stampy_sorted_filtered.bam","maura_PF713_stampy_sorted_filtered.bam","maura_PM613_stampy_sorted_filtered.bam","maura_PM614_stampy_sorted_filtered.bam","maura_PM616_stampy_sorted_filtered.bam","maura_PM618_stampy_sorted_filtered.bam","nigra_PF1001_stampy_sorted_filtered.bam","nigra_PF660_stampy_sorted_filtered.bam","nigra_PM1003_stampy_sorted_filtered.bam","nigra_PM1000_stampy_sorted_filtered.bam","nigrescens_PF654_stampy_sorted_filtered.bam","ochreata_PF625_stampy_sorted_filtered.bam","ochreata_PM571_stampy_sorted_filtered.bam","ochreata_PM596_stampy_sorted_filtered.bam","togeanus_PF549_stampy_sorted_filtered.bam","togeanus_PM545_stampy_sorted_filtered.bam","tonk_PF515_stampy_sorted_filtered.bam","tonk_PM561_stampy_sorted_filtered.bam","tonk_PM565_stampy_sorted_filtered.bam","tonk_PM566_stampy_sorted_filtered.bam","tonk_PM567_stampy_sorted_filtered.bam","tonk_PM582_stampy_sorted_filtered.bam","tonk_PM584_stampy_sorted_filtered.bam","tonk_PM592_stampy_sorted_filtered.bam","tonk_PM602_stampy_sorted_filtered.bam");
+my @sulawesi = ("brunescens_PF707_stampy_sorted","hecki_PF643_stampy_sorted","hecki_PF644_stampy_sorted","hecki_PF648_stampy_sorted","hecki_PF651_stampy_sorted","hecki_PM639_stampy_sorted","hecki_PM645_stampy_sorted","maura_PF615_stampy_sorted","maura_PF713_stampy_sorted","maura_PM613_stampy_sorted","maura_PM614_stampy_sorted","maura_PM616_stampy_sorted","maura_PM618_stampy_sorted","nigra_PF1001_stampy_sorted","nigra_PF660_stampy_sorted","nigrescens_PM1000_stampy_sorted","nigra_PM1003_stampy_sorted","nigrescens_PF654_stampy_sorted","ochreata_PF625_stampy_sorted","ochreata_PM571_stampy_sorted","ochreata_PM596_stampy_sorted","togeanus_PF549_stampy_sorted","togeanus_PM545_stampy_sorted","tonk_PF515_stampy_sorted","tonk_PM561_stampy_sorted","tonk_PM565_stampy_sorted","tonk_PM566_stampy_sorted","tonk_PM567_stampy_sorted","tonk_PM582_stampy_sorted","tonk_PM584_stampy_sorted","tonk_PM592_stampy_sorted","tonk_PM602_stampy_sorted");
 my @sulawesi_numbers=("1","2","3","4","5","6","7","8","9","10","11","12","13","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40");
 #my @sulawesi = ("brunescens_PF707_stampy_sorted_filtered.bam","hecki_PF643_stampy_sorted_filtered.bam","hecki_PF644_stampy_sorted_filtered.bam","hecki_PF648_stampy_sorted_filtered.bam","hecki_PF651_stampy_sorted_filtered.bam","hecki_PM639_stampy_sorted_filtered.bam","hecki_PM645_stampy_sorted_filtered.bam","maura_PF615_stampy_sorted_filtered.bam","maura_PF713_stampy_sorted_filtered.bam","maura_PM613_stampy_sorted_filtered.bam","maura_PM614_stampy_sorted_filtered.bam","maura_PM616_stampy_sorted_filtered.bam","maura_PM618_stampy_sorted_filtered.bam","nigra_PF1001_stampy_sorted_filtered.bam","nigra_PF660_stampy_sorted_filtered.bam","nigra_PM1003_stampy_sorted_filtered.bam","nigra_PM1000_stampy_sorted_filtered.bam","nigrescens_PF654_stampy_sorted_filtered.bam","ochreata_PF625_stampy_sorted_filtered.bam","ochreata_PM571_stampy_sorted_filtered.bam","ochreata_PM596_stampy_sorted_filtered.bam","togeanus_PF549_stampy_sorted_filtered.bam","togeanus_PM545_stampy_sorted_filtered.bam");
 my %borneohash;
@@ -651,7 +650,7 @@ my $z;
 # first do all pairs of Sulawesi macaques with each of the Borneo samples
 for ($x = 0 ; $x < $#sulawesi_numbers ; $x++ ) { # This is the first Sulawesi sample
 	for ($y = 0 ; $y <= $#borneo_numbers ; $y++ ) { # This is each of the Borneo samples
-		for ($z = $x+1 ; $z <= $#sulawesi_numbers ; $z++ ) { # This is the second Sulawesi sample
+		for ($z = ($x+1) ; $z <= $#sulawesi_numbers ; $z++ ) { # This is the second Sulawesi sample
 			$commandline = "Performs_ABBA_BABA.pl ".$infile_tab." 1111100110000111100011100110010100000000 ".$outgroup_number."_".$ingroup_column_begin_number."_".$borneo_numbers[$y]."_".$sulawesi_numbers[$x]."_".$sulawesi_numbers[$z]." ".$sulawesi_numbers[$x]."_".$sulawesi_numbers[$z]."_".$borneo_numbers[$y].".abbababa";
 			$status = system($commandline);
 			# now make a file with the names of the taxa
@@ -666,6 +665,5 @@ for ($x = 0 ; $x < $#sulawesi_numbers ; $x++ ) { # This is the first Sulawesi sa
 		}
 	}
 }
-
 
 ```
