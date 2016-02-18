@@ -660,7 +660,7 @@ for ($x = 0 ; $x < $#sulawesi_numbers ; $x++ ) { # This is the first Sulawesi sa
 				exit;
 			}
 			print "Creating output file: $outputfile2\n";
-			print OUTFILE2 $sulawesi[$x],"\n",$sulawesi[$z],"\n",$borneo[$y],"\n";
+			print OUTFILE2 $borneo[$y],"\n",$sulawesi[$x],"\n",$sulawesi[$z],"\n";
 			close OUTFILE2;
 		}
 	}
