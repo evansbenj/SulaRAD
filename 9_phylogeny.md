@@ -1,6 +1,6 @@
 # Making a phylogeny for each chromosome
 
-Here is a script to convert the tab data into a nexus file for each chromosome:
+Below is a script to convert the tab data into a nexus file for each chromosome (21_tab_to_nexus.pl).  This script is somewhat clunky because it is hardcoded to have three outgroup sequences:
 
 ```perl
 #!/usr/bin/env perl
