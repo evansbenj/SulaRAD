@@ -210,7 +210,7 @@ unless (open(OUTFILE, ">$outputfile"))  {
 }
 print "Creating output file: $outputfile\n";
 print OUTFILE "#NEXUS\n";
-print OUTFILE "BEGIN DATA\;\nDIMENSIONS NTAX=",$#names-1," NCHAR=",$count,"\n";
+print OUTFILE "BEGIN DATA\;\nDIMENSIONS NTAX=",$#names-1," NCHAR=",$count,"\;\n";
 print OUTFILE "FORMAT DATATYPE=DNA  MISSING=? GAP=- \;\n";
 print OUTFILE "MATRIX\n";
 for ($y = 2; $y <= $#names; $y++ ) {
