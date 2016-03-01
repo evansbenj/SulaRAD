@@ -414,3 +414,164 @@ for ($y = 1 ; $y <= $#directories ; $y++ ) {
 
 ```
 
+And I wrote a script that will parse and format the output of the above script.  This script is called "Formats_Kais_results.pl":
+
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# This script reformats the output of "parse_commando.pl" which is a wrapper
+# for a java program that Kai wrote to extract results from many runs
+
+# run by typing "Formats_Kais_results.pl infile outfile"
+
+my $inputfile = $ARGV[0];
+my $outputfile = $ARGV[1];
+
+unless (open DATAINPUT, $inputfile) {
+	print "Can not find the input file.\n";
+	exit;
+}
+
+unless (open(OUTFILE, ">$outputfile"))  {
+	print "I can\'t write to $outputfile\n";
+	exit;
+}
+print "Creating output file: $outputfile\n";
+
+my %datahash;
+my @temp;
+my $y;
+my @headers;
+my @models = ("equilibrium","epoch2_full","epoch2_GAMMA_A_EQ_C_0","epoch2_GAMMA_X_EQ_3OVER4_GAMMA_A","epoch2_GAMMA_X_EQ_C_0","epoch2_GAMMA_X_EQ_LAMBDA_GAMMA_A","epoch2_lambda_eq_0.75","epoch2_THETA_01_A_EQ_THETA_10_A","epoch2_THETA_01_X_EQ_LAMBDA_THETA_01_A","epoch2_THETA_01_X_EQ_THETA_10_X","epoch2_THETA_10_X_EQ_LAMBDA_THETA_10_A","epoch3_full","epoch3_GAMMA_A_EQ_C_0","epoch3_GAMMA_X_EQ_3OVER4_GAMMA_A","epoch3_GAMMA_X_EQ_C_0","epoch3_GAMMA_X_EQ_LAMBDA_GAMMA_A","epoch3_THETA_01_A_EQ_THETA_10_A","epoch3_lambda_eq_0.75","epoch3_THETA_01_X_EQ_LAMBDA_THETA_01_A","epoch3_THETA_01_X_EQ_THETA_10_X","epoch3_THETA_10_X_EQ_LAMBDA_THETA_10_A");
+my @free_params = ("0","3","2","1","2","2","2","2","2","2","2","5","4","3","4","4","4","4","4","4","4");
+my @paramnames = ("folder_path","nconvg","theta_01_x","theta_10_x","gamma_x","theta_01_a","theta_10_a","gamma_a","lambda","rho_1","tau_a_1","rho_2","tau_a_2");
+
+# make a hash with the free parameter values 
+my %free_params;
+for ($y = 0 ; $y <= $#models; $y++ ) {
+	$free_params{$models[$y]}=$free_params[$y];
+}
+
+# read in the data
+# and calculate the AIC according to WAGENMAKERS and FARRELL
+# Psychonomic Bulletin & Review 2004, 11 (1), 192-196
+
+my $best_AIC=0;
+while ( my $line = <DATAINPUT>) {
+	chomp($line);
+	@temp=split('\t',$line);
+	if($temp[0] ne 'folder_path'){
+		for ($y = 1 ; $y <= $#headers; $y++ ) {
+			$datahash{$temp[0].'_'.$headers[$y]} = $temp[$y];
+		}
+		# calculate the AIC value
+		$datahash{$temp[0].'_AIC'} = -2*$datahash{$temp[0].'_lnLike'}+2*$free_params{$temp[0]};
+		# and calculate the minimum AIC value
+		if($best_AIC == 0){
+			$best_AIC = $datahash{$temp[0].'_AIC'};
+		}	
+		elsif($datahash{$temp[0].'_AIC'} < $best_AIC){
+			$best_AIC = $datahash{$temp[0].'_AIC'};
+		}
+	}
+	else{
+		@headers=@temp;
+	}
+}
+#print "the equilibrium AIC is ",sprintf("%.3f",$datahash{'equilibrium_AIC'}),"\n";
+my $sum_e_raised_to_neg5_times_deltaAIC=0;
+
+# now calculate deltaAIC and the numbers for the AIC weights
+foreach(@models){
+	if(exists($datahash{$_.'_AIC'})){
+		$datahash{$_.'_deltaAIC'} = $datahash{$_.'_AIC'} - $best_AIC;
+		$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'} = exp(-0.5*$datahash{$_.'_deltaAIC'});
+		$sum_e_raised_to_neg5_times_deltaAIC+=$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'};
+	}
+	else{
+		print "This model does not have a defined lnL ",$_,"\n";
+	}
+}
+
+# now calculate the wi_deltaAIC (the AIC weights)
+foreach(@models){
+	if(exists($datahash{$_.'_AIC'})){
+		$datahash{$_.'_wi_deltaAIC'} = $datahash{$_.'_e_raised_to_neg5_times_deltaAIC'}/$sum_e_raised_to_neg5_times_deltaAIC;
+	}
+	else{
+		print "This model does not have a defined lnL ",$_,"\n";
+	}
+}	
+
+# now print the results, eventually also calculate the weighted parameter values
+# first print headers
+print "model\t";
+for ($y = 2 ; $y <= $#paramnames; $y++ ) {
+	print $paramnames[$y],"\t";
+}
+print "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
+foreach(@models){
+	print $_;
+	if(exists($datahash{$_.'nconvg'})){
+		if($datahash{$_.'nconvg'} eq 1){
+			print "*\t";
+		}
+	}	
+	else{
+		print "\t";
+	}
+	for ($y = 2 ; $y <= $#paramnames; $y++ ) {
+		if(exists($datahash{$_.'_'.$paramnames[$y]})){
+			print sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]}),"\t";
+		}
+		elsif($_ eq 'equilibrium'){
+				print "- \t";
+		}
+		elsif($paramnames[$y] eq 'rho_2'){
+			print "- \t";
+		}
+		elsif($paramnames[$y] eq 'tau_a_2'){
+			print "- \t";
+		}		
+		elsif($paramnames[$y] eq 'gamma_a'){
+			print "0(fixed) \t";
+		}		
+		elsif($paramnames[$y] eq 'gamma_x'){
+			if(($_ eq 'epoch2_GAMMA_X_EQ_C_0')||($_ eq 'epoch3_GAMMA_X_EQ_C_0')){
+				print "0(fixed) \t";
+			}
+			elsif(($_ eq 'epoch2_GAMMA_X_EQ_3OVER4_GAMMA_A')||($_ eq 'epoch3_GAMMA_X_EQ_3OVER4_GAMMA_A')||($_ eq 'epoch2_GAMMA_X_EQ_LAMBDA_GAMMA_A')||($_ eq 'epoch3_GAMMA_X_EQ_LAMBDA_GAMMA_A')){
+				print "lgA \t";
+			}	
+		}
+		elsif($paramnames[$y] eq 'lambda'){
+				print "0.75(fixed) \t";			
+		}				
+		else{
+			print "fixme \t";
+		}
+	}	
+	if(exists($datahash{$_.'_AIC'})){
+		$datahash{$_.'_wi_deltaAIC'} = $datahash{$_.'_e_raised_to_neg5_times_deltaAIC'}/$sum_e_raised_to_neg5_times_deltaAIC;
+		print sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.3f",$datahash{$_.'_AIC'})," \t",sprintf("%.3f",$datahash{$_.'_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
+	}
+	else{
+		print "This model does not have a defined lnL ",$_,"\n";
+	}
+}
+
+print "* indicates convergence was achieved with rtol > 1e-15\n";
+
+close DATAINPUT;
+close OUTFILE;
+
+sub in_array {
+my ($arr,$search_for) = @_;
+foreach my $value (@$arr) {
+	return 1 if $value eq $search_for;
+}
+ 	return 0;
+}
+```
