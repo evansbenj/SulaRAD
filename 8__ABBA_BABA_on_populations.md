@@ -461,10 +461,10 @@ foreach (@common_keys) {
 		print OUTFILE2 "0\t";
 	}
 	if(defined($BABA_hash{$_})){
-		print OUTFILE2 $BABA_hash{$_},"\t0\t0\t0\t0\t";
+		print OUTFILE2 $BABA_hash{$_},"\t";
 	}
 	else{
-		print OUTFILE2 "0\t0\t0\t0\t0\t";
+		print OUTFILE2 "0\t";
 	}
 	if(defined($BBAA_hash{$_})){
 		print OUTFILE2 $BBAA_hash{$_},"\t";
