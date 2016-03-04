@@ -20,7 +20,7 @@ use List::MoreUtils qw/ uniq /;
 #  one individual from species H3, H2, and H1, including those that that 
 #  missing data in some individuals.
 
-# to execute type Performs_ABBA_BABA_on_popoulations.pl inputfile.tab 1111100110000111100011100110010100000000 
+# to execute type Performs_ABBA_BABA_on_populations.pl inputfile.tab 1111100110000111100011100110010100000000 
 # 3_6_14-18-19-20_2-3-4-5-6-7_32-33-34-35-36-37-38-39-40 output1.txt output2.txt
 # where 1111100110000111100011100110010100000000 refers to whether or not each individual in the ingroup 
 # in the vcf file is (1) or is not (0) female ,and 3_6 refers to (i) the column that contains the 
@@ -195,7 +195,7 @@ for ($y = 0 ; $y <= $#H3 ; $y++ ) {
 }
 print "This includes ",$number_of_female_individuals_genotyped," female(s)\n";
 
-my $sliding_window=5000000;
+my $sliding_window=10000000;
 my $current_window=0;
 my $window_counter=0;
 my $current_chromosome="blah";
@@ -214,13 +214,41 @@ my $ancestral;
 my $H3_derived_freq;
 my $H1_derived_freq;
 my $H2_derived_freq;
+my $H3_ancestral_freq;
+my $H1_ancestral_freq;
+my $H2_ancestral_freq;
 my $peak_H2_H3_derived_freq;
+my $peak_H1_H3_derived_freq;
 my @H3allelez;
 my @H2allelez;
+my @H1allelez;
 my $diff;
 my $num_comparisons;
 my %H2_H3_pairwise_divergence_per_window;
+my $diffH1H3;
+my $num_comparisonsH1H3;
+my %H1_H3_pairwise_divergence_per_window;
 my %number_of_sites_per_window;
+my %number_of_sites_per_windowH1H3;
+my %ABBA_peak_hashH1H3;
+my %BABA_peak_hashH1H3;
+my %H1_pairwise_nucleotide_diversity_per_window;
+my %H2_pairwise_nucleotide_diversity_per_window;
+my %H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window;
+my %H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window;
+
+my $diffH2;
+my $num_comparisonsH2;
+my @H2_first_allelez;
+my @H2_second_allelez;
+my $aa;
+my $bb;
+
+my $diffH1;
+my $num_comparisonsH1;
+my @H1_first_allelez;
+my @H1_second_allelez;
+
 
 
 while ( my $line = <DATAINPUT>) {
@@ -263,10 +291,11 @@ while ( my $line = <DATAINPUT>) {
 				$string=$string.$A;
 				# now calculate the frequency of the derived allele in the H3 data
 				$H3_derived_freq=0;
+				$H3_ancestral_freq=0;
 				$derived=0;
 				$ancestral=0;
 				for ($y = 0 ; $y <= $#H3; $y++ ) {
-					if($temp[$H3[$y]+$whotoinclude[1]-2] ne './.'){
+					if(($temp[$H3[$y]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H3[$y]+$whotoinclude[1]-2]) == 3)){
 						@allelez=split('/',$temp[$H3[$y]+$whotoinclude[1]-2]);
 						if($allelez[0] eq $A){
 							$ancestral+=1;
@@ -286,13 +315,15 @@ while ( my $line = <DATAINPUT>) {
 				}
 				if(($derived+$ancestral)>0){
 					$H3_derived_freq=$derived/($derived+$ancestral);
+					$H3_ancestral_freq=$ancestral/($derived+$ancestral);
 				}
 				# now calculate the frequency of the derived allele in the H1 data
 				$H1_derived_freq=0;
+				$H1_ancestral_freq=0;
 				$derived=0;
 				$ancestral=0;
 				for ($y = 0 ; $y <= $#H1; $y++ ) {
-					if($temp[$H1[$y]+$whotoinclude[1]-2] ne './.'){
+					if(($temp[$H1[$y]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H1[$y]+$whotoinclude[1]-2]) == 3)){
 						@allelez=split('/',$temp[$H1[$y]+$whotoinclude[1]-2]);
 						if($allelez[0] eq $A){
 							$ancestral+=1;
@@ -312,13 +343,15 @@ while ( my $line = <DATAINPUT>) {
 				}
 				if(($derived+$ancestral)>0){
 					$H1_derived_freq=$derived/($derived+$ancestral);
+					$H1_ancestral_freq=$ancestral/($derived+$ancestral);
 				}
 				# now calculate the frequency of the derived allele in the H2 data
 				$H2_derived_freq=0;
+				$H2_ancestral_freq=0;
 				$derived=0;
 				$ancestral=0;
 				for ($y = 0 ; $y <= $#H2; $y++ ) {
-					if($temp[$H2[$y]+$whotoinclude[1]-2] ne './.'){
+					if(($temp[$H2[$y]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H2[$y]+$whotoinclude[1]-2]) == 3)){
 						@allelez=split('/',$temp[$H2[$y]+$whotoinclude[1]-2]);
 						if($allelez[0] eq $A){
 							$ancestral+=1;
@@ -338,6 +371,7 @@ while ( my $line = <DATAINPUT>) {
 				}
 				if(($derived+$ancestral)>0){
 					$H2_derived_freq=$derived/($derived+$ancestral);
+					$H2_ancestral_freq=$ancestral/($derived+$ancestral);
 				}
 				# Now calculate the average pairwise divergence between H2 and H3
 				$diff=0;
@@ -345,36 +379,153 @@ while ( my $line = <DATAINPUT>) {
 				@H3allelez=();
 				@H2allelez=();
 				for ($y = 0 ; $y <= $#H3; $y++ ) {
-					if($temp[$H3[$y]+$whotoinclude[1]-2] ne './.'){
+					if(($temp[$H3[$y]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H3[$y]+$whotoinclude[1]-2]) == 3)){
 						for ($w = 0 ; $w <= $#H2; $w++ ) {
-							if($temp[$H2[$w]+$whotoinclude[1]-2] ne './.'){
+							if(($temp[$H2[$w]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H2[$w]+$whotoinclude[1]-2]) == 3)){
 								# there are data for H2 and H3
 								@H3allelez=split('/',$temp[$H3[$y]+$whotoinclude[1]-2]);
-								@H2allelez=split('/',$temp[$H3[$w]+$whotoinclude[1]-2]);
-							}
-							foreach(@H3allelez){
-								if($_ ne $H2allelez[0]){
-									$diff+=1; 
+								@H2allelez=split('/',$temp[$H2[$w]+$whotoinclude[1]-2]);
+								foreach(@H3allelez){
+									if($_ ne $H2allelez[0]){
+										$diff+=1; 
+									}
+									if($_ ne $H2allelez[1]){
+										$diff+=1;
+									}
+									$num_comparisons+=2;	
 								}
-								if($_ ne $H2allelez[1]){
-									$diff+=1;
-								}
-								$num_comparisons+=2;	
 							}
 						}
 					}					
 				}
-				# now calculate the average pairwise divergence
+				# Now calculate the average pairwise divergence between H1 and H3
+				$diffH1H3=0;
+				$num_comparisonsH1H3=0;
+				@H3allelez=();
+				@H1allelez=();
+				for ($y = 0 ; $y <= $#H3; $y++ ) {
+					if(($temp[$H3[$y]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H3[$y]+$whotoinclude[1]-2]) == 3)){
+						for ($w = 0 ; $w <= $#H1; $w++ ) {
+							if(($temp[$H1[$w]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H1[$w]+$whotoinclude[1]-2]) == 3)){
+								# there are data for H1 and H3
+								@H3allelez=split('/',$temp[$H3[$y]+$whotoinclude[1]-2]);
+								@H1allelez=split('/',$temp[$H1[$w]+$whotoinclude[1]-2]);
+								foreach(@H3allelez){
+									if($_ ne $H1allelez[0]){
+										$diffH1H3+=1; 
+									}
+									if($_ ne $H1allelez[1]){
+										$diffH1H3+=1;
+									}
+									$num_comparisonsH1H3+=2;	
+								}
+							}
+						}
+					}					
+				}
+				# now calculate the average pairwise divergence for H2 and H3
 				if($num_comparisons>0){
-					if((defined($string))&&($#H1>=0)&&($#H2>=0)&&($#H3>=0)){
+					# this does not depend on the position being polymorphic
+					if((defined($string))&&(($H1_derived_freq>=0)||($H1_ancestral_freq>=0))&&(($H2_derived_freq>=0)||($H2_ancestral_freq>=0))&&(($H3_derived_freq>=0)||($H3_ancestral_freq>=0))){
 						$number_of_sites_per_window{$window_counter."_".$current_chromosome."_".$current_window}+=1;
 						$H2_H3_pairwise_divergence_per_window{$window_counter."_".$current_chromosome."_".$current_window}+=($diff/$num_comparisons);
 						# later we will standardize this by the number of sites per window
-						# this is important because non-diverged sites are an important part of divergence.	
 					}
 				}
-				# Now calculate the ABBA_BABA site weighting
-				if((defined($string))&&($#H1>=0)&&($#H2>=0)&&($#H3>=0)){
+				# now calculate the average pairwise divergence for H1 and H3
+				if($num_comparisonsH1H3>0){
+					# this does not depend on the position being polymorphic
+					if((defined($string))&&(($H1_derived_freq>=0)||($H1_ancestral_freq>=0))&&(($H2_derived_freq>=0)||($H2_ancestral_freq>=0))&&(($H3_derived_freq>=0)||($H3_ancestral_freq>=0))){
+						$number_of_sites_per_windowH1H3{$window_counter."_".$current_chromosome."_".$current_window}+=1;
+						$H1_H3_pairwise_divergence_per_window{$window_counter."_".$current_chromosome."_".$current_window}+=($diffH1H3/$num_comparisonsH1H3);
+						# later we will standardize this by the number of sites per window
+					}
+				}
+				# Now calculate the average pairwise nucleotide diversity within H2
+				$diffH2=0;
+				$num_comparisonsH2=0;
+				@H2_first_allelez=();
+				@H2_second_allelez=();
+				for ($y = 0 ; $y < $#H2; $y++ ) {
+					for ($w = ($y+1) ; $w <= $#H2; $w++ ) {
+						if(($temp[$H2[$y]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H2[$y]+$whotoinclude[1]-2]) == 3) && ($temp[$H2[$w]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H2[$w]+$whotoinclude[1]-2]) == 3)){
+							# there are data for both H2 alleles
+							@H2_first_allelez=split('/',$temp[$H2[$y]+$whotoinclude[1]-2]);
+							@H2_second_allelez=split('/',$temp[$H2[$w]+$whotoinclude[1]-2]);
+							# combine the alleles into one array
+							@H2_first_allelez = (@H2_first_allelez, @H2_second_allelez);
+							# check that this array has 4 elements
+							if($#H2_first_allelez != 3){
+								print "Problem with number of alleles @H2_first_allelez @H2_second_allelez\n";
+							}
+							else{ # calculate the average pairwise diversity for this pair of genotypes
+								for ($bb = 0 ; $bb < $#H2_first_allelez; $bb++) {
+									for ($aa = ($bb+1); $aa <= $#H2_first_allelez; $aa++) {
+										if($H2_first_allelez[$bb] ne $H2_first_allelez[$aa]){
+											$diffH2+=1; 
+										}
+										$num_comparisonsH2+=1;
+									}
+								}		
+							}
+						}
+					}					
+				}
+				# now tabulate the average pairwise nucleotide diversity within H2
+				if($num_comparisonsH2>0){
+					if((defined($string))&&(($H1_derived_freq>=0)||($H1_ancestral_freq>=0))&&(($H2_derived_freq>=0)||($H2_ancestral_freq>=0))&&(($H3_derived_freq>=0)||($H3_ancestral_freq>=0))){
+						# this does not depend on the position being polymorphic
+						if((defined($string))&&(($H1_derived_freq>=0)||($H1_ancestral_freq>=0))&&(($H2_derived_freq>=0)||($H2_ancestral_freq>=0))&&(($H3_derived_freq>=0)||($H3_ancestral_freq>=0))){
+							$H2_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}+=($diffH2/$num_comparisonsH2);
+							$H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}+=1;
+							# later we will standardize this by the number of sites per window
+						}
+					}
+				}
+				# Now calculate the average pairwise nucleotide diversity within H1
+				$diffH1=0;
+				$num_comparisonsH1=0;
+				@H1_first_allelez=();
+				@H1_second_allelez=();
+				for ($y = 0 ; $y < $#H1; $y++ ) {
+					for ($w = ($y+1) ; $w <= $#H1; $w++ ) {
+						if(($temp[$H1[$y]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H1[$y]+$whotoinclude[1]-2]) == 3) && ($temp[$H1[$w]+$whotoinclude[1]-2] ne './.')&&(length($temp[$H1[$w]+$whotoinclude[1]-2]) == 3)){
+							# there are data for both H1 alleles
+							@H1_first_allelez=split('/',$temp[$H1[$y]+$whotoinclude[1]-2]);
+							@H1_second_allelez=split('/',$temp[$H1[$w]+$whotoinclude[1]-2]);
+							# combine the alleles into one array
+							@H1_first_allelez = (@H1_first_allelez, @H1_second_allelez);
+							# check that the array has 4 elements
+							if($#H1_first_allelez != 3){
+								print "Problem with number of alleles @H1_first_allelez @H1_second_allelez\n";
+							}
+							else{
+								for ($bb = 0 ; $bb < $#H1_first_allelez; $bb++) {
+									for ($aa = ($bb+1); $aa <= $#H1_first_allelez; $aa++) {
+										if($H1_first_allelez[$bb] ne $H1_first_allelez[$aa]){
+											$diffH1+=1; 
+										}
+										$num_comparisonsH1+=1;
+									}
+								}		
+							}
+						}
+					}					
+				}
+				# now tabulate the average pairwise nucleotide diversity within H1
+				if($num_comparisonsH1>0){
+					if((defined($string))&&(($H1_derived_freq>=0)||($H1_ancestral_freq>=0))&&(($H2_derived_freq>=0)||($H2_ancestral_freq>=0))&&(($H3_derived_freq>=0)||($H3_ancestral_freq>=0))){
+						# this does not depend on the position being polymorphic
+						if((defined($string))&&(($H1_derived_freq>=0)||($H1_ancestral_freq>=0))&&(($H2_derived_freq>=0)||($H2_ancestral_freq>=0))&&(($H3_derived_freq>=0)||($H3_ancestral_freq>=0))){
+							$H1_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}+=($diffH1/$num_comparisonsH1);
+							$H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}+=1;
+							# later we will standardize this by the number of sites per window
+						}
+					}
+				}
+
+				# calculate the ABBA BABBA stats, plus more
+				if((defined($string))&&(($H1_derived_freq>=0)||($H1_ancestral_freq>=0))&&(($H2_derived_freq>=0)||($H2_ancestral_freq>=0))&&(($H3_derived_freq>=0)||($H3_ancestral_freq>=0))){
 					@temp1=split('',$string);
 					$x_uniq = uniq @temp1;
 					if($x_uniq == 2){
@@ -397,7 +548,15 @@ while ( my $line = <DATAINPUT>) {
 								}
 								$ABBA_peak_hash{$window_counter."_".$current_chromosome."_".$current_window}+=((1-$H1_derived_freq)*$peak_H2_H3_derived_freq*$peak_H2_H3_derived_freq);
 								$BABA_peak_hash{$window_counter."_".$current_chromosome."_".$current_window}+=($H1_derived_freq*(1-$peak_H2_H3_derived_freq)*$peak_H2_H3_derived_freq);
-
+								# here we are calculating stats for f and the assignment of H1 and H2 needs to be switched.
+								if($H1_derived_freq > $H3_derived_freq){
+									$peak_H1_H3_derived_freq = $H1_derived_freq;
+								}
+								else{
+									$peak_H1_H3_derived_freq = $H3_derived_freq;	
+								}
+								$BABA_peak_hashH1H3{$window_counter."_".$current_chromosome."_".$current_window}+=($peak_H1_H3_derived_freq*(1-$H2_derived_freq)*$peak_H1_H3_derived_freq);
+								$ABBA_peak_hashH1H3{$window_counter."_".$current_chromosome."_".$current_window}+=((1-$peak_H1_H3_derived_freq)*$H2_derived_freq*$peak_H1_H3_derived_freq);
 						}
 					}
 				}
@@ -420,14 +579,26 @@ foreach (keys %BABA_hash) {
 	push(@common_keys, $_) unless exists $ABBA_hash{$_};
 }
 
-@common_keys = map  { $_->[0] }
+my @common_keys2 = ();
+
+foreach (keys %ABBA_hash) {
+	push(@common_keys2, $_);
+}
+
+foreach (keys %BBAA_hash) {
+	push(@common_keys2, $_) unless exists $ABBA_hash{$_};
+}
+
+
+my @out = keys %{{map {($_ => 1)} (@common_keys, @common_keys2)}};
+
+@out = map  { $_->[0] }
              sort { $a->[1] <=> $b->[1] }
              map  { [$_, $_=~/(\d+)/] }
-                 @common_keys;
-#@common_keys = sort @common_keys;
+                 @out;
 
 
-foreach (@common_keys) {
+foreach (@out) {
 	@temp1=split('_',$_);
 	print OUTFILE $temp1[1],"\t",$temp1[2]+1,"\t",$temp1[2]+$sliding_window,"\t";
 	if(defined($ABBA_hash{$_})){
@@ -443,15 +614,15 @@ foreach (@common_keys) {
 		print OUTFILE "0\t0\t0\t0\t0\n";
 	}
 }
-if($#common_keys == -1){
+if($#out == -1){
 	print OUTFILE "chr0\t1\t500000\t0\t0\t0\t0\t0\t0\n";
 }
 
 close OUTFILE;
 
 
-print OUTFILE2 "chromosome\tbegin\tend\tABBA\tBABA\tBBAA\tD\tfd\tdxy\tnum_sites_per_window\n";
-foreach (@common_keys) {
+print OUTFILE2 "chromosome\tbegin\tend\tABBA\tBABA\tBBAA\tD\tfdH2H3\tfH1H3\tdH1H3\tnum_sites_per_windowH2H3\tdH1H3\tnum_sites_per_windowH1H3\tH2pi\tnumsitesH2pi\tH1pi\tnumsitesH1pi\n";
+foreach (@out) {
 	@temp1=split('_',$_);
 	print OUTFILE2 $temp1[1],"\t",$temp1[2]+1,"\t",$temp1[2]+$sliding_window,"\t";
 	if(defined($ABBA_hash{$_})){
@@ -477,29 +648,57 @@ foreach (@common_keys) {
 		print OUTFILE2 ($ABBA_hash{$_}-$BABA_hash{$_})/($ABBA_hash{$_}+$BABA_hash{$_}),"\t";
 	}
 	else{
-		print OUTFILE2 "NAN\t;"
+		print OUTFILE2 "NAN\t";
 	}
 
-	#print fd for this window
+	#print fd H2H3 for this window
 	if(($ABBA_peak_hash{$_}-$BABA_peak_hash{$_})>0){
 		print OUTFILE2 ($ABBA_hash{$_}-$BABA_hash{$_})/($ABBA_peak_hash{$_}-$BABA_peak_hash{$_}),"\t";
 	}
 	else{
-		print OUTFILE2 "NAN\t;"
+		print OUTFILE2 "NAN\t";
 	}
-	#print average pairwise divergence for this window
-	if($number_of_sites_per_window{$_}>0){
-		print OUTFILE2 ($H2_H3_pairwise_divergence_per_window{$_}/$number_of_sites_per_window{$_}),"\t",$number_of_sites_per_window{$_},"\n";
+	#print fd H1H3 for this window
+	if(($BABA_peak_hashH1H3{$_}-$ABBA_peak_hashH1H3{$_})>0){
+		print OUTFILE2 ($BABA_hash{$_}-$ABBA_hash{$_})/($BABA_peak_hashH1H3{$_}-$ABBA_peak_hashH1H3{$_}),"\t";
 	}
 	else{
-		print OUTFILE2 "NAN\n;"
+		print OUTFILE2 "NAN\t";
+	}	#print average H2H3 pairwise divergence for this window and number of H2H3 sites
+	if($number_of_sites_per_window{$_}>0){
+		print OUTFILE2 ($H2_H3_pairwise_divergence_per_window{$_}/$number_of_sites_per_window{$_}),"\t",$number_of_sites_per_window{$_},"\t";
+	}
+	else{
+		print OUTFILE2 "NAN\t",$number_of_sites_per_window{$_},"\t";
+	}
+	#print average H1H3 pairwise divergence for this window and number of H1H3 sites
+	if($number_of_sites_per_windowH1H3{$_}>0){
+		print OUTFILE2 ($H1_H3_pairwise_divergence_per_window{$_}/$number_of_sites_per_windowH1H3{$_}),"\t",$number_of_sites_per_windowH1H3{$_},"\t";
+	}
+	else{
+		print OUTFILE2 "NAN\t",$number_of_sites_per_windowH1H3{$_},"\t";
+	}
+	#print H2 pairwise nucleotide diversity per site for this window and number of H2 pairwise nucleotide diversity sites
+	if($H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$_}>0){
+		print OUTFILE2 ($H2_pairwise_nucleotide_diversity_per_window{$_}/$H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$_}),"\t",$H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$_},"\t";
+	}
+	else{
+		print OUTFILE2 "NAN\t",$H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$_},"\t";
+	}
+	#print H1 pairwise nucleotide diversity per site for this window and number of H1 pairwise nucleotide diversity sites
+	if($H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$_}>0){
+		print OUTFILE2 ($H1_pairwise_nucleotide_diversity_per_window{$_}/$H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$_}),"\t",$H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$_},"\n";
+	}
+	else{
+		print OUTFILE2 "NAN\t",$H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$_},"\n";
 	}
 }
-if($#common_keys == -1){
+if($#out == -1){
 	print OUTFILE2 "chr0\t1\t500000\t0\t0\t0\t0\t0\t0\t0\n";
 }
 
 close OUTFILE2;
+
 ```
 
 This script generates two files - one is analyzed by the R script from ANGSD called 'jacknife.R' and the other can be fed into an as yet not written R script to analyze cool stuff in windows that is in the file 'stats'.
