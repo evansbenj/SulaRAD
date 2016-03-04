@@ -480,7 +480,7 @@ while ( my $line = <DATAINPUT>) {
 		@headers=@temp;
 	}
 }
-#print "the equilibrium AIC is ",sprintf("%.3f",$datahash{'equilibrium_AIC'}),"\n";
+#print "best AIC is ",$best_AIC,"\n";
 my $sum_e_raised_to_neg5_times_deltaAIC=0;
 
 # now calculate deltaAIC and the numbers for the AIC weights
@@ -508,61 +508,103 @@ foreach(@models){
 # now print the results, eventually also calculate the weighted parameter values
 # first print headers
 print "model\t";
+print OUTFILE "model\t";
 for ($y = 2 ; $y <= $#paramnames; $y++ ) {
 	print $paramnames[$y],"\t";
+	print OUTFILE $paramnames[$y],"\t";
 }
 print "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
+print OUTFILE "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
+
 foreach(@models){
 	print $_;
+	print OUTFILE $_;
 	if(exists($datahash{$_.'nconvg'})){
 		if($datahash{$_.'nconvg'} eq 1){
 			print "*\t";
+			print OUTFILE "*\t";
 		}
 	}	
 	else{
 		print "\t";
+		print OUTFILE "\t";
 	}
 	for ($y = 2 ; $y <= $#paramnames; $y++ ) {
 		if(exists($datahash{$_.'_'.$paramnames[$y]})){
-			print sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]}),"\t";
+			print sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+			print OUTFILE sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
 		}
 		elsif($_ eq 'equilibrium'){
 				print "- \t";
+				print OUTFILE "- \t";
+		}
+		elsif($paramnames[$y] eq 'theta_01_x'){
+			if(($_ eq 'epoch2_THETA_01_X_EQ_LAMBDA_THETA_01_A')||($_ eq 'epoch3_THETA_01_X_EQ_LAMBDA_THETA_01_A')){
+				print "lq01A \t";
+				print OUTFILE "lq01A \t";
+			}
+			if(($_ eq 'epoch2_THETA_01_X_EQ_THETA_10_X')||($_ eq 'epoch3_THETA_01_X_EQ_THETA_10_X')){
+				print "q10x \t";
+				print OUTFILE "q10x \t";
+			}
+		}
+		elsif($paramnames[$y] eq 'theta_10_x'){
+			if(($_ eq 'epoch2_THETA_10_X_EQ_LAMBDA_THETA_10_A')||($_ eq 'epoch3_THETA_10_X_EQ_LAMBDA_THETA_10_A')){
+				print "lq10a \t";
+				print OUTFILE "lq10a \t";
+			}
+		}
+		elsif($paramnames[$y] eq 'theta_01_a'){
+			if(($_ eq 'epoch2_THETA_01_A_EQ_THETA_10_A')||($_ eq 'epoch3_THETA_01_A_EQ_THETA_10_A')){
+				print "q10a \t";
+				print OUTFILE "q10a \t";
+			}
 		}
 		elsif($paramnames[$y] eq 'rho_2'){
 			print "- \t";
+			print OUTFILE "- \t";
 		}
 		elsif($paramnames[$y] eq 'tau_a_2'){
 			print "- \t";
+			print OUTFILE "- \t";
 		}		
 		elsif($paramnames[$y] eq 'gamma_a'){
 			print "0(fixed) \t";
+			print OUTFILE "0(fixed) \t";
 		}		
 		elsif($paramnames[$y] eq 'gamma_x'){
 			if(($_ eq 'epoch2_GAMMA_X_EQ_C_0')||($_ eq 'epoch3_GAMMA_X_EQ_C_0')){
 				print "0(fixed) \t";
+				print OUTFILE "0(fixed) \t";
 			}
 			elsif(($_ eq 'epoch2_GAMMA_X_EQ_3OVER4_GAMMA_A')||($_ eq 'epoch3_GAMMA_X_EQ_3OVER4_GAMMA_A')||($_ eq 'epoch2_GAMMA_X_EQ_LAMBDA_GAMMA_A')||($_ eq 'epoch3_GAMMA_X_EQ_LAMBDA_GAMMA_A')){
 				print "lgA \t";
+				print OUTFILE "lgA \t";
 			}	
 		}
 		elsif($paramnames[$y] eq 'lambda'){
-				print "0.75(fixed) \t";			
+				print "0.75(fixed) \t";
+				print OUTFILE "0.75(fixed) \t";	
 		}				
 		else{
 			print "fixme \t";
+			print OUTFILE "fixme \t";
 		}
 	}	
 	if(exists($datahash{$_.'_AIC'})){
 		$datahash{$_.'_wi_deltaAIC'} = $datahash{$_.'_e_raised_to_neg5_times_deltaAIC'}/$sum_e_raised_to_neg5_times_deltaAIC;
-		print sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.3f",$datahash{$_.'_AIC'})," \t",sprintf("%.3f",$datahash{$_.'_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
+		print sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.3f",$datahash{$_.'_AIC'})," \t",sprintf("%.3f",$datahash{$_.'_deltaAIC'})," \t ",sprintf("%.3f",$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
+		print OUTFILE sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.3f",$datahash{$_.'_AIC'})," \t",sprintf("%.3f",$datahash{$_.'_deltaAIC'})," \t ",sprintf("%.3f",$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
 	}
 	else{
 		print "This model does not have a defined lnL ",$_,"\n";
+		print OUTFILE "This model does not have a defined lnL ",$_,"\n";
 	}
 }
 
-print "* indicates convergence was achieved with rtol > 1e-15\n";
+	print "* indicates convergence was achieved with rtol > 1e-15\n";
+	print OUTFILE "* indicates convergence was achieved with rtol > 1e-15\n";
+
 
 close DATAINPUT;
 close OUTFILE;
@@ -574,4 +616,6 @@ foreach my $value (@$arr) {
 }
  	return 0;
 }
+
+
 ```
