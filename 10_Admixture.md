@@ -238,3 +238,4 @@ cat ../final_round2_filtered.vcf | java -jar vcf2beagle.jar -9 final_round2_filt
 ```
 in this directory `/home/ben/2015_SulaRADtag/good_merged_samples/ADMIXTURE`
 
+and that didn't work either....
