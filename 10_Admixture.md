@@ -239,3 +239,30 @@ cat ../final_round2_filtered.vcf | java -jar vcf2beagle.jar -9 final_round2_filt
 in this directory `/home/ben/2015_SulaRADtag/good_merged_samples/ADMIXTURE`
 
 and that didn't work either....
+
+So I tried some stuff that was recommended here:
+http://apol1.blogspot.ca/2014/11/best-practice-for-converting-vcf-files.html
+
+This person suggested using bcftools and plink to generate the plink files.  I did this - at first it did not work because some sites had missing genotypes in all individuals. So I used vcftools to remove all sites with more than 50% missing genotypes like this:
+`vcftools --vcf ../final_round2_filtered.vcf --max-missing 0.5 --recode --out less_than_50_percent_missing `
+
+and them I typed this as directed here(http://apol1.blogspot.ca/2014/11/best-practice-for-converting-vcf-files.html):
+```
+bcftools norm -Ou -m -any less_than_50_percent_missing.recode.vcf.gz |
+>   bcftools norm -Ou -f /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta |
+>   bcftools annotate -Ob -x ID \
+>     -I +'%CHROM:%POS:%REF:%ALT' |
+>   plink --bcf /dev/stdin \
+>     --keep-allele-order \
+>     --vcf-idspace-to _ \
+>     --const-fid \
+>     --allow-extra-chr 0 \
+>     --split-x b37 no-fail \
+>     --make-bed \
+>     --out output
+```
+
+and now, miraculously, admixture works.  Like this:
+
+`./admixture ../output.bed 11`
+
