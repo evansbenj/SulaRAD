@@ -231,3 +231,10 @@ Turns out this format is not supported anymore.  So I used vcftools to generate 
 vcftools --gzvcf ../final_round2_filtered.vcf.gz --plink --out final_round2_filtered.vcf.gz_plink
 ```
 
+Several attemtps to make PLINK files did work but the program admixture didn't like the files I generated.  So I made a beagle formated file from my vcf file like this:
+
+```
+cat ../final_round2_filtered.vcf | java -jar vcf2beagle.jar -9 final_round2_filtered_beagle 
+```
+in this directory `/home/ben/2015_SulaRADtag/good_merged_samples/ADMIXTURE`
+
