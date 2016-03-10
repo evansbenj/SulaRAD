@@ -226,4 +226,8 @@ while ( my $line = <DATAINPUT>) {
 
 close OUTFILE;
 ```
+Turns out this format is not supported anymore.  So I used vcftools to generate a PLINK ped file linek this:
+```
+vcftools --gzvcf ../final_round2_filtered.vcf.gz --plink --out final_round2_filtered.vcf.gz_plink
+```
 
