@@ -441,6 +441,7 @@ unless (open(OUTFILE, ">$outputfile"))  {
 print "Creating output file: $outputfile\n";
 
 my %datahash;
+my %weighted_parameters;
 my @temp;
 my $y;
 my @headers;
@@ -505,7 +506,7 @@ foreach(@models){
 	}
 }	
 
-# now print the results, eventually also calculate the weighted parameter values
+# now print the results
 # first print headers
 print "model\t";
 print OUTFILE "model\t";
@@ -516,6 +517,7 @@ for ($y = 2 ; $y <= $#paramnames; $y++ ) {
 print "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
 print OUTFILE "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
 
+# calculate the AIC weights and print out the formatted values
 foreach(@models){
 	print $_;
 	print OUTFILE $_;
@@ -531,8 +533,9 @@ foreach(@models){
 	}
 	for ($y = 2 ; $y <= $#paramnames; $y++ ) {
 		if(exists($datahash{$_.'_'.$paramnames[$y]})){
-			print sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
-			print OUTFILE sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+			print sprintf("%.7f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+			print OUTFILE sprintf("%.7f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+			$weighted_parameters{$paramnames[$y]}+=$datahash{$_.'_'.$paramnames[$y]}*$datahash{$_.'_wi_deltaAIC'};
 		}
 		elsif($_ eq 'equilibrium'){
 				print "- \t";
@@ -542,22 +545,26 @@ foreach(@models){
 			if(($_ eq 'epoch2_THETA_01_X_EQ_LAMBDA_THETA_01_A')||($_ eq 'epoch3_THETA_01_X_EQ_LAMBDA_THETA_01_A')){
 				print "lq01A \t";
 				print OUTFILE "lq01A \t";
+				$weighted_parameters{'theta_01_x'}+=$datahash{$_.'_'.'lambda'}*$datahash{$_.'_'.'theta_01_a'}*$datahash{$_.'_wi_deltaAIC'};
 			}
 			if(($_ eq 'epoch2_THETA_01_X_EQ_THETA_10_X')||($_ eq 'epoch3_THETA_01_X_EQ_THETA_10_X')){
 				print "q10x \t";
 				print OUTFILE "q10x \t";
+				$weighted_parameters{'theta_01_x'}+=$datahash{$_.'_'.'theta_10_x'}*$datahash{$_.'_wi_deltaAIC'};
 			}
 		}
 		elsif($paramnames[$y] eq 'theta_10_x'){
 			if(($_ eq 'epoch2_THETA_10_X_EQ_LAMBDA_THETA_10_A')||($_ eq 'epoch3_THETA_10_X_EQ_LAMBDA_THETA_10_A')){
 				print "lq10a \t";
 				print OUTFILE "lq10a \t";
+				$weighted_parameters{'theta_10_x'}+=$datahash{$_.'_'.'lambda'}*$datahash{$_.'_'.'theta_10_a'}*$datahash{$_.'_wi_deltaAIC'};
 			}
 		}
 		elsif($paramnames[$y] eq 'theta_01_a'){
 			if(($_ eq 'epoch2_THETA_01_A_EQ_THETA_10_A')||($_ eq 'epoch3_THETA_01_A_EQ_THETA_10_A')){
 				print "q10a \t";
 				print OUTFILE "q10a \t";
+				$weighted_parameters{'theta_01_a'}+=$datahash{$_.'_'.'theta_10_a'}*$datahash{$_.'_wi_deltaAIC'};
 			}
 		}
 		elsif($paramnames[$y] eq 'rho_2'){
@@ -576,15 +583,23 @@ foreach(@models){
 			if(($_ eq 'epoch2_GAMMA_X_EQ_C_0')||($_ eq 'epoch3_GAMMA_X_EQ_C_0')){
 				print "0(fixed) \t";
 				print OUTFILE "0(fixed) \t";
+				# no need to add to the weighted parameter value
 			}
-			elsif(($_ eq 'epoch2_GAMMA_X_EQ_3OVER4_GAMMA_A')||($_ eq 'epoch3_GAMMA_X_EQ_3OVER4_GAMMA_A')||($_ eq 'epoch2_GAMMA_X_EQ_LAMBDA_GAMMA_A')||($_ eq 'epoch3_GAMMA_X_EQ_LAMBDA_GAMMA_A')){
+			elsif(($_ eq 'epoch2_GAMMA_X_EQ_3OVER4_GAMMA_A')||($_ eq 'epoch3_GAMMA_X_EQ_3OVER4_GAMMA_A')){
+				print "0.75gA \t";
+				print OUTFILE "0.75gA \t";
+				$weighted_parameters{'gamma_x'}+=0.75*$datahash{$_.'_'.'gamma_a'}*$datahash{$_.'_wi_deltaAIC'};
+			}	
+			elsif(($_ eq 'epoch2_GAMMA_X_EQ_LAMBDA_GAMMA_A')||($_ eq 'epoch3_GAMMA_X_EQ_LAMBDA_GAMMA_A')){
 				print "lgA \t";
 				print OUTFILE "lgA \t";
+				$weighted_parameters{'gamma_x'}+=$datahash{$_.'_'.'lambda'}*$datahash{$_.'_'.'gamma_a'}*$datahash{$_.'_wi_deltaAIC'};
 			}	
 		}
 		elsif($paramnames[$y] eq 'lambda'){
 				print "0.75(fixed) \t";
-				print OUTFILE "0.75(fixed) \t";	
+				print OUTFILE "0.75(fixed) \t";
+				$weighted_parameters{'lambda'}+=0.75*$datahash{$_.'_wi_deltaAIC'};	
 		}				
 		else{
 			print "fixme \t";
@@ -604,9 +619,33 @@ foreach(@models){
 
 	print "* indicates convergence was achieved with rtol > 1e-15\n";
 	print OUTFILE "* indicates convergence was achieved with rtol > 1e-15\n";
-
-
 close DATAINPUT;
+
+# print out the weighted parameter values
+
+		print "Model_average\t";
+		print OUTFILE "Model_average\t";
+
+for ($y = 2 ; $y < $#paramnames; $y++ ) {
+	if(exists($weighted_parameters{$paramnames[$y]})){
+		print $weighted_parameters{$paramnames[$y]},"\t";
+		print OUTFILE $weighted_parameters{$paramnames[$y]},"\t";
+	}
+	else{
+		print "0\t";
+		print OUTFILE "0\t";
+	}	
+}
+	if(exists($weighted_parameters{$paramnames[$y]})){
+		print $weighted_parameters{$paramnames[$#paramnames]},"\n";
+		print OUTFILE $weighted_parameters{$paramnames[$#paramnames]},"\n";
+	}
+	else{
+		print "0\t";
+		print OUTFILE "0\t";
+	}
+
+
 close OUTFILE;
 
 sub in_array {
@@ -616,6 +655,8 @@ foreach my $value (@$arr) {
 }
  	return 0;
 }
+
+
 
 
 ```
