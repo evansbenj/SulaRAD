@@ -414,7 +414,7 @@ for ($y = 1 ; $y <= $#directories ; $y++ ) {
 
 ```
 
-And I wrote a script that will parse and format the output of the above script.  This script is called "Formats_Kais_results.pl":
+And I wrote a script that will parse and format the output of the above script so that it is suitable to plot in latek.  This script is called "Formats_Kais_results.pl":
 
 ```perl
 #!/usr/bin/env perl
@@ -448,6 +448,7 @@ my @headers;
 my @models = ("equilibrium","epoch2_full","epoch2_GAMMA_A_EQ_C_0","epoch2_GAMMA_X_EQ_3OVER4_GAMMA_A","epoch2_GAMMA_X_EQ_C_0","epoch2_GAMMA_X_EQ_LAMBDA_GAMMA_A","epoch2_lambda_eq_0.75","epoch2_THETA_01_A_EQ_THETA_10_A","epoch2_THETA_01_X_EQ_LAMBDA_THETA_01_A","epoch2_THETA_01_X_EQ_THETA_10_X","epoch2_THETA_10_X_EQ_LAMBDA_THETA_10_A","epoch3_full","epoch3_GAMMA_A_EQ_C_0","epoch3_GAMMA_X_EQ_3OVER4_GAMMA_A","epoch3_GAMMA_X_EQ_C_0","epoch3_GAMMA_X_EQ_LAMBDA_GAMMA_A","epoch3_THETA_01_A_EQ_THETA_10_A","epoch3_lambda_eq_0.75","epoch3_THETA_01_X_EQ_LAMBDA_THETA_01_A","epoch3_THETA_01_X_EQ_THETA_10_X","epoch3_THETA_10_X_EQ_LAMBDA_THETA_10_A");
 my @free_params = ("0","3","2","1","2","2","2","2","2","2","2","5","4","3","4","4","4","4","4","4","4");
 my @paramnames = ("folder_path","nconvg","theta_01_x","theta_10_x","gamma_x","theta_01_a","theta_10_a","gamma_a","lambda","rho_1","tau_a_1","rho_2","tau_a_2");
+my $switch=0;
 
 # make a hash with the free parameter values 
 my %free_params;
@@ -508,23 +509,36 @@ foreach(@models){
 
 # now print the results
 # first print headers
+print OUTFILE "model	thetaxa	thetaxb	gammax	thetaaa	thetaab	gammaa	lambda	rhoa	taua	rhob	taub	lnL	deltaAIC	wiAIC\n";
 print "model\t";
-print OUTFILE "model\t";
+#print OUTFILE "model\t";
 for ($y = 2 ; $y <= $#paramnames; $y++ ) {
 	print $paramnames[$y],"\t";
-	print OUTFILE $paramnames[$y],"\t";
+	#print OUTFILE $paramnames[$y],"\t";
 }
-print "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
-print OUTFILE "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
+# proviously I printed out all of the AIC stuff
+#print "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
+#print OUTFILE "lnL\tAIC\tdeltaAIC\te^-0.5deltaAIC\twi_AIC\n";
+# now I want to print out only deltaAIC and w_AIC
+print "lnL\tdeltaAIC\twi_AIC\n";
+#print OUTFILE "lnL\tdeltaAIC\twi_AIC\n";
 
 # calculate the AIC weights and print out the formatted values
 foreach(@models){
+	if($_ eq 'epoch2_full'){
+		print OUTFILE "2 Epochs\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\n";
+	}
+	elsif($_ eq 'epoch3_full'){
+		print OUTFILE "3 Epochs\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\n";
+	}
 	print $_;
 	print OUTFILE $_;
+
 	if(exists($datahash{$_.'nconvg'})){
 		if($datahash{$_.'nconvg'} eq 1){
 			print "*\t";
-			print OUTFILE "*\t";
+			print OUTFILE "\t";
+			$switch=1;
 		}
 	}	
 	else{
@@ -533,9 +547,17 @@ foreach(@models){
 	}
 	for ($y = 2 ; $y <= $#paramnames; $y++ ) {
 		if(exists($datahash{$_.'_'.$paramnames[$y]})){
-			print sprintf("%.7f",$datahash{$_.'_'.$paramnames[$y]})," \t";
-			print OUTFILE sprintf("%.7f",$datahash{$_.'_'.$paramnames[$y]})," \t";
-			$weighted_parameters{$paramnames[$y]}+=$datahash{$_.'_'.$paramnames[$y]}*$datahash{$_.'_wi_deltaAIC'};
+			# print out thetas and gammas to 5 decimal points
+			if(($paramnames[$y] eq 'theta_01_x')||($paramnames[$y] eq 'theta_10_x')||($paramnames[$y] eq 'gamma_x')||($paramnames[$y] eq 'theta_01_a')||($paramnames[$y] eq 'theta_10_a')||($paramnames[$y] eq 'gamma_a')){
+				print sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+				print OUTFILE sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+				$weighted_parameters{$paramnames[$y]}+=$datahash{$_.'_'.$paramnames[$y]}*$datahash{$_.'_wi_deltaAIC'};
+			}
+			else{
+				print sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+				print OUTFILE sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+				$weighted_parameters{$paramnames[$y]}+=$datahash{$_.'_'.$paramnames[$y]}*$datahash{$_.'_wi_deltaAIC'};
+			}	
 		}
 		elsif($_ eq 'equilibrium'){
 				print "- \t";
@@ -608,8 +630,12 @@ foreach(@models){
 	}	
 	if(exists($datahash{$_.'_AIC'})){
 		$datahash{$_.'_wi_deltaAIC'} = $datahash{$_.'_e_raised_to_neg5_times_deltaAIC'}/$sum_e_raised_to_neg5_times_deltaAIC;
-		print sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.3f",$datahash{$_.'_AIC'})," \t",sprintf("%.3f",$datahash{$_.'_deltaAIC'})," \t ",sprintf("%.3f",$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
-		print OUTFILE sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.3f",$datahash{$_.'_AIC'})," \t",sprintf("%.3f",$datahash{$_.'_deltaAIC'})," \t ",sprintf("%.3f",$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
+		# proviously I printed out all of the AIC stuff
+		# print sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.3f",$datahash{$_.'_AIC'})," \t",sprintf("%.3f",$datahash{$_.'_deltaAIC'})," \t ",sprintf("%.3f",$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
+		# print OUTFILE sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.3f",$datahash{$_.'_AIC'})," \t",sprintf("%.3f",$datahash{$_.'_deltaAIC'})," \t ",sprintf("%.3f",$datahash{$_.'_e_raised_to_neg5_times_deltaAIC'})," \t",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
+		# now I want to print out only deltaAIC and w_AIC
+		print sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.2f",$datahash{$_.'_deltaAIC'})," \t ",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
+		print OUTFILE sprintf("%.3f",$datahash{$_.'_lnLike'})," \t",sprintf("%.2f",$datahash{$_.'_deltaAIC'})," \t ",sprintf("%.3f",$datahash{$_.'_wi_deltaAIC'}),"\n";
 	}
 	else{
 		print "This model does not have a defined lnL ",$_,"\n";
@@ -617,11 +643,15 @@ foreach(@models){
 	}
 }
 
-	print "* indicates convergence was achieved with rtol > 1e-15\n";
-	print OUTFILE "* indicates convergence was achieved with rtol > 1e-15\n";
+	if($switch == 1){
+		print "* indicates convergence was achieved with rtol > 1e-15\n";
+		print OUTFILE "* indicates convergence was achieved with rtol > 1e-15\n";
+	}
 close DATAINPUT;
 
+
 # print out the weighted parameter values
+print OUTFILE "NAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\n";
 
 		print "Model_average\t";
 		print OUTFILE "Model_average\t";
@@ -629,7 +659,12 @@ close DATAINPUT;
 for ($y = 2 ; $y < $#paramnames; $y++ ) {
 	if(exists($weighted_parameters{$paramnames[$y]})){
 		print $weighted_parameters{$paramnames[$y]},"\t";
-		print OUTFILE $weighted_parameters{$paramnames[$y]},"\t";
+		#if($weighted_parameters{$paramnames[$y]} =~ /^[0-9,.E]+$/ ){
+			print OUTFILE sprintf("%.5f",$weighted_parameters{$paramnames[$y]}),"\t";
+		#}
+		#else{
+		#	print OUTFILE $weighted_parameters{$paramnames[$y]},"\t";
+		#}	
 	}
 	else{
 		print "0\t";
@@ -637,14 +672,22 @@ for ($y = 2 ; $y < $#paramnames; $y++ ) {
 	}	
 }
 	if(exists($weighted_parameters{$paramnames[$y]})){
-		print $weighted_parameters{$paramnames[$#paramnames]},"\n";
-		print OUTFILE $weighted_parameters{$paramnames[$#paramnames]},"\n";
+		print $weighted_parameters{$paramnames[$#paramnames]},"\t";
+		#if($weighted_parameters{$paramnames[$#paramnames]} =~ /^[0-9,.E]+$/ ){
+			print OUTFILE sprintf("%.5f",$weighted_parameters{$paramnames[$#paramnames]}),"\t";
+		#}
+		#else{
+		#	print OUTFILE $weighted_parameters{$paramnames[$y]},"\t";
+		#}	
+
 	}
 	else{
 		print "0\t";
 		print OUTFILE "0\t";
 	}
 
+print "NAN\tNAN\tNAN\n";
+print OUTFILE "NAN\tNAN\tNAN\n";
 
 close OUTFILE;
 
@@ -655,7 +698,6 @@ foreach my $value (@$arr) {
 }
  	return 0;
 }
-
 
 
 
