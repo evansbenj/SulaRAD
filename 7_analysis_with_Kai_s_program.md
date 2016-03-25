@@ -523,6 +523,8 @@ for ($y = 2 ; $y <= $#paramnames; $y++ ) {
 print "lnL\tdeltaAIC\twi_AIC\n";
 #print OUTFILE "lnL\tdeltaAIC\twi_AIC\n";
 
+print OUTFILE "1 Epoch\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\n";
+
 # calculate the AIC weights and print out the formatted values
 foreach(@models){
 	if($_ eq 'epoch2_full'){
@@ -554,8 +556,8 @@ foreach(@models){
 				$weighted_parameters{$paramnames[$y]}+=$datahash{$_.'_'.$paramnames[$y]}*$datahash{$_.'_wi_deltaAIC'};
 			}
 			else{
-				print sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
-				print OUTFILE sprintf("%.5f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+				print sprintf("%.3f",$datahash{$_.'_'.$paramnames[$y]})," \t";
+				print OUTFILE sprintf("%.3f",$datahash{$_.'_'.$paramnames[$y]})," \t";
 				$weighted_parameters{$paramnames[$y]}+=$datahash{$_.'_'.$paramnames[$y]}*$datahash{$_.'_wi_deltaAIC'};
 			}	
 		}
@@ -656,7 +658,7 @@ print OUTFILE "NAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\tNAN\t
 		print "Model_average\t";
 		print OUTFILE "Model_average\t";
 
-for ($y = 2 ; $y < $#paramnames; $y++ ) {
+for ($y = 2 ; $y < 8; $y++ ) {
 	if(exists($weighted_parameters{$paramnames[$y]})){
 		print $weighted_parameters{$paramnames[$y]},"\t";
 		#if($weighted_parameters{$paramnames[$y]} =~ /^[0-9,.E]+$/ ){
@@ -671,20 +673,21 @@ for ($y = 2 ; $y < $#paramnames; $y++ ) {
 		print OUTFILE "0\t";
 	}	
 }
+for ($y = 8 ; $y <= $#paramnames; $y++ ) {
 	if(exists($weighted_parameters{$paramnames[$y]})){
-		print $weighted_parameters{$paramnames[$#paramnames]},"\t";
-		#if($weighted_parameters{$paramnames[$#paramnames]} =~ /^[0-9,.E]+$/ ){
-			print OUTFILE sprintf("%.5f",$weighted_parameters{$paramnames[$#paramnames]}),"\t";
+		print $weighted_parameters{$paramnames[$y]},"\t";
+		#if($weighted_parameters{$paramnames[$y]} =~ /^[0-9,.E]+$/ ){
+			print OUTFILE sprintf("%.3f",$weighted_parameters{$paramnames[$y]}),"\t";
 		#}
 		#else{
 		#	print OUTFILE $weighted_parameters{$paramnames[$y]},"\t";
 		#}	
-
 	}
 	else{
 		print "0\t";
 		print OUTFILE "0\t";
-	}
+	}	
+}
 
 print "NAN\tNAN\tNAN\n";
 print OUTFILE "NAN\tNAN\tNAN\n";
