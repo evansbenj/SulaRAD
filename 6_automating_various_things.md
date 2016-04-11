@@ -249,3 +249,5 @@ data$V1 <- factor(data$V1,levels=c("nemestrina(Malaysia)","nemestrina(Sumatra)",
 ggplot(data, aes(x=V2,y=V3,colour=V1,group=V1))+geom_errorbar(aes(ymin=V4,ymax=V5),width=.1, position=pd) + geom_line(size=.6, position=pd, alpha=0.3)+ geom_point(position=pd) + theme_bw() + geom_hline(yintercept=0.75) + theme(panel.grid.minor=element_blank(),panel.grid.major=element_blank()) + ylab("X/A") + xlab("Distance relative to genes") + guides(color=guide_legend(title="Species")) + scale_x_discrete(labels = c("<1000bp","1000-51000bp",">51000bp"))
 dev.off()
 ```
+
+Also, I am working on a script to format the results for presentation in latex.  More soon.
