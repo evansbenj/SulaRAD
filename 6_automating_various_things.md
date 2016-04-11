@@ -47,7 +47,7 @@ foreach(@tabfiles){
 
 ```
 
-Once we have the output for each species from the script above, I summarized them using this script:
+Once we have the output for each species from the script above, I summarized them using this script (19_colates_popgenstats_new.pl):
 
 ```perl
 #!/usr/bin/env perl
@@ -66,7 +66,7 @@ use warnings;
 
 my $status;
 #my @tabfiles = glob("/home/ben/2015_SulaRADtag/good_merged_samples/tab_relative_to_genez/recal*poly*");
-my @tabfiles = glob("./recal/recal*poly");
+my @tabfiles = glob("./recal*poly");
 my $commandline;
 my @what_what;
 my @species = ("tonk", "heck", "nigra", "nigres", "och", "maura", "brun", "tog","nemBor", "nemSum", "pag", "Malay");
@@ -141,51 +141,65 @@ foreach(@species){
 	}
 	print "Creating output file: $outputfile\n";
 	$species=$_;
-	print OUTFILE "$species\n";
+	#print OUTFILE "$species\n";
 
 	foreach(@wherewhere){
+		#print "wherewhere ",$wherewhere,"\n";
 		$wherewhere=$_;
-		print OUTFILE $wherewhere,"\t";
 		if($wherewhere eq "aDNA"){
+			print OUTFILE "\t";
 			foreach(@wherewherewhere){
 				print OUTFILE $_,"\t";
 			}
+			print OUTFILE "\n";
 		}
-		print OUTFILE "\n";	
-		if($wherewhere ne "ratio_of_X_to_A_pi_over_d"){
-			foreach(@polystatnamez){
-				$polystatnamez=$_;
-				if(($polystatnamez ne "pi_X/d_jc_ad_X/pi_a/d_jc_ad_a")&&($polystatnamez ne "pi_Y/d_jc_ad_Y/pi_a/d_jc_ad_a")){
-					print OUTFILE $polystatnamez,"\t";
-					foreach(@wherewherewhere){
-						if(defined($hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez})){
-							print OUTFILE $hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez},"\t";
-						}
-						else{
-							print OUTFILE "NA\t";
-						}
-					}
-					print OUTFILE "\n";
-				}
+		if(($wherewhere ne "yDNA")&&($wherewhere !~ /ratio_of_X_to_A_pi_over_d/)&&($wherewhere !~ /pi_Y/)){
+			print OUTFILE $wherewhere,"\t";
+		}	
+		if(($wherewhere eq "aDNA")||($wherewhere eq "xDNA")){
+			foreach(@wherewherewhere){
+				print OUTFILE "NAN\t";
 			}
 		}
-		else{
-			foreach(@polystatnamez){
-				$polystatnamez=$_;
-				if(($polystatnamez eq "pi_X/d_jc_ad_X/pi_a/d_jc_ad_a")||($polystatnamez eq "pi_Y/d_jc_ad_Y/pi_a/d_jc_ad_a")){
-					print OUTFILE $polystatnamez,"\t";
-					foreach(@wherewherewhere){
-						if(defined($hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez})){
-							print OUTFILE $hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez},"\t";
-						}
-						else{
-							print OUTFILE "NA\t";
-						}
-					}
-					print OUTFILE "\n";
-				}
-			}
 
+		if(($wherewhere ne "yDNA")&&($wherewhere !~ /ratio_of_X_to_A_pi_over_d/)&&($wherewhere !~ /pi_Y\/d_jc_ad_Y\/pi_a\/d_jc_ad_a/)){
+			print OUTFILE "\n";
+		}
+		if(($wherewhere ne "yDNA")&&($wherewhere !~ /ratio_of_X_to_A_pi_over_d/)&&($wherewhere !~ /pi_Y\/d_jc_ad_Y\/pi_a\/d_jc_ad_a/)){	
+			if($wherewhere !~ /pi_Y\/d_jc_ad_Y\/pi_a\/d_jc_ad_a/){
+				foreach(@polystatnamez){
+					$polystatnamez=$_;
+					if(($polystatnamez ne "pi_X/d_jc_ad_X/pi_a/d_jc_ad_a")&&($polystatnamez !~ /pi_Y\/d_jc_ad_Y\/pi_a\/d_jc_ad_a/)&&($polystatnamez ne "#_alleles")){
+						print OUTFILE $polystatnamez,"\t";
+						foreach(@wherewherewhere){
+							if(defined($hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez})){
+								print OUTFILE $hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez},"\t";
+							}
+							else{
+								print OUTFILE "NAN\t";
+							}
+						}
+						print OUTFILE "\n";
+					}
+				}
+			}
+#			else{
+#				foreach(@polystatnamez){
+#					$polystatnamez=$_;
+#					if(($polystatnamez eq "pi_X/d_jc_ad_X/pi_a/d_jc_ad_a")||($polystatnamez eq "pi_Y/d_jc_ad_Y/pi_a/d_jc_ad_a")){
+#						print OUTFILE $polystatnamez,"\t";
+#						foreach(@wherewherewhere){
+#							if(defined($hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez})){
+#								print OUTFILE $hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez},"\t";
+#							}
+#							else{
+#								print OUTFILE "NAN\t";
+#							}
+#						}
+#						print OUTFILE "\n";
+#					}
+#				}
+#			}
 		}	
 	}
 	close OUTFILE;
@@ -235,6 +249,7 @@ foreach(@species){
 }	
 close OUTFILE;
 
+
 ```
 
 and then we need to manually change the names in the file "recal_X_to_A.tab" to match the names we want on the plot (i.e., "nemestrina(Malaysia)","nemestrina(Sumatra)","nemestrina(Borneo)","pagensis","nigra","nigrescens","hecki","tonkeana","togeanus","ochreata","brunnescens","maura").  After that we can make a pretty plot using these R commands:
@@ -250,4 +265,4 @@ ggplot(data, aes(x=V2,y=V3,colour=V1,group=V1))+geom_errorbar(aes(ymin=V4,ymax=V
 dev.off()
 ```
 
-Also, I am working on a script to format the results for presentation in latex.  More soon.
+
