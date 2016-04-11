@@ -147,9 +147,14 @@ foreach(@species){
 		#print "wherewhere ",$wherewhere,"\n";
 		$wherewhere=$_;
 		if($wherewhere eq "aDNA"){
-			print OUTFILE "\t";
+			print OUTFILE "Statistic\t";
 			foreach(@wherewherewhere){
-				print OUTFILE $_,"\t";
+				if($_ ne "1000_to_50000"){
+					print OUTFILE $_,"\t";
+				}
+				else{
+					print OUTFILE "1000to50000\t";
+				}	
 			}
 			print OUTFILE "\n";
 		}
@@ -170,7 +175,21 @@ foreach(@species){
 				foreach(@polystatnamez){
 					$polystatnamez=$_;
 					if(($polystatnamez ne "pi_X/d_jc_ad_X/pi_a/d_jc_ad_a")&&($polystatnamez !~ /pi_Y\/d_jc_ad_Y\/pi_a\/d_jc_ad_a/)&&($polystatnamez ne "#_alleles")){
-						print OUTFILE $polystatnamez,"\t";
+						if($polystatnamez eq "#_Sites"){
+							print OUTFILE "# Sites\t";
+						}
+						elsif($polystatnamez eq "RAD_tag_count"){
+							print OUTFILE "# RAD tags\t";
+						}
+						elsif($polystatnamez eq "d_JC_AP"){
+							print OUTFILE "divergence\t";
+						}
+						elsif($polystatnamez eq "pi/d_JC_AP"){
+							print OUTFILE "pi/divergence\t";
+						}
+						else{
+							print OUTFILE $polystatnamez,"\t";
+						}
 						foreach(@wherewherewhere){
 							if(defined($hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez})){
 								print OUTFILE $hash_data{$species."_".$wherewhere."_".$_."_".$polystatnamez},"\t";
@@ -248,6 +267,7 @@ foreach(@species){
 	}
 }	
 close OUTFILE;
+
 
 
 ```
