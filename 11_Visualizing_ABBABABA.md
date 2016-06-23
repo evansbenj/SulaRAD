@@ -1,6 +1,6 @@
 # Visualizing ABBA_BABA results
 
-OK, I am back from Ghana now and trying to get back into this analysis after a fairly long break.  Before I left I wrote this R script to plot the ABBABABA results (`X_to_A_sliding_fdm_outlier_only.R`) below. However, I just realized that the script before this takes as input a command line that lists H3, then H1, then H2.  But this script outputs files with names in this order: H2, H1, H3.  This is very important becasue the order of the numbers in the file names defines how the ABBABABA stat is interpreted.  If correct, this means that the "j" loop below is for H1 and the i loop below is for H2.
+OK, I am back from Ghana now and trying to get back into this analysis after a fairly long break.  Before I left I wrote this R script to plot the ABBABABA results (`X_to_A_sliding_fdm_outlier_only.R`) below. However, I just realized that the script before this (`Wrapper_for_Performs_ABBA_BABA_populations_most_inclusive.pl`) takes as input a command line that lists H3, then H1, then H2.  But this script outputs files with names in this order: H2, H1, H3.  This is very important becasue the order of the numbers in the file names defines how the ABBABABA stat is interpreted.  If correct, this means that the "j" loop below is for H1 and the i loop below is for H2.
 
 ``` R
 # This R script will become an awesome plot with multiple panels that 
