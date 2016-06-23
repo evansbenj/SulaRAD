@@ -1,6 +1,6 @@
 # Visualizing ABBA_BABA results
 
-OK, I am back from Ghana now and trying to get back into this analysis after a fairly long break.  Before I left I wrote this R script to plot the ABBABABA results (`X_to_A_sliding_fdm_outlier_only.R`):
+OK, I am back from Ghana now and trying to get back into this analysis after a fairly long break.  Before I left I wrote this R script to plot the ABBABABA results (`X_to_A_sliding_fdm_outlier_only.R`) below. However, I just realized that the script before this takes as input a command line that lists H3, then H1, then H2.  But this script outputs files with names in this order: H2, H1, H3.  This is very important becasue the order of the numbers in the file names defines how the ABBABABA stat is interpreted.  If correct, this means that the "j" loop below is for H1 and the i loop below is for H2.
 
 ``` R
 # This R script will become an awesome plot with multiple panels that 
@@ -37,44 +37,44 @@ pagensisdata <- data.frame(matrix(NA, nrow=1, ncol=1))
 alldata <- data.frame(matrix(NA, nrow=1, ncol=1))
 switch<-0
 
-# for brun as H2
+# for brun as H1
 #pdf("brunnescens_fdm_outlier_only.pdf")
 #j=1
 #for(i in 2:(length(species))) 
 
-# for maura as H2
+# for maura as H1
 #pdf("maura_fdm_outlier_only.pdf")
 #j=3
 #for(i in c(1,2,4,5,6,7,8)) 
 
-# for hecki as H2
+# for hecki as H1
 #pdf("hecki_fdm_outlier_only.pdf")
 #j=2
 #for(i in c(1,3,4,5,6,7,8)) 
 
-# for nigra as H2
+# for nigra as H1
 #pdf("nigra_fdm_outlier_only.pdf")
 #j=4
 #for(i in c(1,2,3,5,6,7,8)) 
   
   
-# for nigrescens as H2
+# for nigrescens as H1
 #pdf("nigrescens_fdm_outlier_only.pdf")
 #j=5
 #for(i in c(1,2,3,4,6,7,8)) 
 
-# for ochreata as H2
+# for ochreata as H1
 #pdf("ochreata_fdm_outlier_only.pdf")
 #j=6
 #for(i in c(1,2,3,4,5,7,8)) 
 
-# for togeanus as H2
+# for togeanus as H1
 #pdf("togeanus_fdm_outlier_only.pdf")
 #j=7
 #for(i in c(1,2,3,4,5,6,8)) 
   
 
-# for tonkeana as H2
+# for tonkeana as H1
 pdf("tonkeana_fdm_outlier_only.pdf")
 j=8
 for(i in 1:(length(species)-1)) 
