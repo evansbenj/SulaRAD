@@ -6,6 +6,11 @@ In addition to the raw data, we got bam files that were already processed by And
 samtools merge nem_tonk_nigra_merged.bam ./Sample_nemestrina-PM664/analysis/alignment_corr/nemestrina-PM664.sorted.dedup.bam ./Sample_tonkeana-PM592/analysis/alignment_corr/tonkeana-PM592.sorted.dedup.bam ./Sample_nigra-PM664/analysis/alignment_corr/nigra-PM664.sorted.dedup.bam
 ```
 
+make an index
+```
+/usr/local/bin/samtools index nem_tonk_nigra_merged.bam
+```
+
 Use unified genotyper to call bases (may have to add read groups first using picard)
 ```
 java -Xmx4G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T UnifiedGenotyper -R /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I nem_tonk_nigra_merged.bam -out_mode EMIT_ALL_CONFIDENT_SITES -o nem_tonk_nigra.vcf
