@@ -1,1 +1,3 @@
 # We now have HiSeqX data from M. nem PM664, M. tonkeana PM592, and M. nigra PM661; Cool!
+
+In addition to the raw data, we got bam files that were already processed by Andre Corvalo at the NY Genome Center.  I fiest merged them like this:
