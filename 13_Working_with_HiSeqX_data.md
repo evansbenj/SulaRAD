@@ -8,7 +8,7 @@ samtools merge nem_tonk_nigra_merged.bam ./Sample_nemestrina-PM664/analysis/alig
 
 Use unified genotyper to call bases (may have to add read groups first using picard)
 ```
-java -Xmx4G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T UnifiedGenotyper -R XXX/ref.fasta -I samtools merge nem_tonk_nigra_merged.bam -out_mode EMIT_ALL_CONFIDENT_SITES -o nem_tonk_nigra.vcf
+java -Xmx4G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T UnifiedGenotyper -R /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2.fa -I samtools merge nem_tonk_nigra_merged.bam -out_mode EMIT_ALL_CONFIDENT_SITES -o nem_tonk_nigra.vcf
 ```
 Make tab delimited files
 ```
