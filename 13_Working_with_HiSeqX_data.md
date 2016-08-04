@@ -27,15 +27,18 @@ cat nem_tonk_nigra.vcf | awk 'NR >= 0 && NR <= 1000000 { print }' > nem_tonk_nig
 ```
 and, because that only sampled chr1, I did this too:
 ```
-cat nem_tonk_nigra.vcf | awk 'NR >= 9000000 && NR <= 10000000 { print }' > nem_tonk_nigra_subset_2.vcf
+cat nem_tonk_nigra.vcf | awk 'NR >= 569000000 && NR <= 570000000 { print }' > nem_tonk_nigra_subset_2.vcf
 ```
-
+then concatenate them:
+```
+cat nem_tonk_nigra_subset.vcf nem_tonk_nigra_subset_2.vcf > nem_tonk_nigra_subsett.vcf
+```
 
 Now make a tab delimited file:
 ```
-~/tabix-0.2.6/bgzip nem_tonk_nigra_subset.vcf
-~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_subset.vcf.gz
-zcat nem_tonk_nigra_subset.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nem_tonk_nigra_subset.vcf.gz.tab
+~/tabix-0.2.6/bgzip nem_tonk_nigra_subsett.vcf
+~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_subsett.vcf.gz
+zcat nem_tonk_nigra_subset.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nem_tonk_nigra_subsett.vcf.gz.tab
 ```
 And then use this script to add to this tab deimited file data from baboons (16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl). This is in this directory on info: `/home/ben/2015_SulaRADtag/baboon_rhesus_alignment` and is executed like this (from that directory):
 ```
