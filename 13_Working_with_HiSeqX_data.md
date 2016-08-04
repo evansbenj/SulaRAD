@@ -7,6 +7,8 @@ We can assess depth like this
 samtools depth ./Sample_nemestrina-PM664/analysis/alignment_corr/nemestrina-PM664.sorted.dedup.bam | awk '{sum+=$3} END { print "Average = ",sum/NR}'
 ```
 
+This indicated that the coverage was >40X for each of the three samples.  Cool!
+
 Use unified genotyper to call bases:
 ```
 java -Xmx4G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T UnifiedGenotyper -R /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I ./Sample_nemestrina-PM664/analysis/alignment_corr/nemestrina-PM664.sorted.dedup.bam  -I ./Sample_tonkeana-PM592/analysis/alignment_corr/tonkeana-PM592.sorted.dedup.bam  -I ./Sample_nigra-PM664/analysis/alignment_corr/nigra-PM664.sorted.dedup.bam -out_mode EMIT_ALL_CONFIDENT_SITES -o nem_tonk_nigra.vcf
@@ -17,6 +19,12 @@ or, on iqaluk, try this:
 java -Xmx64G -jar /work/ben/GenomeAnalysisTK-3.5/GenomeAnalysisTK.jar -T UnifiedGenotyper -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I ./Sample_nemestrina-PM664/analysis/alignment_corr/nemestrina-PM664.sorted.dedup.bam  -I ./Sample_tonkeana-PM592/analysis/alignment_corr/tonkeana-PM592.sorted.dedup.bam  -I ./Sample_nigra-PM664/analysis/alignment_corr/nigra-PM664.sorted.dedup.bam -nt 6 -nct 16 -out_mode EMIT_ALL_CONFIDENT_SITES -o nem_tonk_nigra.vcf
 ```
 
+While I am running this I will develop a pipeline to (1) add the outgroup sequences to a tab-deliminted file generated from the vsf file and (2) merge this with the existing RADseq file.  It will be interesting to quantify and compare how the genotypes from the radseq data compare to the HiSeq data for the same individuals.
+
+OK, here we go.  First subset the vcf file in progress to creat an example file:
+```
+cat nem_tonk_nigra.vcf | awk 'NR >= 0 && NR <= 1000000 { print }' > nem_tonk_nigra_subset.vcf
+```
 
 Make tab delimited files
 ```
