@@ -26,9 +26,15 @@ OK, here we go.  First subset the vcf file in progress to creat an example file:
 cat nem_tonk_nigra.vcf | awk 'NR >= 0 && NR <= 1000000 { print }' > nem_tonk_nigra_subset.vcf
 ```
 
-Make tab delimited files
+Now make a tab delimited file:
 ```
-~/tabix-0.2.6/bgzip nem_tonk_nigra.vcf
-~/tabix-0.2.6/tabix -p vcf tnem_tonk_nigra.vcf.gz
-zcat nem_tonk_nigra.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nem_tonk_nigra.vcf.gz.tab
+~/tabix-0.2.6/bgzip nem_tonk_nigra_subset.vcf
+~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_subset.vcf.gz
+zcat nem_tonk_nigra_subset.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nem_tonk_nigra_subset.vcf.gz.tab
+```
+And then use this script to add to this tab deimited file data from baboons (16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl). 
+
+And use it again to add the human outgroup.  Then modify the header like this:
+```
+sed -i -e 's/papAnu2\tpapAnu2/hg19\tpapAnu2/g' nem_tonk_nigra_subset.vcf.gz_with_baboon_and_human.tab
 ```
