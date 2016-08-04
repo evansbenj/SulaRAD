@@ -60,3 +60,5 @@ Then modify the header like this:
 ```
 sed -i -e 's/papAnu2\tpapAnu2/hg19\tpapAnu2/g' chr1_subset.vcf.gz_with_baboon_and_human.tab
 ```
+
+OK now I should have 23 files (one for each of 20 autosomes, the X, Y, and mt), each with human, baboon and rhesus.  I'd like to write a script that combines these data with the RADseq data. The format should be identical to the RADseq data but with 3 extra columns on the left side.  And for many many sites, I will need to add lines with missing data in the RADseq columns and the HiSeq genotypes.
