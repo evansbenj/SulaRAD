@@ -38,7 +38,11 @@ Now make a tab delimited file:
 ```
 ~/tabix-0.2.6/bgzip nem_tonk_nigra_subsett.vcf
 ~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_subsett.vcf.gz
-zcat nem_tonk_nigra_subset.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nem_tonk_nigra_subsett.vcf.gz.tab
+tabix -h nem_tonk_nigra_subsett.vcf.gz chr1 > chr1_subset.vcf # this should be done for all of the chromosomes.  the -h flag preserves the header
+~/tabix-0.2.6/bgzip chr1_subset.vcf
+~/tabix-0.2.6/tabix -p vcf chr1_subset.vcf.gz
+
+zcat chr1_subset.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > chr1_subset.vcf.gz.tab
 ```
 And then use this script to add to this tab deimited file data from baboons (16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl). This is in this directory on info: `/home/ben/2015_SulaRADtag/baboon_rhesus_alignment` and is executed like this (from that directory):
 ```
