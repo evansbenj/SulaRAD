@@ -38,7 +38,7 @@ Now make a tab delimited file:
 ```
 ~/tabix-0.2.6/bgzip nem_tonk_nigra_subsett.vcf
 ~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_subsett.vcf.gz
-tabix -h nem_tonk_nigra_subsett.vcf.gz chr1 > chr1_subset.vcf # this should be done for all of the chromosomes.  the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_subsett.vcf.gz chr1 > chr1_subset.vcf # this should be done for all of the chromosomes.  the -h flag preserves the header
 ~/tabix-0.2.6/bgzip chr1_subset.vcf
 ~/tabix-0.2.6/tabix -p vcf chr1_subset.vcf.gz
 
