@@ -47,9 +47,16 @@ zcat chr1_subset.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > chr1_subset.
 
 And then use this script to add to this tab deimited file data from baboons (16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl). This is in this directory on info: `/home/ben/2015_SulaRADtag/baboon_rhesus_alignment` and is executed like this (from that directory):
 ```
-/home/ben/2015_SulaRADtag/baboon_rhesus_alignment/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/nem_tonk_nigra_subset.vcf.gz.tab /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/nem_tonk_nigra_subset.vcf.gz_with_baboon.tab
+/home/ben/2015_SulaRADtag/baboon_rhesus_alignment/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/chr1_subset.vcf.gz.tab /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/chr1_subset.vcf.gz_with_baboon.tab
 ```
-And use it again to add the human outgroup from this directory: ``.  Then modify the header like this:
+And use it again to add the human outgroup from this directory: `/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC` like this:
 ```
-sed -i -e 's/papAnu2\tpapAnu2/hg19\tpapAnu2/g' nem_tonk_nigra_subset.vcf.gz_with_baboon_and_human.tab
+/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/chr1_subset.vcf.gz_with_baboon.tab /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/chr1_subset.vcf.gz_with_baboon_and_human.tab
+```
+
+
+
+Then modify the header like this:
+```
+sed -i -e 's/papAnu2\tpapAnu2/hg19\tpapAnu2/g' chr1_subset.vcf.gz_with_baboon_and_human.tab
 ```
