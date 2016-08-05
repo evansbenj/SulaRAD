@@ -55,19 +55,14 @@ Before generating the tab files, we need to filter based on coverage, HWE from R
 
 I'm now thinking most or all of these acrobatics (apart from the sex chromosome checks) are not worthwhile because the number of filtered sites will be very small and the amount of data we have for sites that we cannot filter based on INDELs and HWE is vast.
 
-
-
-
-And then use this script to add to this tab deimited file data from baboons (16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl). This is in this directory on info: `/home/ben/2015_SulaRADtag/baboon_rhesus_alignment` and is executed like this (from that directory):
+Instead, let's just add the outgroup sequences to the tab delimited files. Goto this directory on info: `/home/ben/2015_SulaRADtag/baboon_rhesus_alignment` and execute this file (from that directory): (16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl) like this (for each chr). 
 ```
-/home/ben/2015_SulaRADtag/baboon_rhesus_alignment/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/chr1_subset.vcf.gz.tab /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/chr1_subset.vcf.gz_with_baboon.tab
+/home/ben/2015_SulaRADtag/baboon_rhesus_alignment/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/Hiseqchr1.vcf.gz.tab /net/infofile4-inside/volume1/scratch/ben/Hiseqchr1.vcf.gz_with_baboon.tab
 ```
-And use it again to add the human outgroup from this directory: `/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC` like this:
+And then use it again to add the human outgroup from this directory: `/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC` like this:
 ```
-/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/chr1_subset.vcf.gz_with_baboon.tab /home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/chr1_subset.vcf.gz_with_baboon_and_human.tab
+/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/Hiseqchr1.vcf.gz_with_baboon.tab /net/infofile4-inside/volume1/scratch/ben/Hiseqchr1.vcf.gz_with_baboon_and_human.tab
 ```
-
-
 
 Then modify the header like this:
 ```
