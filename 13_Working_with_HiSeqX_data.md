@@ -39,6 +39,11 @@ Now make a tab delimited file:
 ```
 ~/tabix-0.2.6/bgzip nem_tonk_nigra_first10chrs.vcf
 ~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_first10chrs.vcf.gz
+```
+then this might work as a bash script:
+```
+#!/bin/bash
+
 ~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr1 > HiSeqchr1.vcf # the -h flag preserves the header
 ~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr2 > HiSeqchr2.vcf # the -h flag preserves the header
 ~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr3 > HiSeqchr3.vcf # the -h flag preserves the header
