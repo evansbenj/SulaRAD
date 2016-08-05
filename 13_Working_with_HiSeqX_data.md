@@ -51,7 +51,9 @@ zcat HiSeqchr1.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr1.vcf.
 ```
 
 Before generating the tab files, we need to filter based on coverage, HWE from RADseq data, and (for sex chromosomes) sex phenotypes. I already have this from the RADseq data in this directory:
-`/home/ben/2015_SulaRADtag/good_merged_samples/round2_BADSEX_only.vcf` which includes indels, heterozygous sites, bad sex chromosome sites, plus a buffer of 3, 200, and 200 bp respectively as described [here] (https://github.com/evansbenj/SulaRAD/blob/master/4_More_GATK_Calling_All_Sites_and_Filtering.md)
+`/home/ben/2015_SulaRADtag/good_merged_samples/round2_BADSEX_only.vcf` which includes indels, heterozygous sites, bad sex chromosome sites, plus a buffer of 3, 200, and 200 bp respectively as described [here] (https://github.com/evansbenj/SulaRAD/blob/master/4_More_GATK_Calling_All_Sites_and_Filtering.md).  For the autosomes this can be done by modifying this script `13_Executes_GATK_commands_VariantFiltration_doublemask.pl`.  But for the sex chromosomes, we will need to modify this file `12_Executes_GATK_commands_makes_sex_mask_VariantFiltration.pl` and make a new mask first, and then modifying and running `13_Executes_GATK_commands_VariantFiltration_doublemask.pl`.
+
+I'm now thinking most or all of these acrobatics (apart from the sex chromosome checks) are not worthwhile because the number of filtered sites will be very small and the amount of data we have for sites that we cannot filter based on INDELs and HWE is vast.
 
 
 
