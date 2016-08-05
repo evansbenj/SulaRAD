@@ -33,16 +33,57 @@ then concatenate them:
 ```
 cat nem_tonk_nigra_subset.vcf nem_tonk_nigra_subset_2.vcf > nem_tonk_nigra_subsett.vcf
 ```
+OK, I am going to split up the first ten chromosomes now.  I am working in this directory: `/net/infofile4-inside/volume1/scratch/ben`
 
 Now make a tab delimited file:
 ```
-~/tabix-0.2.6/bgzip nem_tonk_nigra_subsett.vcf
-~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_subsett.vcf.gz
-~/tabix-0.2.6/tabix -h nem_tonk_nigra_subsett.vcf.gz chr1 > chr1_subset.vcf # this should be done for all of the chromosomes.  the -h flag preserves the header
-~/tabix-0.2.6/bgzip chr1_subset.vcf
-~/tabix-0.2.6/tabix -p vcf chr1_subset.vcf.gz
-zcat chr1_subset.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > chr1_subset.vcf.gz.tab
-# and the same for the other chromosomes
+~/tabix-0.2.6/bgzip nem_tonk_nigra_first10chrs.vcf
+~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_first10chrs.vcf.gz
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr1 > HiSeqchr1.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr2 > HiSeqchr2.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr3 > HiSeqchr3.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr4 > HiSeqchr4.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr5 > HiSeqchr5.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr6 > HiSeqchr6.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr7 > HiSeqchr7.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr8 > HiSeqchr8.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr9 > HiSeqchr9.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr10 > HiSeqchr10.vcf # the -h flag preserves the header
+
+~/tabix-0.2.6/bgzip HiSeqchr1.vcf
+~/tabix-0.2.6/bgzip HiSeqchr2.vcf
+~/tabix-0.2.6/bgzip HiSeqchr3.vcf
+~/tabix-0.2.6/bgzip HiSeqchr4.vcf
+~/tabix-0.2.6/bgzip HiSeqchr5.vcf
+~/tabix-0.2.6/bgzip HiSeqchr6.vcf
+~/tabix-0.2.6/bgzip HiSeqchr7.vcf
+~/tabix-0.2.6/bgzip HiSeqchr8.vcf
+~/tabix-0.2.6/bgzip HiSeqchr9.vcf
+~/tabix-0.2.6/bgzip HiSeqchr10.vcf
+
+~/tabix-0.2.6/tabix -p vcf HiSeqchr1.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr2.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr3.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr4.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr5.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr6.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr7.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr8.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr9.vcf.gz
+~/tabix-0.2.6/tabix -p vcf HiSeqchr10.vcf.gz
+
+zcat HiSeqchr1.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr1.vcf.gz.tab
+zcat HiSeqchr2.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr2.vcf.gz.tab
+zcat HiSeqchr3.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr3.vcf.gz.tab
+zcat HiSeqchr4.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr4.vcf.gz.tab
+zcat HiSeqchr5.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr5.vcf.gz.tab
+zcat HiSeqchr6.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr6.vcf.gz.tab
+zcat HiSeqchr7.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr7.vcf.gz.tab
+zcat HiSeqchr8.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr8.vcf.gz.tab
+zcat HiSeqchr9.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr9.vcf.gz.tab
+zcat HiSeqchr10.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr10.vcf.gz.tab
+
+
 ```
 
 And then use this script to add to this tab deimited file data from baboons (16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl). This is in this directory on info: `/home/ben/2015_SulaRADtag/baboon_rhesus_alignment` and is executed like this (from that directory):
