@@ -44,7 +44,13 @@ then this might work as a bash script:
 ```
 #!/bin/bash
 
-~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr1 > HiSeqchr1.vcf # the -h flag preserves the header
+~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr1 > HiSeqchr1.vcf 
+~/tabix-0.2.6/bgzip HiSeqchr1.vcf
+~/tabix-0.2.6/tabix -p vcf HiSeqchr1.vcf.gz
+zcat HiSeqchr1.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr1.vcf.gz.tab
+```
+
+```
 ~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr2 > HiSeqchr2.vcf # the -h flag preserves the header
 ~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr3 > HiSeqchr3.vcf # the -h flag preserves the header
 ~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr4 > HiSeqchr4.vcf # the -h flag preserves the header
@@ -55,7 +61,7 @@ then this might work as a bash script:
 ~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr9 > HiSeqchr9.vcf # the -h flag preserves the header
 ~/tabix-0.2.6/tabix -h nem_tonk_nigra_first10chrs.vcf.gz chr10 > HiSeqchr10.vcf # the -h flag preserves the header
 
-~/tabix-0.2.6/bgzip HiSeqchr1.vcf
+
 ~/tabix-0.2.6/bgzip HiSeqchr2.vcf
 ~/tabix-0.2.6/bgzip HiSeqchr3.vcf
 ~/tabix-0.2.6/bgzip HiSeqchr4.vcf
@@ -66,7 +72,7 @@ then this might work as a bash script:
 ~/tabix-0.2.6/bgzip HiSeqchr9.vcf
 ~/tabix-0.2.6/bgzip HiSeqchr10.vcf
 
-~/tabix-0.2.6/tabix -p vcf HiSeqchr1.vcf.gz
+
 ~/tabix-0.2.6/tabix -p vcf HiSeqchr2.vcf.gz
 ~/tabix-0.2.6/tabix -p vcf HiSeqchr3.vcf.gz
 ~/tabix-0.2.6/tabix -p vcf HiSeqchr4.vcf.gz
@@ -77,7 +83,7 @@ then this might work as a bash script:
 ~/tabix-0.2.6/tabix -p vcf HiSeqchr9.vcf.gz
 ~/tabix-0.2.6/tabix -p vcf HiSeqchr10.vcf.gz
 
-zcat HiSeqchr1.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr1.vcf.gz.tab
+
 zcat HiSeqchr2.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr2.vcf.gz.tab
 zcat HiSeqchr3.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr3.vcf.gz.tab
 zcat HiSeqchr4.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr4.vcf.gz.tab
