@@ -50,7 +50,8 @@ then for each chr automate generation of a tab file with a bash script:
 zcat HiSeqchr1.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > HiSeqchr1.vcf.gz.tab
 ```
 
-Before generating the tab files, we need to filter based on coverage, HWE from RADseq data, and (for sex chromosomes) sex phenotypes.
+Before generating the tab files, we need to filter based on coverage, HWE from RADseq data, and (for sex chromosomes) sex phenotypes. I already have this from the RADseq data in this directory:
+`/home/ben/2015_SulaRADtag/good_merged_samples/round2_BADSEX_only.vcf` which includes indels, heterozygous sites, bad sex chromosome sites, plus a buffer of 3, 200, and 200 bp respectively as described [here] (https://github.com/evansbenj/SulaRAD/blob/master/4_More_GATK_Calling_All_Sites_and_Filtering.md)
 
 
 
