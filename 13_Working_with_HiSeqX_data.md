@@ -75,8 +75,9 @@ I need to do the following:
 * for aDNA, filter each one based on coverage and remove excess heterozygous sites based on RADseq data
 * for sex chromosomes do the same and also filter bad sex genotypes
 * then make tab delimited files, add outgroup data, and combine them with same chromosome RADseq data for the ABBABABA analysis.  I wrote a script that will do the latter (`23_Combines_tab_delimited_files.pl`):
-* ```
-* #!/usr/bin/env perl
+* 
+```
+#!/usr/bin/env perl
 use strict;
 use warnings;
 
@@ -205,4 +206,4 @@ close DATAINPUT2;
 close OUTFILE;
 
 
-* ```
+```
