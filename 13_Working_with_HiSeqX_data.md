@@ -61,7 +61,7 @@ Instead, let's just add the outgroup sequences to the tab delimited files. Goto 
 ```
 And then use it again to add the human outgroup from this directory: `/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC` like this:
 ```
-/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/Hiseqchr1.vcf.gz_with_baboon.tab /net/infofile4-inside/volume1/scratch/ben/Hiseqchr1.vcf.gz_with_baboon_and_human.tab
+/home/ben/2015_SulaRADtag/axt_humans_rhemac2_from_UCSC/16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/HiSeqchr10.vcf.gz_with_baboon.tab /net/infofile4-inside/volume1/scratch/ben/HiSeqchr10.vcf.gz_with_baboon_and_human.tab
 ```
 
 Then modify the header like this:
