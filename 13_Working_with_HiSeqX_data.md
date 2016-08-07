@@ -225,5 +225,9 @@ while ( my $line = <DATAINPUT2>) {
 close DATAINPUT2;
 close OUTFILE;
 
+```
 
+OK now we seem to be on the way to having the alignments by chromosome for the combined RADseq and HiSeq data.  I want to run the abbababba script on these like this:
+```
+Performs_ABBA_BABA_on_populations.pl chr9_HiSeq_RADseq_combined.tab 1111100110000111100011100110010100000000010 3_6_14-41-19-20_22-42-25_32-33-34-35-36-37-38-43-40 born_nigra_tonk_HiSeqRadchr9.jk born_nigra_tonk_HiSeqRadchr9.stats
 ```
