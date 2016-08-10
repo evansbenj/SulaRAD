@@ -241,3 +241,8 @@ When entered this way, H3 is nem born, H1 is nigra, and H2 is tonk. Negative f_d
 I'd like to switch around who is H1 and H2 and also do smaller windows. On iqaluk:
 ```
 Performs_ABBA_BABA_on_populations_1mil.pl chr1_HiSeq_RADseq_combined.tab 1111100110000111100011100110010100000000010 3_6_14-41-19-20_32-33-34-35-36-37-38-43-40_22-42-25 born_tonk_nigra_HiSeqRadchr9.jk H3born_H1tonk_H2nigra_HiSeqRadchr1_1mil.stats
+```
+on info:
+```
+/home/ben/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_1mil.pl chr1_HiSeq_RADseq_combined.tab 1111100110000111100011100110010100000000010 3_6_14-41-19-20_32-33-34-35-36-37-38-43-40_22-42-25 born_tonk_nigra_HiSeqRadchr1.jk H3born_H1tonk_H2nigra_HiSeqRadchr1_1mil.stat
+```
