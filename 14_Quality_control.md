@@ -6,7 +6,6 @@ First, there appears to be some heterozygous chrX sites in males that snuck thro
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use List::MoreUtils qw/ uniq /;
 
 # this script counts male chrX het sites in a tab delimited file.
 # TO run type this
@@ -41,7 +40,6 @@ my @sexes=split('',$ARGV[1]);
 my $counter;
 my @males;
 my @bases;
-my %hetsites;
 
 foreach(@sexes){
 	if($_ == 0){
@@ -54,6 +52,17 @@ foreach(@sexes){
 # we need to add $rhesus_and_begin[1]-1 to this column to get the actual column in the file
 
 my @namez;
+my @number_of_hets;
+my %number_of_heterozygous_males_per_chrX_site;
+my @number_of_het_sites_per_male;
+my $number_of_sites_with_at_least_one_het_male=0;
+
+# initialize @number_of_het_sites_per_male
+$counter=0;
+foreach(@males){
+	$number_of_het_sites_per_male[$counter]=0;
+	$counter+=1;
+}	
 
 while ( my $line = <DATAINPUT>) {
 	chomp($line);
@@ -63,9 +72,13 @@ while ( my $line = <DATAINPUT>) {
 		foreach(@males){
 			@bases=split('/',$temp[$_+$rhesus_and_begin[1]-1]);
 			if($bases[0] ne $bases[1]){
-				$hetsites{$temp[0].'_'.$temp[1]}[$counter]=1;
+				$number_of_heterozygous_males_per_chrX_site{$temp[0].'_'.$temp[1]}+=1;
+				$number_of_het_sites_per_male[$counter]+=1;
 			}
 			$counter+=1;
+		}
+		if(defined($number_of_heterozygous_males_per_chrX_site{$temp[0].'_'.$temp[1]})){
+			$number_of_sites_with_at_least_one_het_male+=1;
 		}
 		# so $hetsites{chr_pos}[] refers to each male sequentially
 	}
@@ -80,57 +93,28 @@ while ( my $line = <DATAINPUT>) {
 }
 close DATAINPUT;
 
-my @number_of_hets;
+print "The number_of_sites_with_at_least_one_het_male is ",$number_of_sites_with_at_least_one_het_male,"\n";
 
-# initialize the array
-$counter=0;
-foreach(@namez) {
-	$number_of_hets[$counter]=0;
-	$counter+=1;
-}
-
-# so the @number_of_hets should have each male sequentially
-
-# now cycle through each key to add up the het sites by individual
-foreach my $chr_and_position (keys %hetsites ) {
-	foreach my $individual (@ {$hetsites{$chr_and_position}} ) {
-		if($hetsites{$chr_and_position}[$individual] == 1){
-			$number_of_hets[$individual]+=1;
-		}
-	}
-}
-
-my %number_of_heterozygous_males_per_chrX_site;
-
-# now cycle through each key of the array to add up the het sites by site
-foreach my $chr_and_position (keys %hetsites ) {
-	foreach my $individual (@ {$hetsites{$chr_and_position}} ) {
-		if($hetsites{$chr_and_position}[$individual] == 1){
-			$number_of_heterozygous_males_per_chrX_site{$chr_and_position}+=1;
-		}
-	}
-}
-
-$counter=0;
-print "Here is a summary of the number of heterozygous sites in males\n";
-foreach(@number_of_hets){
-	print $namez[$counter],"\t",$number_of_hets[$_],"\n";
-	$counter+=1;
-}
-
-my @temp2;
-
-print "Here is a summary of the sites with one or more heterozygous male\n";
 foreach my $chr_and_position (keys %number_of_heterozygous_males_per_chrX_site ) {
-	if(defined($number_of_heterozygous_males_per_chrX_site{$chr_and_position})){
-		@temp2=split('_',$chr_and_position);
-		print OUTFILE $temp2[0],"\t",$temp2[1],"\t",$number_of_heterozygous_males_per_chrX_site{$chr_and_position},"\n";
+	print $chr_and_position,"\t",$number_of_heterozygous_males_per_chrX_site{$chr_and_position},"\n";
+}	
+
+$counter=0;
+foreach (@number_of_het_sites_per_male) {
+	if(defined($number_of_het_sites_per_male[$counter])){
+		print $namez[$counter],"\t",$number_of_het_sites_per_male[$counter],"\n";
 	}
+	else{
+		print $namez[$counter],"\t0\n";
+	}
+	$counter+=1;	
 }
 
-close OUTFILE;
 
 ```
+
+Unfortunately there are alot (441 to be exact) and multiple in every of the 22 male individuals (range 28-119).
+
 
 Another concern is that, in the HiSeq data there are lots of heterozygous sites on the chrX in males.  I wrote this script to identify them and to compare the RADseq nad HiSeq genotypes (Compares_RADseq_and_Hiseq.pl)"
 
