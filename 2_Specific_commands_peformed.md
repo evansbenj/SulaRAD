@@ -13,6 +13,7 @@ And a similar command was used for the forward read only from the *M. tonkeana* 
 Overall the sequence quality looks great for all samples. But two (PM665, PF654) had many (hundreds) of overrepresented sequences that BLASTed to bacteria. So I ran all the data through Trimmomatic removing specifically these sequences:
 
 ```
+>
 TGCAGGCTGGCACTTCTGCCGTTTCTGATAAGTTGCTTGATTTGGTTGGACTTGGTGGCAAGTCTGCCGCTGATA
 >
 TGCAGGAGGATGAGCTCCCTGCGGCATTTGTCCGCGGCTGCGGTGTGTTTGTCTTGATCAATGAAAAGAGGCCGC
