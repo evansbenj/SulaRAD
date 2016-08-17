@@ -1756,7 +1756,57 @@ TGCAGGAAGACTACGGGAGCGGTTTTGCCTCAACAGAAACGGATGACTTCCGCGCGCTGAACCCCAACGCCATGG
 >
 TGCAGGAACGTCTGAAAAACGACTTCGATCTCGATCTGCCAATCAAAGAGTGGCTGGATAAAGAGCCTGAGCTGC
 ```
+I made a bash script to batch process these:
 
+```bash
+#!/bin/bash
+
+files=”brunescens_PF707
+maura_PM613
+nem_PM664
+ochreata_PM571
+tonk_PM566
+hecki_PF643
+maura_PM614
+nem_PM665
+ochreata_PM596
+tonk_PM567
+hecki_PF644
+maura_PM616
+nem_Sukai_male
+tonk_PM582
+hecki_PF648
+maura_PM618
+nigra_PF1001
+tonk_PM584
+hecki_PF651
+nem_Gumgum
+nigra_PF660
+togeanus_PF549
+tonk_PM592
+hecki_PM639
+nem_Kedurang
+nigra_PM1000
+togeanus_PM545
+tonk_PM602
+hecki_PM645
+nem_Malay
+nigra_PM1003
+tonk_PF515
+maura_PF615
+nem_Ngasang
+nigrescens_PF654
+tonk_PM561
+maura_PF713
+nem_pagensis
+ochreata_PF625
+tonk_PM565”
+
+for file in $files
+do
+    java -jar ~/Trimmomatic-0.36/trimmomatic-0.36.jar SE -phred33 ${file}.fq.gz ${file}_trimmed.fq.gz -trimlog ${file}_log.txt ILLUMINACLIP:/home/ben/Trimmomatic-0.36/adapters/SulaRAD_truSeq2_TruSeq3_plus_overrepresented.fa:2:30:10 SLIDINGWINDOW:4:15 MINLEN:36
+done
+```
 
 ## BWA, Samtools
 On info, I demultiplexed the data with Stacks.  I then combined the redundant reads within the 95 samples using the cat command. I then added the forward read from the *M. tonkeana* data.
