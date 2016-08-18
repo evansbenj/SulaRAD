@@ -59,7 +59,11 @@ And then we need to merge the vcf files:
 export PATH=$PATH:~/tabix-0.2.6/
 /usr/local/vcftools/src/perl/vcf-merge nem_haploid_X.vcf.gz tonk_haploid_X.vcf.gz nigra_diploid_X.vcf.gz | bgzip -c > nem_tonk_nigra_ploidy_chrX.vcf.gz
 ```
-
+Now make a tab delimited file
+```
+~/tabix-0.2.6/tabix -p vcf nem_tonk_nigra_ploidy_chrX.vcf.gz
+zcat nem_tonk_nigra_ploidy_chrX.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nem_tonk_nigra_ploidy_chrX.vcf.gz.tab
+```
 
 While I am running this I will develop a pipeline to (1) add the outgroup sequences to a tab-deliminted file generated from the vsf file and (2) merge this with the existing RADseq file.  It will be interesting to quantify and compare how the genotypes from the radseq data compare to the HiSeq data for the same individuals.
 
