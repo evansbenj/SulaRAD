@@ -1,4 +1,4 @@
-# We now have HiSeqX data from M. nem PM664, M. tonkeana PM592, and M. nigra PM661; Cool!
+# We now have HiSeqX data from M. nem PM664, M. tonkeana PM592, and M. nigra PF661; Cool!
 
 In addition to the raw data, we got bam files that were already processed by Andre Corvalo at the NY Genome Center.  They are in this directory `/home/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27`.
 
