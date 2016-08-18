@@ -44,6 +44,20 @@ java -Xmx32G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T UnifiedGenotyper -R /h
 
 ```
 
+And then we need to merge the vcf files:
+
+```
+~/tabix-0.2.6/bgzip nem_haploid_X.vcf
+~/tabix-0.2.6/tabix -p vcf nem_haploid_X.vcf.gz
+
+~/tabix-0.2.6/bgzip tonk_haploid_X.vcf
+~/tabix-0.2.6/tabix -p vcf tonk_haploid_X.vcf.gz
+
+~/tabix-0.2.6/bgzip nigra_diploid_X.vcf
+~/tabix-0.2.6/tabix -p vcf nigra_diploid_X.vcf.gz
+
+vcf-merge nem_haploid_X.vcf.gz tonk_haploid_X.vcf.gz nigra_diploid_X.vcf.gz | bgzip -c > nem_tonk_nigra_ploidy_chrX.vcf.gz
+```
 
 
 While I am running this I will develop a pipeline to (1) add the outgroup sequences to a tab-deliminted file generated from the vsf file and (2) merge this with the existing RADseq file.  It will be interesting to quantify and compare how the genotypes from the radseq data compare to the HiSeq data for the same individuals.
