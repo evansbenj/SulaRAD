@@ -56,7 +56,8 @@ And then we need to merge the vcf files:
 ~/tabix-0.2.6/bgzip nigra_diploid_X.vcf
 ~/tabix-0.2.6/tabix -p vcf nigra_diploid_X.vcf.gz
 
-vcf-merge nem_haploid_X.vcf.gz tonk_haploid_X.vcf.gz nigra_diploid_X.vcf.gz | bgzip -c > nem_tonk_nigra_ploidy_chrX.vcf.gz
+export PATH=$PATH:~/tabix-0.2.6/
+/usr/local/vcftools/src/perl/vcf-merge nem_haploid_X.vcf.gz tonk_haploid_X.vcf.gz nigra_diploid_X.vcf.gz | bgzip -c > nem_tonk_nigra_ploidy_chrX.vcf.gz
 ```
 
 
