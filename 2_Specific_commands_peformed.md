@@ -1824,7 +1824,7 @@ do
 done
 ```
 
-After this was done I ran fastqd again.  PM665 and PM654 still had lots of overrepresented seqs - presumably different ones.  I didn't bother running trimmomatic again because there probably would end up being lots more.
+After this was done I ran fastqd again.  PM665 and PM654 still had lots of overrepresented seqs - presumably different ones.  I ran trimmomatic two more times for each of these files using different adapter files. I then deleteded the intermediate files and renamed the third trimmed one with the previous name to facilitate the pipeline below.
 
 ## BWA, Samtools
 
