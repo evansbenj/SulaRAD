@@ -286,3 +286,9 @@ for chrX we need a separate script to deal with males and females differently:
 ```
 /home/ben/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX_window_1mil.pl chrX_HiSeq_RADseq_combined.tab 1111100110000111100011100110010100000000010 3_6_14-41-19-20_32-33-34-35-36-37-38-43-40_22-42-25 born_tonk_nigra_HiSeqRadchrX.jk H3born_H1tonk_H2nigra_HiSeqRadchrX_1mil.stat
 ```
+For analysis of only the HiSeqX datafile (not concatenated with the RADseq data but with human and baboon outgroup seqs, this command works:
+
+```
+/home/ben/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl HiSeqchrX_ploidy.vcf.gz_with_baboon_and_humans.tab 010 3_6_1_2_3 born_nigra_tonk_HiSeq_only_chrX.jk H3born_H1nigra_H2tonk_HiSeq_only_chrX_ploidy.stats
+```
+
