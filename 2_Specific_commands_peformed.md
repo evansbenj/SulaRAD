@@ -1945,7 +1945,7 @@ use strict;
 my $status;
 my @files;
    
-@files = glob("*_sorted.bam");
+@files = glob("fastq/*_trimmed_sorted.bam");
 
 my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T RealignerTargetCreator ";
 
@@ -1953,7 +1953,7 @@ foreach(@files){
     $commandline = $commandline." -I ".$_." ";
 }
 
-$commandline = $commandline."-R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o forIndelRealigner_ym.intervals";
+$commandline = $commandline."-R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o fastq/forIndelRealigner_ym.intervals";
 
 
 $status = system($commandline);
@@ -1971,7 +1971,7 @@ use strict;
 my $status;
 my @files;
    
-@files = glob("*_sorted.bam");
+@files = glob("/fastq/*trimmed_sorted.bam");
 
 my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T IndelRealigner ";
 
@@ -1979,7 +1979,7 @@ foreach(@files){
     $commandline = $commandline." -I ".$_." ";
 }
 
-$commandline = $commandline."-R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --targetIntervals forIndelRealigner_ym.intervals --nWayOut .realigned.bam";
+$commandline = $commandline."-R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --targetIntervals fastq/forIndelRealigner_ym.intervals --nWayOut .realigned.bam";
 
 
 $status = system($commandline);
