@@ -1824,6 +1824,8 @@ do
 done
 ```
 
+After this was done I ran fastqd again.  PM665 and PM654 still had lots of overrepresented seqs - presumably different ones.  I didn't bother running trimmomatic again because there probably would end up being lots more.
+
 ## BWA, Samtools
 
 Then I executed a bash script called `others_alignmnet_new` which looked like this:
