@@ -6,6 +6,11 @@ I used `process_radtags` from `Stacks` to demultiplex and trim the reads. This w
 
 And a similar command was used for the forward read only from the *M. tonkeana* data from the 2014 MBE paper.  The `-t` flag truncates the reads to 75bp, the `-r` flag rescues barcodes, the `-c` flag removes reads with any uncalled bases, the `-q` flag discards reads with low quality scores (average <10 Phred scale based on a 10bp sliding window), and the `--barcode_dist_1` flag provides a maximum distance from barcodes in order for the read to be included.  This is based on an analysis of p-distance of the barcodes I did with paup (after making the barcode list into a nexus file).
 
+On info, I then combined the de-multiplexed reads for each individual within the 95 samples using the cat command. This was not necessary for the *M. tonkeana* data because that was from 9 individuals each multiplexed on one lane.
+
+Then I moved these fastq files into a directory called `/home/ben/2015_SulaRADtag/good_merged_samples/fastq`
+
+
 ## Checking with FastQC
 `mkdir all_fastqc`
 `fastqc -o all_fastqc/ *fq`
@@ -1820,12 +1825,46 @@ done
 ```
 
 ## BWA, Samtools
-On info, I demultiplexed the data with Stacks.  I then combined the redundant reads within the 95 samples using the cat command. I then added the forward read from the *M. tonkeana* data.
 
-Then I moved these fastq files into a directory called `/home/ben/2015_SulaRADtag/good_merged_samples/fastq`
+Then I executed a bash script called `others_alignmnet_new` which looked like this:
 
-Then I executed a bash script called `others_alignmnet` which looked like this:
+```
+#!/bin/bash                                                                                                          \
+                                                                                                                      
 
+path_to_bwa="/usr/local/bin"
+path_to_samtools="/usr/local/bin"
+path_to_data="./fastq"
+path_to_chromosome="/home/ben/2015_BIO720/rhesus_genome"
+chromosome="macaque_masked_chromosomes_ym.fasta"
+
+individuals="tonk_PF515                                                                                               
+tonk_PM561                                                                                                            
+tonk_PM565                                                                                                            
+tonk_PM566                                                                                                            
+tonk_PM567                                                                                                            
+tonk_PM582                                                                                                            
+tonk_PM584                                                                                                            
+tonk_PM592                                                                                                            
+tonk_PM602"
+for each_individual in $individuals
+do
+
+echo ${each_individual}
+    $path_to_bwa/bwa mem -M -t 16 $path_to_chromosome/$chromosome $path_to_data/${each_individual}_trimmed.fq.gz -R "\
+@RG\tID:FLOWCELL1.LANE1\tSM:${each_individual}.fq\tPL:illumina" > $path_to_data/${each_individual}_trimmed.sam
+    $path_to_samtools/samtools view -bt $path_to_chromosome/$chromosome -o $path_to_data/${each_individual}_trimmed.b\
+am $path_to_data/${each_individual}_trimmed.sam
+    $path_to_samtools/samtools sort $path_to_data/${each_individual}_trimmed.bam $path_to_data/${each_individual}_tri\
+mmed_sorted
+    $path_to_samtools/samtools index $path_to_data/${each_individual}_trimmed_sorted.bam
+    rm -f $path_to_data/${each_individual}_trimmed.bam $path_to_data/${each_individual}_trimmed.sam $path_to_data/${e\
+ach_individual}_trimmed.sai
+done
+```
+A similar script was run for the other samples but changing the header to Lane5 instead of Lane1.
+
+Here is the old script that does not use bwa mem that I used previously.
 ``` bash
 #!/bin/bash                                                                                                                  
 
