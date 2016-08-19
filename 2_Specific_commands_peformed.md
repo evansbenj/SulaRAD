@@ -1931,7 +1931,7 @@ path_to_data/${each_individual}.sam
 done
 ```
 
-This used `bwa` to align the single end reads, then it made sorted bam files and a bam index (bai) file.  I intitially used GATK to realign these bam files using two perl script called `1_Executes_GATK_commands_RealignerTarget.pl` and `2_Executes_GATK_commands_IndelRealigner.pl`, see below.  In the new analysis, I am using Haplotype caller, which does indel realignment and genotyping at the same time.  However, BSQR still requires indel realignment, so I will do this first.
+This used `bwa mem` to align the single end reads, then it made sorted bam files and a bam index (bai) file.  In the new analysis I used GATK 3.6 to realign these bam files using two perl script called `1_Executes_GATK_commands_RealignerTarget.pl` and `2_Executes_GATK_commands_IndelRealigner.pl`, see below.  In the new analysis, I am using Haplotype caller, which does indel realignment and genotyping at the same time.  However, BSQR still requires indel realignment, so I will do this first.
 
 Here is the `1_Executes_GATK_commands_RealignerTarget.pl`:
 ```perl
@@ -1947,7 +1947,7 @@ my @files;
    
 @files = glob("*_sorted.bam");
 
-my $commandline = "java -Xmx1G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T RealignerTargetCreator ";
+my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T RealignerTargetCreator ";
 
 foreach(@files){
     $commandline = $commandline." -I ".$_." ";
@@ -1973,7 +1973,7 @@ my @files;
    
 @files = glob("*_sorted.bam");
 
-my $commandline = "java -Xmx1G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T IndelRealigner ";
+my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T IndelRealigner ";
 
 foreach(@files){
     $commandline = $commandline." -I ".$_." ";
