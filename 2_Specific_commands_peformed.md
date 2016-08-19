@@ -1929,7 +1929,7 @@ path_to_data/${each_individual}.sam
 done
 ```
 
-This used `bwa` to align the single end reads, then it made sorted bam files and a bam index (bai) file.  I used GATK to realign these bam files using two perl script called `1_Executes_GATK_commands_RealignerTarget.pl` and `2_Executes_GATK_commands_IndelRealigner.pl`.
+This used `bwa` to align the single end reads, then it made sorted bam files and a bam index (bai) file.  I intitially used GATK to realign these bam files using two perl script called `1_Executes_GATK_commands_RealignerTarget.pl` and `2_Executes_GATK_commands_IndelRealigner.pl`, see below.  But on the new analysis, I will use Haplotype caller, which does indel realignment and genotyping at the same time, so (maybe) these two scripts are no longer necessary?
 
 Here is the `1_Executes_GATK_commands_RealignerTarget.pl`:
 ```perl
