@@ -362,6 +362,7 @@ I modified the `Performs_ABBA_BABA_on_populations.pl` script to work on chrX (`P
 use strict;
 use warnings;
 use List::MoreUtils qw/ uniq /;
+use Number::Range;
 
 
 #  This program reads in a tab delimited genotype file generated
@@ -375,8 +376,8 @@ use List::MoreUtils qw/ uniq /;
 #  one individual from species H3, H2, and H1, including those that that 
 #  missing data in some individuals.
 
-# to execute type Performs_ABBA_BABA_on_populations.pl inputfile.tab 1111100110000111100011100110010100000000 
-# 3_6_14-18-19-20_2-3-4-5-6-7_32-33-34-35-36-37-38-39-40 output1.txt output2.txt
+# to execute type Performs_ABBA_BABA_on_populations_onlychrX.pl inputfile.tab 1111100110000111100011100110010100000000 
+# 3_6_14-18-19-20_2-3-4-5-6-7_32-33-34-35-36-37-38-39-40 repeat_annotation_file output1.txt output2.txt
 # where 1111100110000111100011100110010100000000 refers to whether or not each individual in the ingroup 
 # in the vcf file is (1) or is not (0) female ,and 3_6 refers to (i) the column that contains the 
 # outgroup nucleotide (3 in this case for rhesus) and (ii) the column number of the first individual in the ingroup 
@@ -480,13 +481,45 @@ use List::MoreUtils qw/ uniq /;
 my $inputfile = $ARGV[0];
 my $input2 = $ARGV[1];
 my $input3 = $ARGV[2];
-my $outputfile = $ARGV[3];
-my $outputfile2 = $ARGV[4];
+my $inputfile4 = $ARGV[3];
+my $outputfile = $ARGV[4];
+my $outputfile2 = $ARGV[5];
 
 unless (open DATAINPUT, $inputfile) {
-	print "Can not find the input file.\n";
+	print "Can not find the genotype input file.\n";
 	exit;
 }
+
+unless (open DATAINPUT4, $inputfile4) {
+	print "Cannot find the repeatmasker file.\n";
+	exit;
+}
+
+my @temp;
+my $range;
+my $line_number=0;
+my $counter=0;
+
+while ( my $line = <DATAINPUT4>) {
+	# begin by removing whitespaces from the silly format of Repeat masker
+	$line =~ s/^\s+//;
+	@temp=split(/\s+/,$line);
+	$line_number+=1;
+	if(($line_number == 4)&&(defined($temp[5]))&&(defined($temp[6]))){ # this is the first line
+		# create range
+		$range = Number::Range->new("$temp[5]..$temp[6]");
+	}
+	elsif(($line_number > 4)&&(defined($temp[5]))&&(defined($temp[6]))){
+		# add to range
+		$range->addrange("$temp[5]..$temp[6]");
+	}
+	# print counter
+	if($line_number > $counter){
+		print "Repeat counter:",$counter,"\n";
+		$counter+=1000000;
+	}
+}	
+
 
 unless (open(OUTFILE, ">$outputfile"))  {
 	print "I can\'t write to $outputfile\n";
@@ -512,7 +545,6 @@ if($#whotoinclude != 4){
 }
 
 
-my @temp;
 my @temp1;
 my $previous= 0;
 my $string;
@@ -641,7 +673,7 @@ while ( my $line = <DATAINPUT>) {
 			$current_window = 0;
 			$window_counter+=1;
 			$H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}=0;
-			$H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}=0;		
+			$H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}=0;
 		}
 		until($temp[1] < ($current_window+$sliding_window)){
 			$current_window = $current_window+$sliding_window;
@@ -649,7 +681,7 @@ while ( my $line = <DATAINPUT>) {
 			$H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}=0;
 			$H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}=0;
 		}
-		if($temp[0] eq "chrX"){
+		if(($temp[0] eq "chrX")&&($range->inrange($temp[1]) == 0)){
 			$string=();
 			if((uc $temp[$whotoinclude[0]-1] eq "A")||(uc $temp[$whotoinclude[0]-1] eq "C")||(uc $temp[$whotoinclude[0]-1] eq "T")||(uc $temp[$whotoinclude[0]-1] eq "G")){
 				# the outgroup is defined
