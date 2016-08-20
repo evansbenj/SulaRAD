@@ -640,6 +640,8 @@ while ( my $line = <DATAINPUT>) {
 			$current_chromosome = $temp[0];
 			$current_window = 0;
 			$window_counter+=1;
+			$H1_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}=0;
+			$H2_number_of_sites_for_pairwise_nucleotide_diversity_per_window{$window_counter."_".$current_chromosome."_".$current_window}=0;		
 		}
 		until($temp[1] < ($current_window+$sliding_window)){
 			$current_window = $current_window+$sliding_window;
