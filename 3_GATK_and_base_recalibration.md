@@ -2,7 +2,39 @@
 
 The bwa-assisted mapping with Stampy produced sam files that had ~10% more mapped reads for all individuals. Great!  Now the next step is to use GATK to do the base recalibration and genotype calling.  I have copied below a series of scripts I used for this purpose (on info).
 
-## Add Read groups
+# Genotyping with Haplotype caller
+I am going to write the scripts from the new analyses above the old ones. Here is the Haplotype caller commands to generate confident variants for BSQR (3_Executes_GATK_commands_Haplotypecaller.pl).
+
+```
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+# This script will read in the *_sorted.bam file names in a directory, and 
+# make and execute a GATK commandline on these files.  
+
+my $status;
+my @files;
+   
+@files = glob("fastq/*_trimmed_sorted.realigned.bam");
+
+my $commandline = "java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar
+ -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym
+.fasta ";
+
+foreach(@files){
+    $commandline = $commandline." -I ".$_." ";
+}
+
+$commandline = $commandline." -L fastq/target_interval_list_autosomes.list -out_mode EMI
+T_VARIANTS_ONLY -o fastq/varonly_haplotypecaller_for_BSQR.vcf";
+
+
+$status = system($commandline);
+```
+
+
+## Add Read groups (this was not done in the new analysis because it is already done by bwa mem above)
 The bam files recovered from Stampy lacked readgroup header information; this is needed by GATK for base recalibration so I ran this script:
 
 ``` perl
