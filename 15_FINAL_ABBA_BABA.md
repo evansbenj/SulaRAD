@@ -19,7 +19,7 @@ make install
 And then I needed this in the top of the script:
 `use lib qw(/home/ben/perl_modules/Number-Range-0.12/lib/);` to tell perl where to look
 
-The final version of 'Performs_ABBA_BABA_on_populations_onlychrX.pl` is here.
+The final version of 'Performs_ABBA_BABA_on_populations_onlychrX.pl` is (https://github.com/evansbenj/SulaRAD/blob/master/12_More_on_visualizing_ABBABABA.md)[here].
 
 ```
 /home/ben/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl HiSeqchrX_ploidy.vcf.gz_with_baboon_and_humans.tab 010 3_6_1_2_3 /home/ben/2015_SulaRADtag/good_merged_samples/repeat_masker_chromOut/X/chrX.fa.out born_nigra_tonk_HiSeq_only_chrX.jk H3born_H1nigra_H2tonk_HiSeq_only_chrX_ploidy_norepeats.stats
