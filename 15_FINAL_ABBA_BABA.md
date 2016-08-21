@@ -33,3 +33,5 @@ Here is an example of a chrX command on info:
 ```
 /home/ben/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl HiSeqchrX_ploidy.vcf.gz_with_baboon_and_humans.tab 010 3_6_1_2_3 /home/ben/2015_SulaRADtag/good_merged_samples/repeat_masker_chromOut/X/chrX.fa.out born_nigra_tonk_HiSeq_only_chrX.jk H3born_H1nigra_H2tonk_HiSeq_only_chrX_ploidy_norepeats.stats
 ```
+
+I did the same for the autosomal analysis.  The final version of the script is [here](https://github.com/evansbenj/SulaRAD/blob/master/8__ABBA_BABA_on_populations.md).
