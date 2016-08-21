@@ -6,8 +6,10 @@ I have learned lots more about ABBABABA tests by reading the cool paper by Marti
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use lib qw(~/perl_modules);
+# use lib qw(/home/ben/perl_modules/Number-Range-0.12/lib/); # uncomment for info and comment line above this one
 use List::MoreUtils qw/ uniq /;
-
+use Number::Range;
 
 #  This program reads in a tab delimited genotype file generated
 #  by the perl program "Gets_outgroup_sequence_from_axt_files.pl"
@@ -21,12 +23,13 @@ use List::MoreUtils qw/ uniq /;
 #  missing data in some individuals.
 
 # to execute type Performs_ABBA_BABA_on_populations.pl inputfile.tab 1111100110000111100011100110010100000000 
-# 3_6_14-18-19-20_2-3-4-5-6-7_32-33-34-35-36-37-38-39-40 output1.txt output2.txt
+# 3_6_14-18-19-20_2-3-4-5-6-7_32-33-34-35-36-37-38-39-40 repeatmasker_input2 output1.txt output2.txt
 # where 1111100110000111100011100110010100000000 refers to whether or not each individual in the ingroup 
 # in the vcf file is (1) or is not (0) female ,and 3_6 refers to (i) the column that contains the 
 # outgroup nucleotide (3 in this case for rhesus) and (ii) the column number of the first individual in the ingroup 
 # (6 in this case), and 14-18-19-20, 2-3-4-5-6-7, and 32-33-34-35-36-37-38-39-40 refer to H3, H1, and H2 samples as 
-# itemized below (here, they are Borneo nemestrina, hecki, and tonkeana, respectively).
+# itemized below (here, they are Borneo nemestrina, hecki, and tonkeana, respectively). repeatmasker_input2 is a file downloaded 
+# from USCG that has repeat intervals for the chr being analyzed
 
 # output1.txt is the one that is fed into the jacknife.R script
 # output2.txt has more information for each window, including BBAA sites, fdom and dxy
@@ -125,13 +128,45 @@ use List::MoreUtils qw/ uniq /;
 my $inputfile = $ARGV[0];
 my $input2 = $ARGV[1];
 my $input3 = $ARGV[2];
-my $outputfile = $ARGV[3];
-my $outputfile2 = $ARGV[4];
+my $inputfile4 = $ARGV[3];
+my $outputfile = $ARGV[4];
+my $outputfile2 = $ARGV[5];
 
 unless (open DATAINPUT, $inputfile) {
 	print "Can not find the input file.\n";
 	exit;
 }
+
+unless (open DATAINPUT4, $inputfile4) {
+	print "Cannot find the repeatmasker file.\n";
+	exit;
+}
+
+my @temp;
+my $range;
+my $line_number=0;
+my $counter=0;
+
+while ( my $line = <DATAINPUT4>) {
+	# begin by removing whitespaces from the silly format of Repeat masker
+	$line =~ s/^\s+//;
+	@temp=split(/\s+/,$line);
+	$line_number+=1;
+	if(($line_number == 4)&&(defined($temp[5]))&&(defined($temp[6]))){ # this is the first line
+		# create range
+		$range = Number::Range->new("$temp[5]..$temp[6]");
+	}
+	elsif(($line_number > 4)&&(defined($temp[5]))&&(defined($temp[6]))){
+		# add to range
+		$range->addrange("$temp[5]..$temp[6]");
+	}
+	# print counter
+	if($line_number > $counter){
+		print "Repeat counter:",$counter,"\n";
+		$counter+=1000000;
+	}
+}	
+
 
 unless (open(OUTFILE, ">$outputfile"))  {
 	print "I can\'t write to $outputfile\n";
@@ -157,7 +192,7 @@ if($#whotoinclude != 4){
 }
 
 
-my @temp;
+
 my @temp1;
 my $previous= 0;
 my $string;
@@ -195,7 +230,7 @@ for ($y = 0 ; $y <= $#H3 ; $y++ ) {
 }
 print "This includes ",$number_of_female_individuals_genotyped," female(s)\n";
 
-my $sliding_window=10000000;
+my $sliding_window=5000000;
 my $current_window=0;
 my $window_counter=0;
 my $current_chromosome="blah";
@@ -290,7 +325,7 @@ while ( my $line = <DATAINPUT>) {
 			$current_window = $current_window+$sliding_window;
 			$window_counter+=1;
 		}
-		if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")&&($temp[0] ne "chrM")){
+		if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")&&($temp[0] ne "chrM")&&($range->inrange($temp[1]) == 0)){
 			$string=();
 			if((uc $temp[$whotoinclude[0]-1] eq "A")||(uc $temp[$whotoinclude[0]-1] eq "C")||(uc $temp[$whotoinclude[0]-1] eq "T")||(uc $temp[$whotoinclude[0]-1] eq "G")){
 				# the outgroup is defined
@@ -768,6 +803,7 @@ if($#out == -1){
 }
 
 close OUTFILE2;
+
 
 
 ```
