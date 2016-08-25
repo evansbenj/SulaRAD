@@ -81,6 +81,10 @@ unless (open(OUTFILE, ">$outputfile"))  {
 my $line_number=0;
 my @temp;
 
+# print header
+print OUTFILE "chrom\tchromStart\tchromEnd\n";
+
+
 while ( my $line = <DATAINPUT>) {
     # begin by removing whitespaces from the silly format of Repeat masker
     $line =~ s/^\s+//;
