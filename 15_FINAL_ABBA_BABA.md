@@ -44,7 +44,7 @@ Here is an example commandline:
 Turns out that this approach is extremely slow because the range finding perl function takes forever to load the ranges.  Instead I will just make bed files from the Repeatmasker files and then filter each vcf file before constructing the tab delimited files.  
 
 I need a script that will take as input 3 vcf files and then do the following:
-(1) output a subset each by chromosome 
-(2) concatenate the three vcfs for each chr
-(3) filter each of these vcf files using repeatmasker bed files
-(4) output a filtered tab delimited file
+* output a subset each by chromosome 
+* concatenate the three vcfs for each chr
+* filter each of these vcf files using repeatmasker bed files
+* output a filtered tab delimited file
