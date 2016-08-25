@@ -48,3 +48,57 @@ I need a script that will take as input 3 vcf files and then do the following:
 * concatenate the three vcfs for each chr
 * filter each of these vcf files using repeatmasker bed files
 * output a filtered tab delimited file
+
+# Make bed files out of repeatmasker files (24_Makes_bed_filez_out_of_repeatmasker.pl):
+
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# This script will read in a Repeatmasker file and make a bed file out of it
+
+# 24_Makes_bed_filez_out_of_repeatmasker.pl repeatfile chr outfile.bed
+
+# the second value will be the chr that is put in the first column
+
+# ./24_Makes_bed_filez_out_of_repeatmasker.pl /projects/SulaRADTAG/perl_scripts/sliding_window/a_HiSeq_RADseq_combined_5mil_windows/repeat_masker_chromOut/4/chr4.fa.out chr4 /projects/SulaRADTAG/perl_scripts/sliding_window/a_HiSeq_RADseq_combined_5mil_windows/repeat_masker_chromOut/4/chr4.bed
+
+my $inputfile = $ARGV[0];
+unless (open DATAINPUT, $inputfile) {
+    print 'Can not find the repeatmasker file.\n';
+    exit;
+}
+
+my $chr = $ARGV[1];
+
+
+my $outputfile = $ARGV[2];
+unless (open(OUTFILE, ">$outputfile"))  {
+    print "I can\'t write to $outputfile\n";
+    exit;
+}
+my $line_number=0;
+my @temp;
+
+while ( my $line = <DATAINPUT>) {
+    # begin by removing whitespaces from the silly format of Repeat masker
+    $line =~ s/^\s+//;
+    @temp=split(/\s+/,$line);
+    $line_number+=1;
+    if(($line_number == 4)&&(defined($temp[5]))&&(defined($temp[6]))){ # this is the first line
+        # print to outfile
+        print OUTFILE $chr,"\t",$temp[5]-1,"\t",$temp[6]-1,"\n"; # bed files start at zero
+    }
+    elsif(($line_number > 4)&&(defined($temp[5]))&&(defined($temp[6]))){
+        # print to outfile
+        print OUTFILE $chr,"\t",$temp[5]-1,"\t",$temp[6]-1,"\n";
+    }
+    # print counter
+}   
+
+
+close DATAINPUT;
+close OUTFILE;
+```
+
