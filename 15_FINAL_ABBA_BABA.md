@@ -40,3 +40,5 @@ Here is an example commandline:
 ```
 /home/ben/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations.pl chr2_HiSeq_RADseq_combined.tab 1111100110000111100011100110010100000000010 3_6_14-41-19-20_32-33-34-35-36-37-38-43-40_22-42-25 /home/ben/2015_SulaRADtag/good_merged_samples/repeat_masker_chromOut/2/chr2.fa.out born_tonk_nigra_HiSeq_only_chr2.jk H3born_H1tonk_H2nigra_HiSeqRADseq_chr2_norepeats.stats
 ```
+
+Turns out that this approach is extremely slow because the range finding perl function takes forever to load the ranges.  Instead I will just make bed files from the Repeatmasker files and then filter each vcf file before constructing the tab delimited files.
