@@ -226,3 +226,11 @@ foreach my $chr (@chr){
 }
 
 ```
+
+# Using ploidy option with Haplotypecaller to call chrX on new hiseqX bam files
+
+Today is Aug 26, 2016 and I am working with new bam files that have been BSQRed and indel realigned by the NYGenome center.  I already have vcf files they made but I want to recall chrX for nem and tonk using ploidy = 1 because they are males. I have the bam files in this directory in iqaluk: `/work/ben/2015_SulaRADtag/bam-constitutional` and I have an interval file for chrX in here: `/work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/target_interval_list_X.list`.
+
+The ref genome is here: `/work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa`
+
+java -Xmx32G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T HaplotypeCaller -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I /work/ben/2015_SulaRADtag/bam-constitutional/nemestrina-PM664.final.bam -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES -L /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/target_interval_list_X.list -nct 3 -nt 8 -o nemestrina-PM664.final.bam_haploid_X.vcf
