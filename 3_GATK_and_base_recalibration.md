@@ -63,7 +63,7 @@ foreach(@files){
     $status = system($commandline);
 }
 ```
-## Realignment
+## Realignment (this was done already in the new analysis before the Haplotype caller was run - see previous page)
 Using the bam files from bwa, samtools, and stampy, I then realigned indels using GATK in two steps.
 
 * Step 1.
@@ -95,7 +95,7 @@ $status = system($commandline);
 
 ```
 
-* Step 2
+* Step 2 (this was done already in the new analysis before the Haplotype caller was run - see previous page)
 
 ```perl
 #!/usr/bin/perl
@@ -132,7 +132,7 @@ $status= system ("rename _stampy_sorted_rg.stampy_realigned.bai _stampy_realigne
 
 The last steps were needed to rename the silly long names GATK gave the realigned files.
 
-## Genotyping
+## Genotyping (this was done in the new analysis using Haplotypecaller; see above)
 
 Then I genotyped the files as follows:
 
@@ -178,7 +178,7 @@ my @files;
    
 @files = glob("*_stampy_realigned.bam");
 
-my $commandline = "java -Xmx3G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T BaseRecalibrator -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta ";
+my $commandline = "java -Xmx3G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T BaseRecalibrator -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta ";
 
 foreach(@files){
     $commandline = $commandline." -I ".$_." ";
@@ -207,7 +207,7 @@ my @files;
    
 @files = glob("*_stampy_realigned.bam");
 
-my $commandline = "java -Xmx3G -jar /usr/local/gatk/GenomeAnalysisTK.jar -T PrintReads -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
+my $commandline = "java -Xmx3G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T PrintReads -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
 
 foreach(@files){
     $commandline = $commandline." -I ".$_." ";
