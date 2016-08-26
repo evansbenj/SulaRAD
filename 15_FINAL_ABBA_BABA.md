@@ -106,3 +106,102 @@ close DATAINPUT;
 close OUTFILE;
 ```
 
+This script divides up a vcf file from the NYGenome Center and then filters it using the bed files generated above (25_Splits_vcf_by_chr_and_filter_1.pl).
+
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# This script will take as input 3 vcf files and then do the following:
+
+# output a subset each by chromosome
+#   tabix -p vcf myvcf.vcf.gz
+#   tabix -h myvcf.vcf.gz chr1 > chr1.vcf
+
+# concatenate the three vcfs for each chr
+#   export PATH=$PATH:~/tabix-0.2.6/
+#   /usr/local/vcftools/src/perl/vcf-merge file1.vcf.gz file2.vcf.gz file2.vcf.gz | bgzip -c > file1_file2_file3_chr.vcf.gz
+
+# filter each of these vcf files using repeatmasker bed files
+#   /usr/local/vcftools/src/cpp/vcftools --gzvcf FILE --out OUTPUT_PREFIX --exclude-bed
+
+# output a filtered tab delimited file for each chr
+
+my $commandline;
+my $combined_filename;
+my $status;
+
+my @chr=("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20","chrX");
+#my @chr=("chr1","chr2","chr3","chr4");
+my @vcf=("nemestrina-PM664.vcf.gz","nigra-PM664.vcf.gz","tonkeana-PM592.vcf.gz");
+
+
+# export the path for tabix
+#$commandline="export PATH=\$PATH:~/tabix-0.2.6/";
+#$commandline="export PATH=\$PATH:/work/ben/vcftools/src/perl/";
+#$ENV{PATH} = "$ENV{PATH}:/work/ben/vcftools/src/perl/";
+# this worked for sharcnet:
+# export PERL5LIB=/work/ben/vcftools/src/perl
+#print $commandline,"\n";
+#$status = system($commandline);
+
+# index each vcf
+#foreach my $vcf (@vcf){
+#    $commandline="tabix -p vcf ".$vcf;
+#    print $commandline,"\n";
+#    #$status = system($commandline);#}
+
+# output a vcfsubset for each chr of each vcf file
+foreach my $vcf (@vcf){
+    foreach my $chr (@chr){
+        $commandline="tabix -h ".$vcf." ".$chr." > ".$vcf."_".$chr.".vcf";
+        print $commandline,"\n";
+        $status = system($commandline);    }
+}
+
+# compress them
+foreach my $vcf (@vcf){
+    foreach my $chr (@chr){
+        $commandline="bgzip -c ".$vcf."_".$chr.".vcf > ".$vcf."_".$chr.".vcf.gz";
+        print $commandline,"\n";
+        $status = system($commandline);    }
+} 
+
+# index them
+foreach my $vcf (@vcf){
+    foreach my $chr (@chr){
+        $commandline="tabix -p vcf ".$vcf."_".$chr.".vcf.gz";
+        print $commandline,"\n";
+        $status = system($commandline);    }
+} 
+
+
+# merge the vcf files for each chr
+foreach my $chr (@chr){
+    #$commandline = "/usr/local/vcftools/src/perl/vcf-merge"; # for info
+    $combined_filename=();
+    $commandline = "/work/ben/vcftools/src/perl/vcf-merge"; # for sharcnet
+        foreach my $vcf (@vcf){
+            $commandline = $commandline." ".$vcf."_".$chr.".vcf.gz";
+            $combined_filename=$combined_filename.$vcf;
+        }
+        $commandline = $commandline." | bgzip -c > ".$combined_filename."_".$chr.".vcf.gz";
+        print $commandline,"\n";
+        $status = system($commandline);}
+
+
+# filter each of the chr files
+foreach my $chr (@chr){
+    $commandline = "/work/ben/vcftools/src/cpp/vcftools --gzvcf ".$combined_filename."_".$chr.".vcf.gz --recode --out nemPM664_nigraPF660_tonkPM592_".$chr." --exclude-bed ./bed_files_from_repeatmasker/".$chr.".bed";
+    print $commandline,"\n";
+    $status = system($commandline);}
+
+# make tab delimited files
+#foreach my $chr (@chr){
+#    $commandline = "zcat nemPM664_nigraPF660_tonkPM592_".$chr.".vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nemPM664_nigraPF660_tonkPM592_".$chr.".vcf.gz.tab";
+#    print $commandline,"\n";
+#    #$status = system($commandline);#}
+
+
+```
