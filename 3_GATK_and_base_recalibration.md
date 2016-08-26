@@ -36,7 +36,11 @@ T_VARIANTS_ONLY -o fastq/varonly_haplotypecaller_for_BSQR.vcf";
 $status = system($commandline);
 ```
 ## Filtering the set of known sites
-One concern I have is that, no matter how much I filter, repetitive sites may still have mismapped reads. To me it therefore makes sense to filter the set of known variants and exclude the repetitive regions.  I also wish to exclude the sex chromosomes and mtDNA, the latter of which almost certainly has mismapped numts.
+One concern I have is that, no matter how much I filter, repetitive sites may still have mismapped reads. To me it therefore makes sense to filter the set of known variants and exclude the repetitive regions.  I also wish to exclude the sex chromosomes and mtDNA, the latter of which almost certainly has mismapped numts. So I filtered this out using a bed file I made by combining all of the aDNA repeats from repeatmasker plus the entire X, Y, and mt genomes.  This file is called `aDNA_bed_allX_allY_allM.bed` and here is the command I used to filter the file:
+
+```
+vcftools --gzvcf varonly_haplotypecaller_for_BSQR.vcf.gz --recode --out varonly_haplotypecaller_norepeats_noX_noY_noM_for_BSQR.vcf.gz --exclude-bed ../repeat_masker_chromOut/aDNA_bed_allX_allY_allM.bed
+```
 
 
 ## Base recalibration
