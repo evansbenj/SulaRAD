@@ -133,8 +133,8 @@ my $combined_filename;
 my $status;
 
 my @chr=("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20","chrX");
-#my @chr=("chr1","chr2","chr3","chr4");
-my @vcf=("nemestrina-PM664.vcf.gz","nigra-PM664.vcf.gz","tonkeana-PM592.vcf.gz");
+#my @chr=("chr5","chr6","chr7","chr8");
+my @vcf=("nemestrina-PM664.g.vcf.gz","nigra-PM664.g.vcf.gz","tonkeana-PM592.g.vcf.gz");
 
 
 # export the path for tabix
@@ -146,18 +146,21 @@ my @vcf=("nemestrina-PM664.vcf.gz","nigra-PM664.vcf.gz","tonkeana-PM592.vcf.gz")
 #print $commandline,"\n";
 #$status = system($commandline);
 
+
 # index each vcf
 #foreach my $vcf (@vcf){
 #    $commandline="tabix -p vcf ".$vcf;
 #    print $commandline,"\n";
-#    #$status = system($commandline);#}
+#    #$status = system($commandline);
+#}
 
 # output a vcfsubset for each chr of each vcf file
 foreach my $vcf (@vcf){
     foreach my $chr (@chr){
         $commandline="tabix -h ".$vcf." ".$chr." > ".$vcf."_".$chr.".vcf";
         print $commandline,"\n";
-        $status = system($commandline);    }
+        $status = system($commandline);
+    }
 }
 
 # compress them
@@ -165,7 +168,8 @@ foreach my $vcf (@vcf){
     foreach my $chr (@chr){
         $commandline="bgzip -c ".$vcf."_".$chr.".vcf > ".$vcf."_".$chr.".vcf.gz";
         print $commandline,"\n";
-        $status = system($commandline);    }
+        $status = system($commandline);
+    }
 } 
 
 # index them
@@ -173,7 +177,8 @@ foreach my $vcf (@vcf){
     foreach my $chr (@chr){
         $commandline="tabix -p vcf ".$vcf."_".$chr.".vcf.gz";
         print $commandline,"\n";
-        $status = system($commandline);    }
+        $status = system($commandline);
+    }
 } 
 
 
@@ -188,20 +193,36 @@ foreach my $chr (@chr){
         }
         $commandline = $commandline." | bgzip -c > ".$combined_filename."_".$chr.".vcf.gz";
         print $commandline,"\n";
-        $status = system($commandline);}
+        $status = system($commandline);
+}
 
 
 # filter each of the chr files
 foreach my $chr (@chr){
     $commandline = "/work/ben/vcftools/src/cpp/vcftools --gzvcf ".$combined_filename."_".$chr.".vcf.gz --recode --out nemPM664_nigraPF660_tonkPM592_".$chr." --exclude-bed ./bed_files_from_repeatmasker/".$chr.".bed";
     print $commandline,"\n";
-    $status = system($commandline);}
+    $status = system($commandline);
+}
+
+# compress them
+foreach my $chr (@chr){
+        $commandline="bgzip -c nemPM664_nigraPF660_tonkPM592_".$chr.".recode.vcf > nemPM664_nigraPF660_tonkPM592_".$chr.".recode.vcf.gz";
+        print $commandline,"\n";
+        $status = system($commandline);
+} 
+
+# index them
+foreach my $chr (@chr){
+        $commandline="tabix -p vcf nemPM664_nigraPF660_tonkPM592_".$chr.".recode.vcf.gz";
+        print $commandline,"\n";
+        $status = system($commandline);
+} 
 
 # make tab delimited files
-#foreach my $chr (@chr){
-#    $commandline = "zcat nemPM664_nigraPF660_tonkPM592_".$chr.".vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nemPM664_nigraPF660_tonkPM592_".$chr.".vcf.gz.tab";
-#    print $commandline,"\n";
-#    #$status = system($commandline);#}
-
+foreach my $chr (@chr){
+    $commandline = "zcat nemPM664_nigraPF660_tonkPM592_".$chr.".recode.vcf.gz | /work/ben/vcftools/src/perl/vcf-to-tab > nemPM664_nigraPF660_tonkPM592_".$chr.".recode.vcf.gz.tab";
+    print $commandline,"\n";
+    $status = system($commandline);
+}
 
 ```
