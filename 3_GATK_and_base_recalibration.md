@@ -3,6 +3,9 @@
 The bwa-assisted mapping with Stampy produced sam files that had ~10% more mapped reads for all individuals. Great!  Now the next step is to use GATK to do the base recalibration and genotype calling.  I have copied below a series of scripts I used for this purpose (on info).
 
 # Genotyping with Haplotype caller
+
+Some issues with screen on info15-20 were resolved like this: `export TERM=xterm-color`.
+
 I am going to write the scripts from the new analyses above the old ones. Here is the Haplotype caller commands to generate confident variants for BSQR (3_Executes_GATK_commands_Haplotypecaller.pl).
 
 ```
