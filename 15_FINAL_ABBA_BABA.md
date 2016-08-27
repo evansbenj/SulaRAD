@@ -245,3 +245,9 @@ To get vcftools to work on iqaluk, I had to type this:
 export PERL5LIB=/work/ben/vcftools/src/perl
 ```
 
+After bgzip and tabix, I merged the chrX files:
+
+```
+/work/ben/vcftools/src/perl/vcf-merge ../bam-constitutional/nemestrina-PM664.final.bam_haploid_X.vcf.gz ../bam-constitutional/tonkeana-PM592.final.bam_haploid_X.vcf.gz nigra-PM664.g.vcf.gz_chrX.vcf.gz | bgzip -c > nemPM664tonkPM592nigraPF660_chrX_ploidy.vcf.gz
+```
+
