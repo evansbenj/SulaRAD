@@ -251,3 +251,8 @@ After bgzip and tabix, I merged the chrX files:
 /work/ben/vcftools/src/perl/vcf-merge ../bam-constitutional/nemestrina-PM664.final.bam_haploid_X.vcf.gz ../bam-constitutional/tonkeana-PM592.final.bam_haploid_X.vcf.gz nigra-PM664.g.vcf.gz_chrX.vcf.gz | bgzip -c > nemPM664tonkPM592nigraPF660_chrX_ploidy.vcf.gz
 ```
 
+And then I removed the repetitive portions like this:
+
+```
+/work/ben/vcftools/src/cpp/vcftools --gzvcf nemPM664tonkPM592nigraPF660_chrX_ploidy.vcf.gz --recode --out nemPM664tonkPM592nigraPF660_chrX_ploidy_filtered.vcf.gz --exclude-bed /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/repeat_masker_chromOut/repeatmasker_bed_files/chrX.bed
+```
