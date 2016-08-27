@@ -45,7 +45,7 @@ vcftools --gzvcf varonly_haplotypecaller_for_BSQR.vcf.gz --recode --out varonly_
 
 ## Base recalibration
 
-Then I did the base recalibration as follows:
+Then I did the base recalibration as follows (4_Executes_GATK_commands_BaseRecalibrator.pl):
 
 ```perl
 #!/usr/bin/perl
@@ -95,7 +95,7 @@ foreach(@files){
     $commandline = $commandline." -I ".$_." ";
 }
 
-$commandline = $commandline."-BQSR recal_data.table -o recal_stampy_round1_all.bam";
+$commandline = $commandline."-BQSR recal_data.table -o RADseq_recal_round1_all.bam";
 
 
 $status = system($commandline);
