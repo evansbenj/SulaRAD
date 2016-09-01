@@ -28,6 +28,7 @@ To run this script we need:
 * an output filename we don't use (`.jk`)
 * an output filename we do use (`.stats`)
 
+
 Here is an example of a chrX command on info:
 
 ```
@@ -105,8 +106,14 @@ while ( my $line = <DATAINPUT>) {
 close DATAINPUT;
 close OUTFILE;
 ```
+# Dividing up HiSeq gvcf file 
 
 This script divides up a vcf file from the NYGenome Center and then filters it using the bed files generated above (25_Splits_vcf_by_chr_and_filter_1.pl).
+
+First I needed to convert the gvcf files to a regular unblocked vcf file in order to use vcftools.  I did this by decompressing each of the gvcf files like this `gunzip -d tonkeana-PM592.g.vcf.gz`
+
+And then I broke up the blocks like this:
+`/work/ben/2015_SulaRADtag/gvcftools-0.16/bin/break_blocks --ref /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --region-file /work/ben/2015_SulaRADtag/vcf-constitutional/target_interval_list_allchrs.bed < in.vcf > out.vcf `
 
 ```perl
 #!/usr/bin/env perl
