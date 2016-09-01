@@ -1996,25 +1996,19 @@ use warnings;
 use strict;
 
 # This script will read in the *_sorted.bam file names in a directory, and 
-# make and execute a GATK commandline on these files.  
+# make new bam files with only chrX
 
 my $status;
 my @files;
+my $commandline;
    
 @files = glob("fastq/*_trimmed_sorted.realigned.bam");
 
-my $commandline = "java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCalle
-r -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta ";
-
 foreach(@files){
-    $commandline = $commandline." -I ".$_." ";
+    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -L fastq/target_interval_list_autosomes.list -out_mode EMIT_ALL_CONFIDENT_SITES -emitRefConfidence BP_RESOLUTION -o fastq/".$_."_aDNA_no_BSQR_all_confident_sites.vcf";
+
+    $status = system($commandline);
 }
-
-$commandline = $commandline." -L fastq/target_interval_list_autosomes.list -out_mode EMIT_ALL_CONFIDENT_SI
-TES -o fastq/RADseq_aDNA_no_BSQR_all_confident_sites.vcf";
-
-
-$status = system($commandline);
 ```
 
 ### Sex chromosomes (3B_extracts_Xs.pl)
