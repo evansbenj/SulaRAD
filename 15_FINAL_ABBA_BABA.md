@@ -134,8 +134,12 @@ my $status;
 
 my @chr=("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20","chrX");
 #my @chr=("chr5","chr6","chr7","chr8");
-my @vcf=("nemestrina-PM664.g.vcf.gz","nigra-PM664.g.vcf.gz","tonkeana-PM592.g.vcf.gz");
-
+my @gvcf=("nemestrina-PM664.g.vcf.gz","nigra-PM664.g.vcf.gz","tonkeana-PM592.g.vcf.gz");
+foreach my $gvcf (@vcf){
+    $commandline="gzip -dc ".$gvcf." | extract_variants | bgzip -c > ".$gvcf.".vcf.gz";
+    $status = system($commandline);
+}
+my @vcf=("nemestrina-PM664.g.vcf.gz.vcf.gz","nigra-PM664.g.vcf.gz.vcf.gz","tonkeana-PM592.g.vcf.gz.vcf.gz");
 
 # export the path for tabix
 #$commandline="export PATH=\$PATH:~/tabix-0.2.6/";
@@ -163,7 +167,7 @@ foreach my $vcf (@vcf){
     }
 }
 
-# compress them
+# compress each subset
 foreach my $vcf (@vcf){
     foreach my $chr (@chr){
         $commandline="bgzip -c ".$vcf."_".$chr.".vcf > ".$vcf."_".$chr.".vcf.gz";
