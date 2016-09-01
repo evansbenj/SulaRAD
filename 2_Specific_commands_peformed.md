@@ -1985,6 +1985,83 @@ $commandline = $commandline."-R /home/ben/2015_BIO720/rhesus_genome/macaque_mask
 $status = system($commandline);
 ```
 
+## Genotyping with no BSQR
+
+### ADNA
+3_Executes_GATK_commands_Haplotypecaller_NO_BSQR.pl
+
+```perl
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+# This script will read in the *_sorted.bam file names in a directory, and 
+# make and execute a GATK commandline on these files.  
+
+my $status;
+my @files;
+   
+@files = glob("fastq/*_trimmed_sorted.realigned.bam");
+
+my $commandline = "java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCalle
+r -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta ";
+
+foreach(@files){
+    $commandline = $commandline." -I ".$_." ";
+}
+
+$commandline = $commandline." -L fastq/target_interval_list_autosomes.list -out_mode EMIT_ALL_CONFIDENT_SI
+TES -o fastq/RADseq_aDNA_no_BSQR_all_confident_sites.vcf";
+
+
+$status = system($commandline);
+```
+
+### Sex chromosomes (3B_extracts_Xs.pl)
+``` perl
+
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+# This script will read in the *_sorted.bam file names in a directory, and 
+# make new bam files with only chrX
+
+my $status;
+my @files;
+my $commandline;
+   
+@files = glob("fastq/*_trimmed_sorted.realigned.bam");
+
+foreach(@files){
+    $commandline = "samtools view -b ".$_." chrX > ".$_."_chrX.bam";
+    print $commandline,"\n";
+    $status = system($commandline);
+    $commandline = "samtools index ".$_."_chrX.bam";
+    print $commandline,"\n";
+    $status = system($commandline);
+   # $commandline = "java -jar ~/picard-tools-1.131/picard.jar AddOrReplaceReadGroups I=".$_."_chrX.bam O=".$_."_chrX_rg.bam RGID=FLOWCELL1.LANE5 RGLB=".$_.".fq RGPL=illumina RGPU=".$_.".fq RGSM=".$_.".fq";
+   # $status = system($commandline);
+   
+my @males=("fastq/hecki_PM639_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PM645_trimmed_sorted.realigned.bam_chrX.bam","fastq/maura_PM613_trimmed_sorted.realigned.bam_chrX.bam","fastq/maura_PM614_trimmed_sorted.realigned.bam_chrX.bam","fastq/maura_PM616_trimmed_sorted.realigned.bam_chrX.bam","fastq/maura_PM618_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_PM664_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_PM665_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Sukai_male_trimmed_sorted.realigned.bam_chrX.bam","fastq/nigra_PM1000_trimmed_sorted.realigned.bam_chrX.bam","fastq/nigra_PM1003_trimmed_sorted.realigned.bam_chrX.bam","fastq/ochreata_PM571_trimmed_sorted.realigned.bam_chrX.bam","fastq/ochreata_PM596_trimmed_sorted.realigned.bam_chrX.bam","fastq/togeanus_PM545_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PM561_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PM565_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PM566_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PM567_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PM582_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PM584_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PM592_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PM602_trimmed_sorted.realigned.bam_chrX.bam");
+
+my @females=("fastq/brunescens_PF707_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PF643_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PF644_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PF648_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PF651_trimmed_sorted.realigned.bam_chrX.bam","fastq/maura_PF615_trimmed_sorted.realigned.bam_chrX.bam","fastq/maura_PF713_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Gumgum_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Kedurang_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Malay_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Ngasang_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_pagensis_trimmed_sorted.realigned.bam_chrX.bam","fastq/nigra_PF1001_trimmed_sorted.realigned.bam_chrX.bam","fastq/nigra_PF660_trimmed_sorted.realigned.bam_chrX.bam","fastq/nigrescens_PF654_trimmed_sorted.realigned.bam_chrX.bam","fastq/ochreata_PF625_trimmed_sorted.realigned.bam_chrX.bam","fastq/togeanus_PF549_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PF515_trimmed_sorted.realigned.bam_chrX.bam");
+
+foreach(@females){
+    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -out_mode EMIT_ALL_CONFIDENT_SITES -o ".$_."_xDNA_no_BSQR_all_confident_sites.vcf";
+    print $commandline,"\n";
+    $status = system($commandline);
+}
+
+foreach(@males){
+    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES -o ".$_."_xDNA_no_BSQR_all_confident_sites.vcf";
+    print $commandline,"\n";    
+    $status = system($commandline);
+}
+
+```
+
+
 
 ## Stampy (I am no longer using Stampy, so this section was skipped)
 Then I used stampy to map some more reads using these bam files as a starting point.  This was accomplished using this a bash script called `stampy_alignment.sh`.  But before this is executed, we need to load python 2.7 like this (on info):
