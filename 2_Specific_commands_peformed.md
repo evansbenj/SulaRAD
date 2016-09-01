@@ -2061,7 +2061,31 @@ foreach(@males){
 
 ```
 
+## Combine the ploidy vcf files (3C_Merge_chrX_vcfs_noBSQR.pl)
 
+```perl
+#!/usr/bin/perl                                                                                        
+use warnings;
+use strict;
+
+# This script will merge chrX files 
+
+my $status;
+my @files;
+my $commandline;
+
+#@files = glob("fastq/*trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf");
+
+$commandline = "java -Xmx5g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T CombineVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant fastq/brunescens_PF707_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/hecki_PF643_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/hecki_PF644_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/hecki_PF648_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/hecki_PF651_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/hecki_PM639_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/hecki_PM645_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/maura_PF615_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/maura_PF713_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/maura_PM613_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/maura_PM614_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/maura_PM616_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/maura_PM618_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nem_Gumgum_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nem_Kedurang_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nem_Malay_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nem_Ngasang_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nem_PM664_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nem_PM665_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nem_Sukai_male_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nem_pagensis_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nigra_PF1001_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nigra_PF660_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nigra_PM1000_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nigra_PM1003_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/nigrescens_PF654_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/ochreata_PF625_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/ochreata_PM571_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/ochreata_PM596_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/togeanus_PF549_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/togeanus_PM545_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PF515_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PM561_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PM565_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PM566_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PM567_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PM582_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PM584_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PM592_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf --variant fastq/tonk_PM602_trimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf  -o RADseq_ploidytrimmed_sorted.realigned.bam_chrX.bam_xDNA_no_BSQR_all_confident_sites.vcf";
+
+
+#foreach(@files){
+#    $commandline = $commandline." ---variant ".$_."_filtered.vcf";
+#}   
+
+# $commandline = $commandline." -o final_filtered.vcf";       
+$status = system($commandline);
+```
 
 ## Stampy (I am no longer using Stampy, so this section was skipped)
 Then I used stampy to map some more reads using these bam files as a starting point.  This was accomplished using this a bash script called `stampy_alignment.sh`.  But before this is executed, we need to load python 2.7 like this (on info):
