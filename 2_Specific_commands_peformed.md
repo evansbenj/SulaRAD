@@ -2005,7 +2005,7 @@ my $commandline;
 @files = glob("fastq/*_trimmed_sorted.realigned.bam");
 
 foreach(@files){
-    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -L fastq/target_interval_list_autosomes.list -out_mode EMIT_ALL_CONFIDENT_SITES -emitRefConfidence BP_RESOLUTION -o fastq/".$_."_aDNA_no_BSQR_all_confident_sites.vcf";
+    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -L fastq/target_interval_list_autosomes.list -out_mode EMIT_ALL_CONFIDENT_SITES -emitRefConfidence BP_RESOLUTION -o ".$_."_aDNA_no_BSQR_all_confident_sites.vcf";
 
     $status = system($commandline);
 }
