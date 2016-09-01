@@ -234,9 +234,9 @@ Today is Aug 26, 2016 and I am working with new bam files that have been BSQRed 
 The ref genome is here: `/work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa`
 
 ```
-/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I /work/ben/2015_SulaRADtag/bam-constitutional/nemestrina-PM664.final.bam -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES -L /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/target_interval_list_X.list -o nemestrina-PM664.final.bam_haploid_X.vcf
+/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I /work/ben/2015_SulaRADtag/bam-constitutional/nemestrina-PM664.final.bam -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES --emitRefConfidence BP_RESOLUTION -L /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/target_interval_list_X.list -o nemestrina-PM664.final.bam_haploid_X.vcf
 
-/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I /work/ben/2015_SulaRADtag/bam-constitutional/tonkeana-PM592.final.bam -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES -L /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/target_interval_list_X.list -o tonkeana-PM592.final.bam_haploid_X.vcf
+/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I /work/ben/2015_SulaRADtag/bam-constitutional/tonkeana-PM592.final.bam -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES --emitRefConfidence BP_RESOLUTION -L /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/target_interval_list_X.list -o tonkeana-PM592.final.bam_haploid_X.vcf
 
 ```
 
