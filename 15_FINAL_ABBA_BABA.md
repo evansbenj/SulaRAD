@@ -273,7 +273,7 @@ I needed to convert the nigra chrX  g.vcf to a vcf :
 After bgzip and tabix, I merged the chrX files:
 
 ```
-/work/ben/vcftools/src/perl/vcf-merge ../bam-constitutional/nemestrina-PM664.final.bam_haploid_X.vcf.gz ../bam-constitutional/tonkeana-PM592.final.bam_haploid_X.vcf.gz nigra-PM664.g.vcf.gz_chrX.vcf.gz | bgzip -c > nemPM664tonkPM592nigraPF660_chrX_ploidy.vcf.gz
+/work/ben/vcftools/src/perl/vcf-merge ../bam-constitutional/nemestrina-PM664.final.bam_haploid_X.vcf.gz ../bam-constitutional/tonkeana-PM592.final.bam_haploid_X.vcf.gz nigra-PM664.g.vcf.gz_chrX.noblock.vcf.gz | bgzip -c > nemPM664tonkPM592nigraPF660_chrX_ploidy.vcf.gz
 ```
 
 And then I removed the repetitive portions like this:
