@@ -127,14 +127,15 @@ use strict;
 my $status;
 my $commandline;
 
-my @chr=("chr1","chr2");
-#my @chr=("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20","chrX");
+#my @chr=("chr1","chr2");
+my @chr=("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20");
 
 foreach my $chr (@chr){
-	$commandline = "/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant nemestrina-PM664.g.vcf.gz_".$chr.".g.vcf --variant tonkeana-PM592.g.vcf.gz_".$chr.".g.vcf --variant nigra-PM664.g.vcf.gz_".$chr.".g.vcf -o nem_tonk_nigra_HiSeq_combined_".$chr.".vcf";
+	$commandline = "/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant nemestrina-PM664.g.vcf.gz_".$chr.".g.vcf --variant tonkeana-PM592.g.vcf.gz_".$chr.".g.vcf --variant nigra-PM664.g.vcf.gz_".$chr.".g.vcf --includeNonVariantSites -o nem_tonk_nigra_HiSeq_combined_".$chr.".vcf";
 	print $commandline,"\n";
 	$status = system($commandline);
 }
+
 ```
 
 # Calling chrX on nem and tonk using ploidy 1 in Haplotypecaller
