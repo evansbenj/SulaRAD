@@ -264,6 +264,12 @@ To get vcftools to work on iqaluk, I had to type this:
 export PERL5LIB=/work/ben/vcftools/src/perl
 ```
 
+I needed to convert the nigra chrX  g.vcf to a vcf :
+
+```
+/work/ben/2015_SulaRADtag/gvcftools-0.16/bin/break_blocks --ref /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --region-file /work/ben/2015_SulaRADtag/vcf-constitutional/target_interval_list_allchrs.bed < nigra-PM664.g.vcf.gz_chrX.vcf > nigra-PM664.g.vcf.gz_chrX.noblock.vcf
+```
+
 After bgzip and tabix, I merged the chrX files:
 
 ```
