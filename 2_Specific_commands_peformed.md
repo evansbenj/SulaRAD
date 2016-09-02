@@ -2048,7 +2048,7 @@ my $status;
 my @files;
 my $commandline;
    
-@files = glob("fastq/*_trimmed_sorted.realigned.bam");
+#@files = glob("fastq/*_trimmed_sorted.realigned.bam");
 
 #foreach(@files){
 #    $commandline = "samtools view -b ".$_." chrX > ".$_."_chrX.bam";
@@ -2065,13 +2065,13 @@ my @males=("fastq/hecki_PM639_trimmed_sorted.realigned.bam_chrX.bam","fastq/heck
 my @females=("fastq/brunescens_PF707_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PF643_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PF644_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PF648_trimmed_sorted.realigned.bam_chrX.bam","fastq/hecki_PF651_trimmed_sorted.realigned.bam_chrX.bam","fastq/maura_PF615_trimmed_sorted.realigned.bam_chrX.bam","fastq/maura_PF713_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Gumgum_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Kedurang_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Malay_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_Ngasang_trimmed_sorted.realigned.bam_chrX.bam","fastq/nem_pagensis_trimmed_sorted.realigned.bam_chrX.bam","fastq/nigra_PF1001_trimmed_sorted.realigned.bam_chrX.bam","fastq/nigra_PF660_trimmed_sorted.realigned.bam_chrX.bam","fastq/nigrescens_PF654_trimmed_sorted.realigned.bam_chrX.bam","fastq/ochreata_PF625_trimmed_sorted.realigned.bam_chrX.bam","fastq/togeanus_PF549_trimmed_sorted.realigned.bam_chrX.bam","fastq/tonk_PF515_trimmed_sorted.realigned.bam_chrX.bam");
 
 foreach(@females){
-    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -out_mode EMIT_ALL_CONFIDENT_SITES --emitRefConfidence GVCF -o ".$_."_xDNA_no_BSQR_all_confident_sites.vcf";
+    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -out_mode EMIT_ALL_CONFIDENT_SITES -L fastq/target_interval_list_chrX.list --emitRefConfidence GVCF -o ".$_."_xDNA_no_BSQR_all_confident_sites.g.vcf";
     print $commandline,"\n";
     $status = system($commandline);
 }
 
 foreach(@males){
-    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES --emitRefConfidence GVCF -o ".$_."_xDNA_no_BSQR_all_confident_sites.vcf";
+    my $commandline = "java -Xmx1G -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES -L fastq/target_interval_list_chrX.list --emitRefConfidence GVCF -o ".$_."_xDNA_no_BSQR_all_confident_sites.g.vcf";
     print $commandline,"\n";    
     $status = system($commandline);
 }
