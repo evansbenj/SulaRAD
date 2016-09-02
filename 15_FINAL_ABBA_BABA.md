@@ -137,6 +137,19 @@ foreach my $chr (@chr){
 }
 ```
 
+# Calling chrX on nem and tonk using ploidy 1 in Haplotypecaller
+
+```
+/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I /work/ben/2015_SulaRADtag/bam-constitutional/nemestrina-PM664.final.bam -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES --emitRefConfidence GVCF -L /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/target_interval_list_X.list -o nemestrina-PM664.final.bam_haploid_X.g.vcf
+
+/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -I /work/ben/2015_SulaRADtag/bam-constitutional/tonkeana-PM592.final.bam -ploidy 1 -out_mode EMIT_ALL_CONFIDENT_SITES --emitRefConfidence GVCF -L /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/target_interval_list_X.list -o tonkeana-PM592.final.bam_haploid_X.g.vcf
+
+```
+
+
+
+# BELOW THIS IS WRONG
+
 
 This script divides up a vcf file from the NYGenome Center and then filters it using the bed files generated above (25_Splits_vcf_by_chr_and_filter_1.pl).
 
