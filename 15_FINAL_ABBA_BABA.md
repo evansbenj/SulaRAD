@@ -147,6 +147,27 @@ foreach my $chr (@chr){
 
 ```
 
+# Merge chrX HiSeq files (25B_Combines_HiSeq_gVCFs chrX.pl)
+```perl
+#!/usr/bin/perl                                                                                        
+use warnings;
+use strict;
+
+# This script will merge xDNA gvcf files into a vcf file
+
+my $status;
+my $commandline;
+
+#my @chr=("chr1","chr2");
+my @chr=("chrX");
+
+foreach my $chr (@chr){
+	$commandline = "/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant /work/ben/2015_SulaRADtag/bam-constitutional/nemestrina-PM664.final.bam_haploid_X.g.vcf --variant /work/ben/2015_SulaRADtag/bam-constitutional/tonkeana-PM592.final.bam_haploid_X.g.vcf --variant /work/ben/2015_SulaRADtag/vcf-constitutional/nigra-PM664.g.vcf.gz_chrX.g.vcf --includeNonVariantSites -o nem_tonk_nigra_HiSeq_combined_".$chr.".vcf";
+	print $commandline,"\n";
+	$status = system($commandline);
+}
+
+```
 
 
 # BELOW THIS IS WRONG
