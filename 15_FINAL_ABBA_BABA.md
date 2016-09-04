@@ -169,6 +169,39 @@ foreach my $chr (@chr){
 
 ```
 
+### Filter merged vcfs (26_HiSeq_filters_combinedVCFs_chrX.pl)
+
+```perl
+#!/usr/bin/perl                                                                                        
+use warnings;
+use strict;
+
+# This script will merge xDNA gvcf files into a vcf file
+
+my $status;
+my $commandline;
+
+#my @chr=("chr1","chr2");
+my @chr=("chrX");
+
+foreach my $chr (@chr){
+	$commandline = "/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T VariantFiltration -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant nem_tonk_nigra_HiSeq_combined_".$chr.".vcf -o nem_tonk_nigra_HiSeq_combined_".$chr."_marked.vcf --filterExpression \"QUAL < 30.0\" --filterName \"VeryLowQual\" -G_filter \"DP < 4\" -G_filterName \"LowCoverage\" --setFilteredGtToNocall";
+	print $commandline,"\n";
+	$status = system($commandline);
+
+	$commandline = "/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -o nem_tonk_nigra_HiSeq_combined_".$chr."_marked.vcf --variant nem_tonk_nigra_HiSeq_combined_".$chr."_filtered.vcf --excludeFiltered";
+	print $commandline,"\n";
+	$status = system($commandline);
+
+}
+
+```
+
+
+
+
+
+
 
 # BELOW THIS IS WRONG
 
