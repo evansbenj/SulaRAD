@@ -2104,6 +2104,29 @@ print $commandline,"\n";
 $status = system($commandline);
 
 ```
+#  Filter combined genotypes
+Filter (3D_Filter_chrX_vcfs_noBSQR.pl)
+
+```perl
+#!/usr/bin/perl                                                                                        
+use warnings;
+use strict;
+
+# This script will filter chrX files 
+
+my $status;
+my $commandline;
+
+$commandline = "java -Xmx5g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /home/ben/2015_SulaRADtag/good_merged_samples/RADseq_chrX_haplotypecaller_combined_marked.vcf --variant /home/ben/2015_SulaRADtag/good_merged_samples/RADseq_chrX_haplotypecaller_combined.vcf --filterExpression \"QUAL < 30.0\" --filterName \"VeryLowQual\" -G_filter \"DP < 4\" -G_filterName \"LowCoverage\" --setFilteredGtToNocall";
+print $commandline,"\n";
+$status = system($commandline);
+
+
+$commandline = "java -Xmx5g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /home/ben/2015_SulaRADtag/good_merged_samples/RADseq_chrX_haplotypecaller_combined_filtered.vcf --variant /home/ben/2015_SulaRADtag/good_merged_samples/RADseq_chrX_haplotypecaller_combined_marked.vcf --excludeFiltered";
+print $commandline,"\n";
+$status = system($commandline);
+
+```
 
 # BELOW WAS NOT USED
 
