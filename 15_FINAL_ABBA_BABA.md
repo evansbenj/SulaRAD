@@ -189,7 +189,7 @@ foreach my $chr (@chr){
 	print $commandline,"\n";
 	$status = system($commandline);
 
-	$commandline = "/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -o nem_tonk_nigra_HiSeq_combined_".$chr."_filtered.vcf --variant nem_tonk_nigra_HiSeq_combined_".$chr."_marked.vcf --excludeFiltered";
+	$commandline = "/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa -o nem_tonk_nigra_HiSeq_combined_".$chr."_filtered.vcf --variant nem_tonk_nigra_HiSeq_combined_".$chr."_marked.vcf --excludeFiltered --maxNOCALLfraction 0.99";
 	print $commandline,"\n";
 	$status = system($commandline);
 
