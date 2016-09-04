@@ -2122,7 +2122,7 @@ print $commandline,"\n";
 $status = system($commandline);
 
 
-$commandline = "java -Xmx5g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /home/ben/2015_SulaRADtag/good_merged_samples/RADseq_chrX_haplotypecaller_combined_filtered.vcf --variant /home/ben/2015_SulaRADtag/good_merged_samples/RADseq_chrX_haplotypecaller_combined_marked.vcf --excludeFiltered";
+$commandline = "java -Xmx5g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /home/ben/2015_SulaRADtag/good_merged_samples/RADseq_chrX_haplotypecaller_combined_filtered.vcf --variant /home/ben/2015_SulaRADtag/good_merged_samples/RADseq_chrX_haplotypecaller_combined_marked.vcf --excludeFiltered --maxNOCALLfraction 0.99";
 print $commandline,"\n";
 $status = system($commandline);
 
