@@ -236,6 +236,13 @@ export PERL5LIB=/work/ben/vcftools/src/perl
 zcat nem_tonk_nigra_HiSeq_combined_chrX_filtered.vcf.gz | /work/ben/vcftools/src/perl/vcf-to-tab > nem_tonk_nigra_HiSeq_combined_chrX_filtered.vcf.gz.tab
 ```
 
+I suspect that the error with the genotypefilter above might be related to asterisks in the ALT field of vcf files.  This is a new [issue](http://gatkforums.broadinstitute.org/gatk/discussion/5904/asterisk-in-the-alt-feild-of-vcf). Anyhow, i still get the weird abba-baba with the haploid genotypes.  Now I am reanalyzing the data after converting the nigra seq to a haploid like this:
+
+`sed -i 's/\/C/\//g' nem_tonk_nigra_HiSeq_combined_chrX_filtered3.vcf.gz.tab` and so on for each of the 4 bases.  I am also going to convert asterisks in this tab file (they are some, I've seen them, to a period like this:
+
+`sed -i 's/\*/\./g' nem_tonk_nigra_HiSeq_combined_chrX_filtered3.vcf.gz.tab`
+
+
 
 
 
