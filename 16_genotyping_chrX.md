@@ -35,4 +35,17 @@ Convert from gvcf to vcf
 
 /work/ben/2015_SulaRADtag/gvcftools-0.16/bin/break_blocks --ref /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --region-file /work/ben/2015_SulaRADtag/vcf-constitutional/target_interval_list_allchrs.bed < nigraHiSeqchrX.vcf > nigraHiSeqchrX.vcf.noblock.vcf
 ```
+merge the files
 
+```
+bgzip nemHiSeqchrX.vcf.noblock.vcf
+tabix -p vcf nemHiSeqchrX.vcf.noblock.vcf.gz
+bgzip nigraHiSeqchrX.vcf.noblock.vcf
+tabix -p vcf nigraHiSeqchrX.vcf.noblock.vcf.gz
+bgzip tonkHiSeqchrX.vcf.noblock.vcf
+tabix -p vcf tonkHiSeqchrX.vcf.noblock.vcf.gz
+
+export PERL5LIB=/work/ben/vcftools/src/perl
+
+/work/ben/vcftools/bin/vcf-merge nemHiSeqchrX.vcf.noblock.vcf.gz tonkHiSeqchrX.vcf.noblock.vcf.gz nigraHiSeqchrX.vcf.noblock.vcf.gz | bgzip -c > nem_tonk_nigra_alldiploid_chrX.vcf.gz
+```
