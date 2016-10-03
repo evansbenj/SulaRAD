@@ -15,7 +15,24 @@ I have some vcf files made at the NYGenome center here (on iqaluk):
 -rw-rw-r-- 1 ben ben 6125321940 Sep  2 00:32 nigra-PM664.g.vcf.gz
 -rw-rw-r-- 1 ben ben 6455292312 Sep  2 00:34 tonkeana-PM592.g.vcf.gz
 ```
+Index the vcf files:
+```
+tabix -p vcf nemestrina-PM664.g.vcf.gz
+```
+Export the chrX:
+
 ```
 ~/tabix-0.2.6/tabix -h nemestrina-PM664.g.vcf.gz chrX > nemHiSeqchrX.vcf 
 ~/tabix-0.2.6/tabix -h nigra-PM664.g.vcf.gz chrX > nigraHiSeqchrX.vcf 
 ~/tabix-0.2.6/tabix -h tonkeana-PM592.g.vcf.gz chrX > tonkHiSeqchrX.vcf 
+```
+
+Convert from gvcf to vcf
+```
+/work/ben/2015_SulaRADtag/gvcftools-0.16/bin/break_blocks --ref /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --region-file /work/ben/2015_SulaRADtag/vcf-constitutional/target_interval_list_allchrs.bed < nemHiSeqchrX.vcf > nemHiSeqchrX.vcf.noblock.vcf
+
+/work/ben/2015_SulaRADtag/gvcftools-0.16/bin/break_blocks --ref /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --region-file /work/ben/2015_SulaRADtag/vcf-constitutional/target_interval_list_allchrs.bed < tonkHiSeqchrX.vcf > tonkHiSeqchrX.vcf.noblock.vcf
+
+/work/ben/2015_SulaRADtag/gvcftools-0.16/bin/break_blocks --ref /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --region-file /work/ben/2015_SulaRADtag/vcf-constitutional/target_interval_list_allchrs.bed < nigraHiSeqchrX.vcf > nigraHiSeqchrX.vcf.noblock.vcf
+```
+
