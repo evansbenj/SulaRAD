@@ -51,3 +51,7 @@ export PERL5LIB=/work/ben/vcftools/src/perl
 ```
 
 All of this appears to be bad because positions with no data are called as reference sites for some stupid reason.  So I am going to try again using GATK.
+```
+/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant nemHiSeqchrX.g.vcf --variant tonkHiSeqchrX.g.vcf --variant nigraHiSeqchrX.g.vcf --includeNonVariantSites -o nem_tonk_nigra_HiSeq_combined_alldiploid_chrX.vcf
+```
+
