@@ -49,3 +49,5 @@ export PERL5LIB=/work/ben/vcftools/src/perl
 
 /work/ben/vcftools/bin/vcf-merge nemHiSeqchrX.vcf.noblock.vcf.gz tonkHiSeqchrX.vcf.noblock.vcf.gz nigraHiSeqchrX.vcf.noblock.vcf.gz | bgzip -c > nem_tonk_nigra_alldiploid_chrX.vcf.gz
 ```
+
+All of this appears to be bad because positions with no data are called as reference sites for some stupid reason.  So I am going to try again using GATK.
