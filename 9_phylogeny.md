@@ -221,7 +221,7 @@ close OUTFILE;
 $count=0;
 ```
 
-Here is a cooler script that converts the same tab delimited file to an interleaved nexus file with the entire dataset in it:
+Here is a cooler script that converts the same tab delimited file to an interleaved nexus file with the entire dataset in it (21_tab_to_interleave_nexus.pl):
 
 ```
 #!/usr/bin/env perl
