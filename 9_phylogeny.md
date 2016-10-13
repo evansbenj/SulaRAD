@@ -221,6 +221,8 @@ close OUTFILE;
 $count=0;
 ```
 
+# Making a phylogeny for the whole genome
+
 Here is a cooler script that converts the same tab delimited file to an interleaved nexus file with the entire dataset in it (21_tab_to_interleave_nexus.pl):
 
 ```
