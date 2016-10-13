@@ -100,7 +100,7 @@ $commandline = $commandline."-BQSR recal_data.table -o RADseq_recal_round1_all.b
 
 $status = system($commandline);
 ```
-## Genotype the new bam file
+## Genotype the new bam file (this is deprecated because it uses UnifiedGenotyper)
 
 Then I genotyped the new and improved bam file as follows
 
