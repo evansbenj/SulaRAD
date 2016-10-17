@@ -2004,11 +2004,16 @@ my @files;
 @files = glob("fastq/*_trimmed_sorted.realigned.bam");
 
 foreach(@files){
-	my $commandline = "java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -L fastq/target_interval_list_autosomes.list -out_mode EMIT_ALL_CONFIDENT_SITES --emitRefConfidence GVCF -o ".$_."varonly_haplotypecaller_for_BSQR.g.vcf";
-	print $commandline,"\n";
-	$status = system($commandline);
+        my $commandline = "java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T HaplotypeCaller -R /
+home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -I ".$_." -out_mode EMIT_ALL_CONFIDENT_SITES --em
+itRefConfidence GVCF -o ".$_."allsites_haplotypecaller_noBSQR.g.vcf";
+        print $commandline,"\n";
+        $status = system($commandline);
 }
 ```
+
+
+# STUFF BELOW WAS NOT USED!!!
 
 and 3_Executes_GATK_commands_Haplotypecaller_for_BSQR.pl:
 
