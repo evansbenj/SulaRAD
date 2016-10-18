@@ -1988,7 +1988,7 @@ $status = system($commandline);
 ## Genotyping with no BSQR
 
 ### ADNA
-3_Executes_GATK_commands_Haplotypecaller_NO_BSQR.pl
+3_Executes_GATK_commands_Haplotypecaller_noBSQR.pl
 
 ```perl
 #!/usr/bin/perl
@@ -2011,6 +2011,38 @@ itRefConfidence GVCF -o ".$_."allsites_haplotypecaller_noBSQR.g.vcf";
         $status = system($commandline);
 }
 ```
+Now, 3.05_Executes_GATK_commands_GenotypeVCFs_noBSQR.pl:
+
+```
+#!/usr/bin/perl                                                                                                 
+use warnings;
+use strict;
+
+# This script will read in the individual Haplotype caller vcf file names in a directory, and                   
+# make and execute a GATK commandline on these files.                                                           
+
+my $status;
+my @files;
+
+@files = glob("fastq/*allsites_haplotypecaller_noBSQR.g.vcf");
+
+my $commandline = "java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /h\
+ome/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
+
+foreach(@files){
+    $commandline = $commandline." --variant ".$_;
+}
+
+$commandline = $commandline." --includeNonVariantSites -o fastq/GenotypeVCFs_noBSQR.vcf";
+
+print $commandline,"\n";
+
+$status = system($commandline);
+
+```
+
+
+
 
 
 # STUFF BELOW WAS NOT USED!!!
