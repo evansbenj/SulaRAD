@@ -2011,33 +2011,44 @@ itRefConfidence GVCF -o ".$_."allsites_haplotypecaller_noBSQR.g.vcf";
         $status = system($commandline);
 }
 ```
-Now, 3.05_Executes_GATK_commands_GenotypeVCFs_noBSQR.pl:
+Now, for the GenotypeGVCF step.  Several points are worth noting.  First, I am emiting all genotypes, irrespective of the quality scores. This is because I found that the entire site was being filtered as 'LowQual' when there were lots of missing data, even though the genotypes with data were of very high coverage.  For example:
+```
+chr1	180563	.	G	<NON_REF>	9.40	LowQual	AC=0;AF=0.00;AN=2;DP=20;MLEAC=0;MLEAF=0.00	GT:AD:DP:RGQ	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	0/0:20,0:20:60	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0	./.:0,0:0
+```
+
+Above you can see that there is one homoz ref genotype with 20X coverage (0/0:20,0:20:60) but still the site has a 'LowQual' filter. Here is the script (3.05_Executes_GATK_commands_GenotypeVCFs_noBSQR.pl):
 
 ```
-#!/usr/bin/perl                                                                                             
+#!/usr/bin/perl                                                                                               
 use warnings;
 use strict;
 
-# This script will read in the individual Haplotype caller vcf file names in a directory, and               
-# make and execute a GATK commandline on these files.                                                       
+# This script will read in the individual Haplotype caller vcf file names in a directory, and                 
+# make and execute a GATK commandline on these files.                                                         
 
 my $status;
 my @files;
 
 @files = glob("fastq/*allsites_haplotypecaller_noBSQR.g.vcf");
 
-my $commandline = "java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
+my $commandline = "java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R \
+/home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta";
 
 foreach(@files){
     $commandline = $commandline." --variant ".$_;
 }
 
-$commandline = $commandline." --includeNonVariantSites -stand_call_conf 30 -stand_emit_conf 30 -o fastq/GenotypeVCFs_noBSQR.vcf.gz";
+$commandline = $commandline." --includeNonVariantSites -stand_call_conf 0 -stand_emit_conf 0 -L chr1_to_5.int\
+ervals -o fastq/GenotypeVCFs_noBSQR.vcf.gz";
 
 print $commandline,"\n";
 
 $status = system($commandline);
 ```
+
+Next I need to merge the vcf files I did individually, make a vcf with only indels, and use this plus other filters for depth to filter the vcf.  Then I can output only the good sites, recall the chrX using coverage, and move on with life.
+
+
 
 
 
