@@ -2173,6 +2173,14 @@ print $commandline,"\n";
 $status = system($commandline);
 
 ```
+# Concatenate the vcf files from Genotypgvcf
+I am going to use GATK instead of bcftools because there may be weird incompatibility issues with the gvcf files...
+
+```
+java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T CombineGVCFs -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant fastq/GenotypeVCFs_noBSQR.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_6_to_10.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_11_to_16.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_17_to_X.vcf.gz -o fastq/GenotypeVCFs_noBSQR_concat.vcf.gz
+```
+
+
 
 # BELOW WAS NOT USED
 
