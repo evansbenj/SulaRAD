@@ -2048,8 +2048,27 @@ $status = system($commandline);
 
 Next I need to merge the vcf files I did individually, make a vcf with only indels, and use this plus other filters for depth to filter the vcf.  Then I can output only the good sites, recall the chrX using coverage, and move on with life.
 
+```
+java -cp /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar org.broadinstitute.gatk.tools.CatVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant fastq/GenotypeVCFs_noBSQR.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_6_to_10.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_11_to_16.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_17_to_X.vcf.gz --outputFile fastq/GenotypeVCFs_noBSQR_concat.vcf.gz -assumeSorted
+```
 
+Now identify the indels (3.1_Executes_GATK_commands_SelectVariants_output_indels_only_NO_RECAL.pl)
+```
+#!/usr/bin/perl
+# This script will read in a vcf file names and 
+# make and execute a GATK commandline that marks INDELs
+# in a new vcf file.  
 
+my $status;
+my $file = "fastq/GenotypeVCFs_noBSQR_concat.vcf.gz";
+
+my $commandline = "java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o fastq/GenotypeVCFs_noBSQR_concat_indels_only.vcf.gz --variant ".$file." -selectType INDEL";
+
+$status = system($commandline);
+```
+
+# Filter using indel mask and based on genotype depth
 
 
 
