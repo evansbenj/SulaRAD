@@ -2068,9 +2068,39 @@ $commandline = $commandline." -o fastq/GenotypeVCFs_noBSQR_concat_indels_only.vc
 $status = system($commandline);
 ```
 
-# Filter using indel mask and based on genotype depth
+# Filter using indel mask and based on genotype depth (3.2_Executes_GATK_commands_VariantFiltration_noBSQR.pl):
 
+```
+#!/usr/bin/perl
 
+# This script will read in a vcf file and 
+# make and execute several GATK commandlines 
+# to filter a vcf file from genotypeGVCFs
+
+my $status;
+my $file = "fastq/GenotypeVCFs_noBSQR_concat.vcf.gz";
+my $indel_only_file = "fastq/GenotypeVCFs_noBSQR_concat_indels_only.vcf.gz";
+my $outfile1 = "fastq/temp1_norecal.vcf";
+my $outfile2 = "fastq/nonrecal_filtered.vcf";
+
+# Mark sites that map poorly and that are in or within 3 bp of an indel
+my $commandline = "java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile1." --variant ".$file." --filterExpression \"MLEAC == \'.\'\" --filterName \"No_data\"";
+$commandline = $commandline." --genotypeFilterExpression \"DP < 5\" --genotypeFilterName \"low_depth\"";
+$commandline = $commandline." --mask ".$indel_only_file." --maskName INDEL --maskExtension 3 --setFilteredGtToNocall";
+print $commandline,"\n";
+$status = system($commandline);
+
+# Print out the filtered file
+$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile2." --variant ".$outfile1." -select 'vc.isNotFiltered()'";
+print $commandline,"\n";
+$status = system($commandline);
+
+# now clean up the intermediate vcf files
+#$commandline = "rm -f ".$outfile1." ".$outfile2;
+#$status = system($commandline);
+```
 
 
 # STUFF BELOW WAS NOT USED!!!
