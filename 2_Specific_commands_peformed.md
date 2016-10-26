@@ -2068,7 +2068,7 @@ $commandline = $commandline." -o fastq/GenotypeVCFs_noBSQR_concat_indels_only.vc
 $status = system($commandline);
 ```
 
-# Filter using indel mask and based on genotype depth (3.2_Executes_GATK_commands_VariantFiltration_noBSQR.pl):
+# Filter using indel mask and based on genotype depth (3.2_Executes_GATK_commands_VariantFiltration_noBSQR.pl). This ended up being time consuming so I did it on the chromosome intervals above and then I will combine the final filtered vcf files using the commands above.
 
 ```
 #!/usr/bin/perl
@@ -2101,6 +2101,16 @@ $status = system($commandline);
 #$commandline = "rm -f ".$outfile1." ".$outfile2;
 #$status = system($commandline);
 ```
+
+
+
+
+
+
+
+
+
+
 
 
 # STUFF BELOW WAS NOT USED!!!
