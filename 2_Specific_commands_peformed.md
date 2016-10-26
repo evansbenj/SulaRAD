@@ -2068,7 +2068,11 @@ $commandline = $commandline." -o fastq/GenotypeVCFs_noBSQR_concat_indels_only.vc
 $status = system($commandline);
 ```
 
-# Filter using indel mask and based on genotype depth (3.2_Executes_GATK_commands_VariantFiltration_noBSQR.pl). This ended up being time consuming so I did it on the chromosome intervals above and then I will combine the final filtered vcf files using the commands above.
+# Filter using indel mask and based on genotype depth (3.2_Executes_GATK_commands_VariantFiltration_noBSQR.pl). This ended up being time consuming so I did it on the chromosome intervals above and then I will combine the final filtered vcf files using the commands above. Before running, we need to index the vcf.gz files:
+
+```
+tabix -p vcf dbsnp_138.hg19.vcf.gz
+```
 
 ```
 #!/usr/bin/perl
