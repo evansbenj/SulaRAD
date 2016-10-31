@@ -1879,8 +1879,7 @@ my @files;
 @files = glob("fastq/*_trimmed_sorted.realigned.bam");
 
 foreach(@files){
-    my $commandline = "~/samtools_2016/bin/samtools depth ".$_."  |  awk \'{sum+=\$3} END { print \"".$_." Average = \",su
-m/NR}\'";
+    my $commandline = "~/samtools_2016/bin/samtools depth ".$_."  |  awk \'{sum+=\$3} END { print \"".$_." Average = \",sum/NR}\'";
     print $commandline,"\n";
     $status = system($commandline);
 }
