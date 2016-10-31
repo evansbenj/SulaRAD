@@ -1866,72 +1866,28 @@ done
 ```
 A similar script was run for the other samples but changing the header to Lane5 instead of Lane1.
 
-Here is the old script that does not use bwa mem that I used previously.
-``` bash
-#!/bin/bash                                                                                                                  
+This used `bwa mem` to align the single end reads, then it made sorted bam files and a bam index (bai) file.  
 
-path_to_bwa="/usr/local/bin"
-path_to_samtools="/usr/local/bin"
-path_to_data="."
-path_to_chromosome="/home/ben/2015_BIO720/rhesus_genome"
-chromosome="macaque_masked_chromosomes_ym.fasta"
+I checked depth with this script (2.99_samtools_depth_noBSQR.pl):
+```
+# This script will read in the *_sorted.bam file names in a directory, and 
+# make and execute a GATK commandline on these files.  
 
-individuals="brunescens_PF707
-hecki_PF643
-hecki_PF644
-hecki_PF648
-hecki_PF651
-hecki_PM639
-hecki_PM645
-maura_PF615
-maura_PF713
-maura_PM613
-maura_PM614
-maura_PM616
-maura_PM618
-nem_Gumgum
-nem_Kedurang
-nem_Malay
-nem_Ngasang
-nem_pagensis
-nem_PM664
-nem_PM665
-nem_Sukai_male
-nigra_PF1001
-nigra_PF660
-nigra_PM1000
-nigra_PM1003
-nigrescens_PF654
-ochreata_PF625
-ochreata_PM571
-ochreata_PM596
-togeanus_PF549
-togeanus_PM545
-tonk_PF515
-tonk_PM561
-tonk_PM565
-tonk_PM566
-tonk_PM567
-tonk_PM582
-tonk_PM584
-tonk_PM592
-tonk_PM602"
+my $status;
+my @files;
+   
+@files = glob("fastq/*_trimmed_sorted.realigned.bam");
 
-for each_individual in $individuals
-do
+foreach(@files){
+    my $commandline = "~/samtools_2016/bin/samtools depth ".$_."  |  awk \'{sum+=\$3} END { print \"".$_." Average = \",su
+m/NR}\'";
+    print $commandline,"\n";
+    $status = system($commandline);
+}
 
-echo ${each_individual}
-    $path_to_bwa/bwa aln $path_to_chromosome/$chromosome $path_to_data/${each_individual}.fq > $path_to_data/${each_individual}.sai
-    $path_to_bwa/bwa samse -r "@RG\tID:FLOWCELL1.LANE5\tSM:${each_individual}.fq\tPL:illumina" $path_to_chromosome/$chromosome $path_to_data/${each_individual}.sai $path_to_data/${each_individual}.fq > $
-path_to_data/${each_individual}.sam
-    $path_to_samtools/samtools view -bt $path_to_chromosome/$chromosome -o $path_to_data/${each_individual}.bam $path_to_data/${each_individual}.sam
-    $path_to_samtools/samtools sort $path_to_data/${each_individual}.bam $path_to_data/${each_individual}_sorted
-    $path_to_samtools/samtools index $path_to_data/${each_individual}_sorted.bam
-    rm -f $path_to_data/${each_individual}.bam $path_to_data/${each_individual}.sam $path_to_data/${each_individual}.sai
-done
 ```
 
-This used `bwa mem` to align the single end reads, then it made sorted bam files and a bam index (bai) file.  In the new analysis I used GATK 3.6 to realign these bam files using two perl script called `1_Executes_GATK_commands_RealignerTarget.pl` and `2_Executes_GATK_commands_IndelRealigner.pl`, see below.  In the new analysis, I am using Haplotype caller, which does indel realignment and genotyping at the same time.  However, BSQR still requires indel realignment, so I will do this first.
+In the new analysis I used GATK 3.6 to realign these bam files using two perl script called `1_Executes_GATK_commands_RealignerTarget.pl` and `2_Executes_GATK_commands_IndelRealigner.pl`, see below.  In the new analysis, I am using Haplotype caller, which does indel realignment and genotyping at the same time.  However, BSQR still requires indel realignment, so I will do this first.
 
 Here is the `1_Executes_GATK_commands_RealignerTarget.pl`:
 ```perl
