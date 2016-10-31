@@ -1826,6 +1826,27 @@ done
 
 After this was done I ran fastqd again.  PM665 and PM654 still had lots of overrepresented seqs - presumably different ones.  I ran trimmomatic two more times for each of these files using different adapter files. I then deleteded the intermediate files and renamed the third trimmed one with the previous name to facilitate the pipeline below.
 
+## Count reads after trimming
+
+I did this like this (2.98_grep_reads_noBSQR.pl): 
+```perl
+#!/usr/bin/perl
+# This script count the number of reads in each trimmed fastq file.  
+
+my $status;
+my @files;
+   
+@files = glob("fastq/*_trimmed.fq.gz");
+
+foreach(@files){
+    my $commandline = "zcat ".$_." | grep -c \'>\'";
+    print $commandline,"\n";
+    $status = system($commandline);
+}
+
+```
+
+
 ## BWA, Samtools
 
 Then I executed a bash script called `others_alignmnet_new` which looked like this:
