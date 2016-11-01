@@ -2162,7 +2162,7 @@ while ( my $line = <DATAINPUT>) {
 				for ($y=0; $y<= 8; $y ++){
 					print OUTFILE $columns[$y],"\t";
 				}
-				for ($y=0; $y<= ($#sexes); $y ++){
+				for ($y=0; $y< ($#sexes); $y ++){
 					print OUTFILE "./.\t";
 				}
 				print OUTFILE "./.\n";
