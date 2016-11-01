@@ -2256,8 +2256,12 @@ close OUTFILE;
 java -cp /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar org.broadinstitute.gatk.tools.CatVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant fastq/nonrecal_filtered_1.vcf --variant fastq/nonrecal_filtered_2.vcf --variant fastq/nonrecal_filtered_3.vcf --variant fastq/nonrecal_filtered_4.vcf --variant fastq/nonrecal_filtered_5.vcf --variant fastq/nonrecal_filtered_6.vcf --variant fastq/nonrecal_filtered_7.vcf --variant fastq/nonrecal_filtered_8.vcf --variant fastq/nonrecal_filtered_9.vcf --variant fastq/nonrecal_filtered_10.vcf --variant fastq/nonrecal_filtered_11.vcf --variant fastq/nonrecal_filtered_12.vcf --variant fastq/nonrecal_filtered_13.vcf --variant fastq/nonrecal_filtered_14.vcf --variant fastq/nonrecal_filtered_15.vcf --variant fastq/nonrecal_filtered_16.vcf --variant fastq/nonrecal_filtered_17_to_X.vcf.vcf --outputFile fastq/GenotypeVCFs_noBSQR_filtered.vcf -assumeSorted
 ```
 
-
-
+# Convert to tab
+```bash
+~/tabix-0.2.6/bgzip fastq/GenotypeVCFs_noBSQR_filtered.vcf
+~/tabix-0.2.6/tabix -p vcf fastq/GenotypeVCFs_noBSQR_filtered.vcf.gz
+zcat fastq/GenotypeVCFs_noBSQR_filtered.vcf.gz | ~/vcftools/bin/vcf-to-tab > fastq/GenotypeVCFs_noBSQR_filtered.vcf.gz.tab
+```
 
 
 
