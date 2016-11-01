@@ -2044,7 +2044,9 @@ $commandline = $commandline." -o fastq/GenotypeVCFs_noBSQR_concat_indels_only.vc
 $status = system($commandline);
 ```
 
-# Filter using indel mask and based on genotype depth (3.2_Executes_GATK_commands_VariantFiltration_noBSQR.pl). This ended up being time consuming so I did it on the chromosome intervals above and then I will combine the final filtered vcf files using the commands above. Before running, we need to index the vcf.gz files:
+# Filter using indel mask and based on genotype depth (3.2_Executes_GATK_commands_VariantFiltration_noBSQR.pl). This ended up being time consuming so I did it on the chromosome intervals above and then I will combine the final filtered vcf files using the commands above. Before running, we need to index the vcf.gz files if they aren't already (they should have a file with the same name and an .idx suffix):
+
+Note: for chrs 4, 5, 9, and 10 this script threw an error because some genotypes lacked a DP field.  I solved this using a script (14_Vcf_filter_gnu_aDNA_only.pl) after this one.
 
 ```
 tabix -p vcf dbsnp_138.hg19.vcf.gz
@@ -2081,7 +2083,173 @@ $status = system($commandline);
 #$commandline = "rm -f ".$outfile1." ".$outfile2;
 #$status = system($commandline);
 ```
+OK for chr 4, 5, 9, and 10, I had to use this script to filter based on depth (DP) (14_Vcf_filter_gnu_aDNA_only.pl):
 
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# This program reads in a vcf file and filters individual genotypes by replacing their
+# genotypes with "./." 
+# This only affects the patricular genotype in question and will not change the other
+# genotypes at that position
+# This was not possible to do with GATK - one can filter by an individual genotype but 
+# all of the genotypes appear to be removed at any position with one filter
+
+# to execute type Vcf_filter.pl inputfile.vcf 1111100110000111100011100110010100000000 outputfile.vcf  
+# where 1111100110000111100011100110010100000000 refers to whether or not each individual 
+# in the vcf file is (1) or is not (0) female
+
+# Vcf_filter.pl round2_filtered.vcf 1111100110000111100011100110010100000000 final_filtered.vcf
+
+my $inputfile = $ARGV[0];
+my $outputfile = $ARGV[2];
+
+unless (open DATAINPUT, $inputfile) {
+	print "Can not find the input file.\n";
+	exit;
+}
+
+unless (open(OUTFILE, ">$outputfile"))  {
+	print "I can\'t write to $outputfile\n";
+	exit;
+}
+print "Creating output file: $outputfile\n";
+
+
+my @sexes = split("",$ARGV[1]);
+
+# Because these data were collected with two difference levels of coverage,
+# I am not going to impose an upper limit on depth of coverage.  This was
+# done in the 2014 paper but had not much effect.  Additionally by filtering 
+# based on sites with many genotype calls and with all of them being heterozygous 
+# we probably get rid of most repetitive mappings
+my $minimum_depth_of_coverage_per_diploid_genotype=5;
+my $minimum_depth_of_coverage_per_haploid_genotype=3;
+my $number_of_ref_seq_microsats=0;
+my $number_of_nonref_microsats=0;
+my @male_chrX_hets=();
+my @male_chrY_hets=();
+my @male_chrX_lowcoverage=();
+my @female_chrX_lowcoverage=();
+my @male_chrY_lowcoverage=();
+my @female_chrY=();
+my @autosomal_lowcoverage=();
+my @male_Yhet_sites;
+my @male_Xhet_sites;
+my @female_Y_sites;
+my $y;
+my @columns=();
+my @DP;
+my $DP;
+my $GT;
+my @genotypes;
+my @tempp;
+
+while ( my $line = <DATAINPUT>) {
+	# print all commented lines to the outfile
+	if(substr($line,0,1) eq "#"){
+		print OUTFILE $line;
+	}
+	else{
+		@columns=split(/\s/,$line);
+			# filter microsatellites
+			if((defined($columns[3]))&&(length($columns[3]) > 1)){
+				# this is a microsat in the ref seq
+				# delete the genotypes in the whole line
+				# print the first 8 columns
+				for ($y=0; $y<= 8; $y ++){
+					print OUTFILE $columns[$y],"\t";
+				}
+				for ($y=0; $y<= ($#sexes); $y ++){
+					print OUTFILE "./.\t";
+				}
+				print OUTFILE "./.\n";
+				$number_of_ref_seq_microsats+=1;
+			}
+			elsif((defined($columns[3]))&&(length($columns[3]) == 1)){	
+				# this is not a microsat in the ref seq
+				# first find out where the depth of coverage is			
+				@DP = split(":",$columns[8]);
+				$DP=-1;
+				$GT=-1;
+				for ($y=0; $y<= $#DP; $y += 1){
+					if($DP[$y] eq "DP"){
+						$DP=$y;
+					}
+					if($DP[$y] eq "GT"){
+						$GT=$y;
+					}
+				}
+				# now print the first 8 columns
+				for ($y=0; $y<= 8; $y ++){
+					print OUTFILE $columns[$y],"\t";
+				}
+				# now print or delete each genotype based on coverage
+				for ($y=9; $y<= ($#sexes +9); $y ++){
+					# check each individual genotype in the ingroup
+					@genotypes=split(":",$columns[$y]);
+					# if a call was made, check if either genotype is more than one base
+					if($#genotypes == 0){
+						# no call made, print no call genotype
+						if($y < ($#sexes + 9)){
+							print OUTFILE "./.\t";
+						}	
+						else{
+							print OUTFILE "./.\n";
+						}	
+					}
+					else{
+						# a call was made
+						if((defined($genotypes[$DP]))&&($genotypes[$DP] ne '.')){ # some vcf files are messed up and don't have this info for all genotypes
+							if($genotypes[$DP] < $minimum_depth_of_coverage_per_diploid_genotype){
+								# not enough coverage
+								if($y < ($#sexes + 9)){
+									print OUTFILE "./.";
+									# print other stuff
+									print OUTFILE substr($columns[$y], index($columns[$y], ':'));
+									print OUTFILE "\t";
+								}	
+								else{
+									print OUTFILE "./.";
+									# print other stuff
+									print OUTFILE substr($columns[$y], index($columns[$y], ':'));
+									print OUTFILE "\n";
+								}
+							}
+							else{
+								if($y < ($#sexes + 9)){
+									print OUTFILE $columns[$y],"\t";
+								}	
+								else{
+									print OUTFILE $columns[$y],"\n";
+								}
+							}
+						}
+						else{ # this genotype field does not have a DP value, so delete the genotype
+							if($y < ($#sexes + 9)){
+								print OUTFILE "./.";
+								# print other stuff
+								print OUTFILE substr($columns[$y], index($columns[$y], ':'));
+								print OUTFILE "\t";
+							}	
+							else{
+								print OUTFILE "./.";
+								# print other stuff
+								print OUTFILE substr($columns[$y], index($columns[$y], ':'));
+								print OUTFILE "\n";
+							}
+						}	
+					}
+				} # end for loop over each genotype within a base position
+			}# end of elsif
+	} # end else	
+}# end while
+close DATAINPUT;
+close OUTFILE;
+
+```
 
 
 
