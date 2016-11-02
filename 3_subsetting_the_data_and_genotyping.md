@@ -10,6 +10,10 @@ This generated two files: fastq/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz (a
 
 Now I'd like to do a PCA with all aDNA and then exclude the five low coverage (i.e., <10X) samples and repeat.  The low coverage samples are PM613 (maura), PF660 (nigra), PF654(nigrescens), PM596 (ochreata) and PF549 (togeanus).
 
+```java
+java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --exclude_sample_file low_coverage_individuals -o fastq/GenotypeVCFs_noBSQR_filtered_aDNA_only_no_lowcoverage_individuals.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz 
+
+```
 
 
 ## Subsetting with respect to genes
