@@ -1,4 +1,17 @@
 # Subsetting the data and popgen stats.
+## Subseting aDNA and xDNA 
+```java
+java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -L fastq/target_interval_list_autosomes.list -o fastq/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_filtered.vcf.gz 
+
+java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -L chrX -o fastq/GenotypeVCFs_noBSQR_filtered_xDNA_only.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_filtered.vcf.gz 
+
+
+--exclude_sample_name
+
+```
+
+
+## Subsetting with respect to genes
 I wrote a script to split up the master vcf file using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
 
 ```bash
@@ -21,52 +34,48 @@ And now I used this script to split up the vcf files into different sections dep
 
 
 my $status;
-my $infile = "final_round2_filtered.vcf";
-#my $infile = "nonrecal_final_filtered.vcf";
-my $outfile1 = "recal_plusminus_1000.vcf";
-#my $outfile1 = "nonrecal_plusminus_1000.vcf";
+my $infile = "fastq/GenotypeVCFs_noBSQR_filtered.vcf.gz";
+my $outfile1 = "recal_plusminus_1000.vcf.gz";
 my $bedfile1 = "bedfile1_genes_plusminus_1000.bed";
-my $outfile2 = "recal_1000_51000.vcf";
-#my $outfile2 = "nonrecal_1000_51000.vcf";
+my $outfile2 = "recal_1000_51000.vcf.gz";
 my $bedfile2 = "bedfile2_1001_to_51000.bed";
-my $outfile3 = "recal_51000plus.vcf";
-#my $outfile3 = "nonrecal_51000plus.vcf";
+my $outfile3 = "recal_51000plus.vcf.gz";
 my $bedfile3 = "51000_and_more_galaxy.bed";
 
-my $commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+my $commandline = "java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile1." --variant ".$infile;
 $commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile1;
 $status = system($commandline);
 
-$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = "java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile2." --variant ".$infile;
 $commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile2;
 $status = system($commandline);
 
-$commandline = "java -Xmx2g -jar /usr/local/gatk/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = "java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
 $commandline = $commandline." -o ".$outfile3." --variant ".$infile;
 $commandline = $commandline." -L /home/ben/2015_SulaRADtag/bed_files_perfect/".$bedfile3;
 $status = system($commandline);
 
-
-$commandline = "~/tabix-0.2.6/bgzip ".$outfile1;
-$status = system($commandline);
-$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile1.".gz";
-$status = system($commandline);
+# no need to index and zip now
+#$commandline = "~/tabix-0.2.6/bgzip ".$outfile1;
+#$status = system($commandline);
+#$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile1.".gz";
+#$status = system($commandline);
 $commandline = "zcat ".$outfile1.".gz | /usr/local/vcftools/src/perl/vcf-to-tab > ".$outfile1.".gz.tab";
 $status = system($commandline);
 
-$commandline = "~/tabix-0.2.6/bgzip ".$outfile2;
-$status = system($commandline);
-$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile2.".gz";
-$status = system($commandline);
+#$commandline = "~/tabix-0.2.6/bgzip ".$outfile2;
+#$status = system($commandline);
+#$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile2.".gz";
+#$status = system($commandline);
 $commandline = "zcat ".$outfile2.".gz | /usr/local/vcftools/src/perl/vcf-to-tab > ".$outfile2.".gz.tab";
 $status = system($commandline);
 
-$commandline = "~/tabix-0.2.6/bgzip ".$outfile3;
-$status = system($commandline);
-$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile3.".gz";
-$status = system($commandline);
+#$commandline = "~/tabix-0.2.6/bgzip ".$outfile3;
+#$status = system($commandline);
+#$commandline = "~/tabix-0.2.6/tabix -p vcf ".$outfile3.".gz";
+#$status = system($commandline);
 $commandline = "zcat ".$outfile3.".gz | /usr/local/vcftools/src/perl/vcf-to-tab > ".$outfile3.".gz.tab";
 $status = system($commandline);
 
