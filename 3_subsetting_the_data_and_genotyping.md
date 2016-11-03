@@ -18,7 +18,7 @@ java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVa
 I did this and still there were not many segregating sites for the PCA.  I think the program SNPRelate requires data for all individuals. My decision is to report a PCA of the entire dataset and also for only the Sulawesi macaques.  So now I need to subset only the Sulawesi macaques:
 
 ```java
-java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --exclude_sample_file low_coverage_individuals -o fastq/GenotypeVCFs_noBSQR_filtered_aDNA_only_no_lowcoverage_individuals.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz 
+java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --exclude_sample_file nemestrina_individuals -o fastq/GenotypeVCFs_noBSQR_filtered_aDNA_only_Sulawesi_only.vcf.gz --variant fastq/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz 
 
 ```
 
