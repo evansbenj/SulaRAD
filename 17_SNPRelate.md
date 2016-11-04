@@ -67,11 +67,17 @@ d<-ggplot(data=tab, aes(x=EV1,y=-EV2, label = samp.fieldid, color = samp.color))
 	# italicize species names
 	theme(legend.text = element_text(face="italic"))+ 
 	# move the legend
-	theme(legend.position = c(.1.7, .3)) +
+	theme(legend.position = c(.14, .28)) +
 	# add a title
 	ggtitle("PCA of M. nemestrina and Sulawesi Samples") + 
 	# remove boxes around legend symbols
-	theme(legend.key = element_blank())
+	theme(legend.key = element_blank())+
+	annotate(geom = "text", x = .2, y = -.4, label = "Southwest Sulawesi", color = "black", angle = -60)+
+	annotate(geom = "text", x = .16, y = .22, label = "North Sulawesi", color = "black", angle = 55)+
+	annotate(geom = "text", x = .24, y = .03, label = "Southeast\n    Sulawesi", color = "black", angle = 20)+
+	annotate(geom = "text", x = -.25, y = -.08, label = "Borneo", color = "black", angle = 10)+
+	annotate(geom = "text", x = -.3, y = .04, label = "Sumatra/Mentawai", color = "black", angle = 10)+
+	annotate(geom = "text", x = -.57, y = 0, label = "Peninsular Malaysia", color = "black", angle = 0)
 d
 dev.off()
 
