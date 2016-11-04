@@ -53,13 +53,13 @@ tab$Species <- c("M. brunnescens", "M. hecki", "M. hecki", "M. hecki", "M. hecki
 tab$samp.color <- c("yellowgreen", "brown", "brown", "brown", "brown", "brown", "brown", "darkorange4", "darkorange4", "darkorange4", "darkorange4", "darkorange4", "darkorange4","blue","blue","blue","blue","blue","blue","blue","blue", "purple", "purple", "hotpink1", "purple", "hotpink1", "green4", "green4", "green4", "wheat4", "wheat4", "black", "black", "black", "black", "black", "black", "black", "black", "black")
 tab$samp.fieldid <- c("PF707","PF643","PF644","PF648","PF651","PM639","PM645","PF615","PF713","PM613","PM614","PM616","PM618","Gumgum","Kedurang","Malay","Ngasang","PM664","PM665","Sukai","pagensis","PF1001","PF660","PM1000","PM1003","PF654","PF625","PM571","PM596","PF549","PM545","PF515","PM561","PM565","PM566","PM567","PM582","PM584","PM592","PM602")
 
-d<-ggplot(data=tab, aes(x=EV1,y=EV2, label = samp.fieldid, color = samp.color)) +
+d<-ggplot(data=tab, aes(x=EV1,y=-EV2, label = samp.fieldid, color = samp.color)) +
 	# label axis 
- 	labs(x=expression("Eigenvector 1"), y=expression("Eigenvector 2")) +
+ 	labs(x=expression("Eigenvector 1"), y=expression("-Eigenvector 2")) +
  	# legend details
  	scale_colour_manual(name="Species", values = c("yellowgreen"="yellowgreen", "brown"="brown", "darkorange4"="darkorange4","blue"="blue","purple"="purple", "hotpink1"="hotpink1","green4" = "green4", "wheat4" = "wheat4", "black" = "black"),breaks=c("yellowgreen", "green4", "darkorange4","blue","purple","hotpink1","brown","wheat4","black"),labels=c("M.brunnescens", "M. hecki", "M. maura","M. nemestina","M. nigra","M. nigrescens","M. ochreata","M. togeanus","M. tonkeana"))+
  	# add points and fieldID labels
-	geom_text_repel(aes(EV1,EV2, label=(samp.fieldid))) + geom_point(size=4) + 
+	geom_text_repel(aes(EV1,-EV2, label=(samp.fieldid))) + geom_point(size=4) + 
 	# change to cleaner theme
 	theme_classic(base_size = 16) +
 	# make it clean
@@ -67,7 +67,7 @@ d<-ggplot(data=tab, aes(x=EV1,y=EV2, label = samp.fieldid, color = samp.color)) 
 	# italicize species names
 	theme(legend.text = element_text(face="italic"))+ 
 	# move the legend
-	theme(legend.position = c(.1, .7)) +
+	theme(legend.position = c(.1.7, .3)) +
 	# add a title
 	ggtitle("PCA of M. nemestrina and Sulawesi Samples") + 
 	# remove boxes around legend symbols
