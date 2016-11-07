@@ -22,6 +22,426 @@ java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVa
 
 ```
 
+# Genotyping chrX based on depth and outputting a haploid tab file for all individuals
+
+Preliminary results from the ABBABABA tests identified some problems with chrX genotyping.  So I wrote a script to call genotypes based on the highest coverage allele for all sites.  Using this script, we get a single allele called for male and female individuals (Genotypes_only_male_chrX_based_on_allelic_depth.pl).  
+
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use List::Util 'max';
+use List::Util qw(shuffle);
+
+# This program reads in a vcf file then genotypes chrX sequences
+# based on the AD (allelic depth) annotation for males
+# Females are left as is
+
+# To run type this:
+# Genotypes_only_male_chrX_based_on_allelic_depth copy input.vcf 0101010 output.tab
+
+# where 0101010 indicates for each ingroup 
+# sample whether the individual is not (0) or is (1)
+# a female
+
+# It takes as input a vcf file and outputs a tab delimited file
+
+
+my $inputfile = $ARGV[0];
+my $outputfile = $ARGV[2];
+
+unless (open(OUTFILE, ">$outputfile"))  {
+	print "I can\'t write to $outputfile   $!\n\n";
+	exit;
+}
+print "Creating output file: $outputfile\n";
+
+unless (open DATAINPUT, $inputfile) {
+	print "Can not find the input file, jackass.\n";
+	exit;
+}
+
+my @sexes = split("",$ARGV[1]);
+
+my $y;
+my $x;
+my @columns=();
+my @fields;
+my $AD;
+my $GT;
+my $counter=0;
+my @genotypes;
+my $genotypez;
+my @alleledepth;
+my $max;
+my @maxcounter=();
+my $counter2=0;
+my @altalleles=();
+my @allelieos;
+
+while ( my $line = <DATAINPUT>) {
+	chomp($line);
+	@columns=split("\t",$line);
+		if(substr($columns[0],0,1) ne '#'){ # this is not a comment
+			@fields=split(":",$columns[8]);
+			$counter=0;
+			$AD=0;
+			$GT=0;
+			@altalleles=split(",",$columns[4]);
+			# first find out where the AD and GT columns are
+			foreach(@fields){
+				if($_ eq 'AD'){
+					$AD=$counter;
+				}
+				elsif($_ eq 'GT'){
+					$GT=$counter;
+				}
+				$counter+=1;
+			}
+			# now print out genotypes
+			# first check if we have no data for all individuals
+			$genotypez=();
+			for ($y = 9 ; $y <= $#columns; $y++ ) {
+				@genotypes=split(":",$columns[$y]);
+				$genotypez=$genotypez.$genotypes[$GT];
+			}
+			#print "genotypez ",$genotypez,"\n";
+			if(
+				(index($genotypez,'0') != -1)||
+				(index($genotypez,'1') != -1)||
+				(index($genotypez,'2') != -1)){
+				# there is at least one genotype in the ingroup
+				# if $AD==0 then all individuals are ref
+				if($AD==0){ # this probably never happens
+					print OUTFILE $columns[0],"\t",$columns[1],"\t",$columns[3];
+					for ($y = 9 ; $y <= $#columns; $y++ ) {
+						@genotypes=split(":",$columns[$y]);
+						if($genotypes[$GT] eq '.\/.'){
+							# check if this is a male or female
+							if($sexes[$y-9] == 0){ # it is a male
+								print OUTFILE "\t\.\/\.";
+							}
+							else{ # this is a female
+								print OUTFILE "\t\.\/.";
+							}	
+						}
+						elsif($genotypes[$GT] eq '0/0'){
+							if($sexes[$y-9] == 0){ # it is a male
+								print OUTFILE "\t".$columns[3]."\/".$columns[3];
+							}
+							else{ # this is a female
+								print OUTFILE "\t$columns[3]\/$columns[3]";
+							}	
+								
+						}
+						else{
+							print "Something is weird with the invariant genotypes\n";
+						}
+					}	
+					print OUTFILE "\n";
+				}
+				else{ # This is probably what happens all the time
+					#print "AD $AD\n";
+					print OUTFILE $columns[0],"\t",$columns[1],"\t",$columns[3];
+					for ($y = 9 ; $y <= $#columns; $y++ ) {
+						if($sexes[$y-9] == 0){ # this is a male
+							@alleledepth=();
+							@genotypes=();
+							@genotypes=split(":",$columns[$y]);
+							@alleledepth=split(",",$genotypes[$AD]);
+							@allelieos = split("/",$genotypes[$GT]); # these are the alleles with numbers 0, 1, 2, etc
+							@maxcounter=();
+							$counter2=0;
+							$max=0;
+							$max=max @alleledepth;
+							# now cycle through each allele depth to find highest and see if there is a tie
+							foreach my $alleledepth (@alleledepth){
+								if($alleledepth == $max){
+									push(@maxcounter,$counter2);
+								}
+								$counter2+=1;
+							}	
+							@maxcounter = shuffle @maxcounter;
+							if($genotypes[$GT] eq './.'){
+								print OUTFILE "\t\.\/\.";
+							}
+							elsif($maxcounter[0] == 0){ # the highest depth is the REF allele
+								if($columns[3] ne '*'){
+									print OUTFILE "\t".$columns[3]."\/".$columns[3];
+								}
+								else{
+									print OUTFILE "\t\.\/";
+								}	
+							}
+							elsif($maxcounter[0] == 1){ # the highest depth is the first alt allele
+								if($altalleles[0] ne '*'){
+									print OUTFILE "\t".$altalleles[0]."\/".$altalleles[0];
+								}
+								else{
+									print OUTFILE "\t\.\/";
+								}	
+							}
+							elsif($maxcounter[0] == 2){ # the highest depth is the second alt allele
+								if($altalleles[1] ne '*'){
+									print OUTFILE "\t".$altalleles[1]."\/".$altalleles[1];
+								}
+								else{
+									print OUTFILE "\t\.\/";
+								}	
+							}
+							elsif($maxcounter[0] == 3){ # the highest depth is the third alt allele
+								if($altalleles[2] ne '*'){
+									print OUTFILE "\t".$altalleles[2]."\/".$altalleles[2];
+								}
+								else{
+									print OUTFILE "\t\.\/";
+								}	
+							}
+							elsif($maxcounter[0] == 4){ # the highest depth is the fourth alt allele
+								if($altalleles[3] ne '*'){
+									print OUTFILE "\t".$altalleles[3]."\/".$altalleles[3];
+								}
+								else{
+									print OUTFILE "\t\.\/";
+								}	
+							}
+							elsif($maxcounter[0] == 5){ # the highest depth is the fifth alt allele
+								if($altalleles[4] ne '*'){
+									print OUTFILE "\t".$altalleles[4]."\/".$altalleles[4];
+								}
+								else{
+									print OUTFILE "\t\.\/";
+								}	
+							}
+						}
+						else{ # this is a female
+							@genotypes=();
+							@genotypes=split(":",$columns[$y]);
+							if($genotypes[$GT] eq './.'){
+								print OUTFILE "\t\.\/\.";
+							}
+							elsif($genotypes[$GT] eq '0/0'){
+								print OUTFILE "\t".$columns[3]."\/".$columns[3];
+							}
+							else{ # this female is heterozygous
+								@altalleles = split(",",$columns[4]);
+								@allelieos = split("/",$genotypes[$GT]);
+								# first print first allele for this female
+								if($altalleles[$allelieos[0]-1] ne '*'){
+									if($allelieos[0] eq '0'){
+										print OUTFILE "\t".$columns[3]."\/";
+									}
+									else{
+										print OUTFILE "\t".$altalleles[$allelieos[0]-1]."\/";
+									}
+								}
+								else{
+									print OUTFILE "\t\.\/";
+								}
+								# now print the second allele	
+								if($altalleles[$allelieos[1]-1] ne '*'){
+									if($allelieos[1] eq '0'){
+										print OUTFILE $columns[3];
+									}
+									else{
+										print OUTFILE $altalleles[$allelieos[1]-1];
+									}
+								}
+								else{
+									print OUTFILE "\.";
+								}
+							}
+
+						}	
+					}
+					print OUTFILE "\n";	
+				}
+			}
+		}# endif
+		elsif(substr($columns[0],0,6) eq '#CHROM'){ # print the first line
+			print OUTFILE "#CHROM	POS	REF";
+				for ($y = 9 ; $y <= $#columns; $y++ ) {
+					print OUTFILE "\t",$columns[$y];
+				}
+				print OUTFILE "\n";			
+		}
+}# end while
+close DATAINPUT;
+close OUTFILE;
+
+```
+
+# Coverting to Nexus file for phylogenetic analysis
+
+After adding the baboon and human outgroup sequences to the tab files, I used this script to make an interleaved nexus file (21_tab_to_interleave_nexus.pl):
+
+``` perl
+
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use List::MoreUtils qw/ uniq /;
+
+
+
+#  This program reads in a tab delimited genotype file generated
+#  by the perl program '17_adds_outgroup_to_lots_of_tab_files.pl'
+#  and generates an interleaved nexus file that includes degenerate bases and gaps
+
+# it is hardcoded to expect one base from two outgroup sequences after the reference (rhesus) seq
+
+
+# run it like this
+# 21_tab_to_interleave_nexus.pl input.tab output_interleave.nxs
+
+# Notes: 
+# ##### nigra_PM1000 is actually nigrescens_PM1000 #####
+
+# ##### these samples have very low coverage (<10x): ####
+# ##### nigrescens_PF654_sorted (7.33X) ####
+# ##### maura_PM613_sorted (8.65X) ####
+# ##### ochreata_PM596_sorted (9.02X)####
+# ##### nigra_660_sorted (9.61X) ####
+# ##### togeanus_PF549 (9.63X) ####
+
+
+
+my $inputfile = $ARGV[0];
+my $outputfile = $ARGV[1];
+
+unless (open DATAINPUT, $inputfile) {
+	print 'Can not find the input file.\n';
+	exit;
+}
+
+
+my @temp;
+my @temp1;
+my @names;
+my %datahash;
+my $y;
+my $x;
+my $watisitnow;
+my $count=0;
+my $interleave=0;
+
+# Read in datainput file
+
+# Ideally, I'd like to print out the interleaved sections as the vcf file is read
+# and keep track of the number of bases, and print this out to screen at the end
+# then this number could be added to the nxs file after the script runs
+
+
+while ( my $line = <DATAINPUT>) {
+	chomp($line);
+	@temp=split('\t',$line);
+	if($temp[0] eq '#CHROM'){
+		@names=@temp;
+		for ($y = 2; $y <= $#names; $y++ ) {
+			$names[$y] =~ s/-//gi; # get rid of dashes in names
+			$datahash{$names[$y]}=''; # initialize the hash
+		}	
+		# print preamble to output file
+		unless (open(OUTFILE, ">$outputfile"))  {
+			print "I can\'t write to $outputfile\n";
+			exit;
+		}
+		print "Creating output file: $outputfile\n";
+		print OUTFILE "#NEXUS\n\n";
+		print OUTFILE "BEGIN DATA\;\nDIMENSIONS NTAX=",$#names-1," NCHAR= XXXX\;\n";
+		print OUTFILE "FORMAT DATATYPE=DNA  MISSING=? INTERLEAVE GAP=- \;\n";
+		print OUTFILE "MATRIX\n";
+		print OUTFILE "\n";
+	}
+	else{	
+		# only print ones that are not microsats or indels in the outgroups
+		if($interleave>79){  # print this section of the data
+			for ($y = 2; $y <= $#names; $y++ ) {
+				print OUTFILE $names[$y],"\t\t",$datahash{$names[$y]},"\n";
+			}
+			print OUTFILE "\n";
+			$interleave=0;
+			# clear the hash
+			for ($y = 2 ; $y <= $#names; $y++ ) {
+				$datahash{$names[$y]}='';
+			}	
+		}
+		if((length($temp[2]) == 1)&&(length($temp[3]) == 1)&&(length($temp[4]) == 1)){ # all the outgroup seqs are single bp
+			$count=$count+1; # this is the count of all positions
+			$interleave=$interleave+1; # this is the count of the interleave length
+			
+			
+			# now add data to the hash
+			for ($y = 2 ; $y <= 4; $y++ ) {	# first the three outgroups which are haploid
+				if($temp[$y] ne '*'){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.uc($temp[$y]);
+				}
+				else{
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'-';
+				}	
+			}
+			for ($y = 5 ; $y <= $#temp; $y++ ) { # now the ingroups, which are diploid, usually (except chrX and chrY)
+				# for these, we need to use IUPAC codes
+				if(($temp[$y] eq 'G/G')||($temp[$y] eq 'C/C')||($temp[$y] eq 'T/T')||($temp[$y] eq 'A/A')||($temp[$y] eq 'G/')||($temp[$y] eq 'C/')||($temp[$y] eq 'T/')||($temp[$y] eq 'A/')){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.substr($temp[$y],0,1);
+				}
+				elsif(($temp[$y] eq './.')||($temp[$y] eq './')){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'-';
+				}
+				elsif(($temp[$y] eq 'C/T')||($temp[$y] eq 'T/C')){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'Y';
+				}
+				elsif(($temp[$y] eq 'A/G')||($temp[$y] eq 'G/A')){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'R';
+				}
+				elsif(($temp[$y] eq 'A/C')||($temp[$y] eq 'C/A')){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'M';
+				}
+				elsif(($temp[$y] eq 'A/T')||($temp[$y] eq 'T/A')){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'W';
+				}
+				elsif(($temp[$y] eq 'C/G')||($temp[$y] eq 'G/C')){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'S';
+				}
+				elsif(($temp[$y] eq 'G/T')||($temp[$y] eq 'T/G')){
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'K';
+				}
+				else{ # this is a microsat, so substitute missing data
+					$datahash{$names[$y]} = $datahash{$names[$y]}.'-';
+				}
+			}	
+		}
+	}
+}		
+
+# print the last line
+for ($y = 2; $y <= $#names; $y++ ) {
+	print OUTFILE $names[$y],"\t\t",$datahash{$names[$y]},"\n";
+}
+#print OUTFILE "\n";
+
+
+
+print OUTFILE "\;\nEND\;";
+print OUTFILE "\n";
+print OUTFILE "\n";
+#print OUTFILE "BEGIN Mrbayes\;\n";
+#print OUTFILE "Prset statefreqpr=dirichlet(1,1,1,1)\;\n";
+#print OUTFILE "Lset  nst=6  rates=invgamma\;\n";
+#print OUTFILE "mcmc ngen=2000000 savebrlens=yes\;\n";
+#print OUTFILE "sumt burnin=10000\;\n";
+#print OUTFILE "quit\;\n";
+
+close OUTFILE;
+print "The number of sites is $count\n";
+
+# now update the number of bases
+
+my $status;
+$status = system("perl -p -i -e 's/XXXX/$count/g' $outputfile");
+
+```
+
 
 ## Subsetting with respect to genes
 I wrote a script to split up the master vcf file using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
