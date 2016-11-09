@@ -7,8 +7,10 @@ As a solution, Janet Kelso from the MPI suggested I genotype male chrX sites usi
 # First do the RADseq chrX.
 
 Working with the entire chrX first using Genotypes_only_male_chrX_based_on_allelic_depth.pl (script is below).  I also need to do this for each gene-location partition as well.
+
 input file: `fastq/GenotypeVCFs_noBSQR_filtered_xDNA_only.vcf`
-output file: 'fastq/GenotypeVCFs_noBSQR_filtered_hap_depth_xDNA_only.vcf.tab'
+
+output file: `fastq/GenotypeVCFs_noBSQR_filtered_hap_depth_xDNA_only.vcf.tab`
 
 
 
