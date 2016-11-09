@@ -445,8 +445,61 @@ $status = system("perl -p -i -e 's/XXXX/$count/g' $outputfile");
 # Phylogenetic analysis with iqtree
 
 I used iqtree version 1.5.0a to estimate a phylogeny using ML for the entire aDNA dataset. A model of evolution was selected by iqtree.
-Here is the commandline: 
+Here is the commandline on info from within this directory: '2015_SulaRADtag/good_merged_samples/iqtree-1.5.0a-Linux/': 
 `./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.nxs -m TEST -nt 1`
+
+Here is some information from iqtree that points out that many taxa have lots of missing data:
+```
+Alignment has 43 sequences with 10639115 columns and 707276 patterns (89659 informative sites)
+                     Gap/Ambiguity  Composition  p-value
+   1  REF                    0.00%    failed      0.00%
+   2  hg19                   3.02%    failed      0.00%
+   3  papAnu2                9.56%    failed      0.00%
+   4  brunescens_PF707.fq   56.58%    failed      0.00%
+   5  hecki_PF643.fq        47.64%    failed      0.00%
+   6  hecki_PF644.fq        47.02%    failed      0.00%
+   7  hecki_PF648.fq        48.02%    failed      0.00%
+   8  hecki_PF651.fq        47.99%    failed      0.00%
+   9  hecki_PM639.fq        47.87%    failed      0.00%
+  10  hecki_PM645.fq        47.61%    failed      0.00%
+  11  maura_PF615.fq        47.66%    failed      0.00%
+  12  maura_PF713.fq        46.89%    failed      0.00%
+  13  maura_PM613.fq        72.33%    failed      0.00%
+  14  maura_PM614.fq        48.74%    failed      0.00%
+  15  maura_PM616.fq        47.23%    failed      0.00%
+  16  maura_PM618.fq        48.79%    failed      0.00%
+  17  nem_Gumgum.fq         49.57%    failed      0.00%
+  18  nem_Kedurang.fq       52.25%    failed      0.00%
+  19  nem_Malay.fq          51.28%    failed      0.00%
+  20  nem_Ngasang.fq        58.29%    failed      0.00%
+  21  nem_PM664.fq          47.62%    failed      0.00%
+  22  nem_PM665.fq          53.00%    failed      0.00%
+  23  nem_Sukai_male.fq     53.05%    failed      0.00%
+  24  nem_pagensis.fq       54.34%    failed      0.00%
+  25  nigra_PF1001.fq       59.23%    failed      0.00%
+  26  nigra_PF660.fq        69.09%    failed      0.00%
+  27  nigra_PM1000.fq       51.57%    failed      0.00%
+  28  nigra_PM1003.fq       52.41%    failed      0.00%
+  29  nigrescens_PF654.fq   78.10%    failed      0.00%
+  30  ochreata_PF625.fq     55.37%    failed      0.00%
+  31  ochreata_PM571.fq     60.37%    failed      0.00%
+  32  ochreata_PM596.fq     70.95%    failed      0.00%
+  33  togeanus_PF549.fq     69.52%    failed      0.00%
+  34  togeanus_PM545.fq     59.05%    failed      0.00%
+  35  tonk_PF515.fq         42.65%    failed      0.00%
+  36  tonk_PM561.fq         43.37%    failed      0.00%
+  37  tonk_PM565.fq         42.06%    failed      0.00%
+  38  tonk_PM566.fq         44.56%    failed      0.00%
+  39  tonk_PM567.fq         43.87%    failed      0.00%
+  40  tonk_PM582.fq         44.22%    failed      0.00%
+  41  tonk_PM584.fq         43.36%    failed      0.00%
+  42  tonk_PM592.fq         43.43%    failed      0.00%
+  43  tonk_PM602.fq         43.32%    failed      0.00%
+WARNING: 18 sequences contain more than 50% gaps/ambiguity
+****  TOTAL                 48.90%  43 sequences failed composition chi2 test (p-value<5%; df=3)
+NOTE: minimal branch length is reduced to 0.000000009399 for long alignment
+
+```
 
 ## Subsetting with respect to genes
 I wrote a script to split up the master vcf file using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
