@@ -18,6 +18,29 @@ From within human axt files directory:
 16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl ../baboon_rhesus_alignment/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon.tab GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.tab
 ```
 
+# TO DO for RADseq
+
+Final aDNA file (all data) with both outgroup seqs:
+aDNA /human_hg19_rhesus_alignment/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.tab
+
+Final xDNA depth file with both outgroup seqs:
+Not yet made.
+
+xDNA hapdepth: fastq/GenotypeVCFs_noBSQR_filtered_hap_depth_xDNA_only.vcf.tab
+adding baboon seq now; then need to add human
+
+combine aDNA and xDNA outgroup tabs from all data, feed into abbababa; also do popgen stats for each species with good sample size (maura, tonk, hecki)
+
+
+# RAdseq Splitting up files
+I am currently running the vcf_to_tab function for each of the 3 partitions for aDNA.
+
+For xDNA, I need to do this also for the original vcf file.  Then, using the vcf subsets by gene, I can use my per script to make tab files for each parition with the depth haplotype.
+
+
+
+
+
 # HiSeqX output chrX
 
 I have some vcf files made at the NYGenome center here (on iqaluk):
