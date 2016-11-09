@@ -4,6 +4,14 @@ Background: my preliminary results suggest that there are some issues with genot
 
 As a solution, Janet Kelso from the MPI suggested I genotype male chrX sites using the highest frequenty SNP.  This sounds like a great idea to me!  I plan to do this for the female as well so that each chrX is treated the same. I will write a script that outputs a tab delimited file from a diploid vcf file with genotyping based on the AD annotation (AD is allele depth).  For sites with an equal frequency of the ref and alt SNP, I will select the genotype randomly (and also keep track of how frequently this happens.
 
+# First do the RADseq chrX.
+
+Working with the entire chrX first using Genotypes_only_male_chrX_based_on_allelic_depth.pl (script is below).  I also need to do this for each gene-location partition as well.
+input file: `fastq/GenotypeVCFs_noBSQR_filtered_xDNA_only.vcf`
+output file: 'fastq/GenotypeVCFs_noBSQR_filtered_hap_depth_xDNA_only.vcf.tab'
+
+
+
 # First output chrX
 
 I have some vcf files made at the NYGenome center here (on iqaluk):
@@ -54,7 +62,7 @@ All of this appears to be bad because positions with no data are called as refer
 ```
 /usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant nemHiSeqchrX.g.vcf --variant tonkHiSeqchrX.g.vcf --variant nigraHiSeqchrX.g.vcf --includeNonVariantSites -o nem_tonk_nigra_HiSeq_combined_alldiploid_chrX.vcf
 ```
-Here is a script that converts a vcf file to a majority rule tab delimited file, with haploid genotypes for all (Genotypes_only_male_chrX_based_on_allelic_depth.pl:
+Here is a script that converts a vcf file to a majority rule tab delimited file, with haploid genotypes for all (Genotypes_only_male_chrX_based_on_allelic_depth.pl):
 
 ```
 #!/usr/bin/env perl
