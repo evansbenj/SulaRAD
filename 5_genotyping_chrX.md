@@ -12,9 +12,12 @@ input file: `fastq/GenotypeVCFs_noBSQR_filtered_xDNA_only.vcf`
 
 output file: `fastq/GenotypeVCFs_noBSQR_filtered_hap_depth_xDNA_only.vcf.tab`
 
+# Add outgroups to RADseq aDNA
+From within human axt files directory:
+```16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl ../baboon_rhesus_alignment/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon.tab GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.tab
+```
 
-
-# First output chrX
+# HiSeqX output chrX
 
 I have some vcf files made at the NYGenome center here (on iqaluk):
 ```
