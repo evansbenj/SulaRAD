@@ -442,6 +442,11 @@ $status = system("perl -p -i -e 's/XXXX/$count/g' $outputfile");
 
 ```
 
+# Phylogenetic analysis with iqtree
+
+I used iqtree version 1.5.0a to estimate a phylogeny using ML for the entire aDNA dataset. A model of evolution was selected by iqtree.
+Here is the commandline: 
+`./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.nxs -m TEST -nt 1`
 
 ## Subsetting with respect to genes
 I wrote a script to split up the master vcf file using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
