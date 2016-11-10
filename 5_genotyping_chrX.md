@@ -41,9 +41,12 @@ And also for only borneo nem like this:
 
 Now I am going to calculate the X/A ratio for all RADseq data.  I did this with this command:
 ```
-Blah
+./18_calculate_popgenstats_allRADseqdata.pl
 ```
-
+which writes the data to this directory:
+```
+/home/ben/2015_SulaRADtag/good_merged_samples/FINAL_X_to_A_allRADseq
+```
 
 # TO DO for RADseq
 
