@@ -504,6 +504,12 @@ NOTE: minimal branch length is reduced to 0.000000009399 for long alignment
 
 ```
 
+## Bootstrapping with iqtree
+```
+./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.nxs -m GTR+G4 -alrt 1000 -bb 1000 -pre boot_
+```
+The -pre flag adds the prefix `boot_` to the output files.  The -alrt and -bb specify the number of replicates for two types of bootstraps.
+
 ## Subsetting with respect to genes
 I wrote a script to split up the master vcf file using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
 
