@@ -18,6 +18,17 @@ From within human axt files directory:
 16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl ../baboon_rhesus_alignment/GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon.tab GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.tab
 ```
 
+# FINAL RADseq aDNA and haploid depth xDNA file
+
+The final file is in this directory:
+`/home/ben/2015_SulaRADtag/good_merged_samples`
+
+and has this name:
+
+`FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab`
+
+I am going to run the ABBABABA script and the popgen script on this file now.
+
 # TO DO for RADseq
 
 Final aDNA file (all data) with both outgroup seqs:
