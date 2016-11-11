@@ -510,6 +510,11 @@ NOTE: minimal branch length is reduced to 0.000000009399 for long alignment
 ```
 The -pre flag adds the prefix `boot_` to the output files.  The -alrt and -bb specify the number of replicates for two types of bootstraps.
 
+for regular parametric bootstraping:
+```
+./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.nxs -m GTR+G4 -b 1000 -pre paraboot_
+```
+
 ## Subsetting with respect to genes
 I wrote a script to split up the master vcf file using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
 
@@ -1034,7 +1039,7 @@ my $number_of_individuals_genotyped=($#whotoinclude - 1);
 
 print "The number of individuals to assess is ",$number_of_individuals_genotyped,"\n";
 
-my $number_of_female_individuals_genotyped;
+my $number_of_female_individuals_genotyped=0;
 for ($y = 2 ; $y <= $#whotoinclude ; $y++ ) {
 	if($sexes[$whotoinclude[$y]-1] == 1){
 		$number_of_female_individuals_genotyped +=1;
