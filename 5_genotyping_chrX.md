@@ -63,7 +63,10 @@ combine aDNA and xDNA outgroup tabs from all data, feed into abbababa; also do p
 
 
 # RAdseq Splitting up files
-I am currently running the vcf_to_tab function for each of the 3 partitions for aDNA.
+For aDNA, this is done:
+-rw-rw-r-- 1 ben ben  360212982 Nov 10 09:02 nonrecal_1000_51000.vcf.gz.gz.tab_with_baboon.tab_and_human.tab
+-rw-rw-r-- 1 ben ben 1349655016 Nov 10 09:53 nonrecal_51000plus.vcf.gz.gz.tab_with_baboon.tab_and_human.tab
+-rw-rw-r-- 1 ben ben  213930632 Nov 10 10:37 nonrecal_plusminus_1000.vcf.gz.gz.tab_with_baboon.tab_and_human.tab
 
 For xDNA, I need to do this also for the original vcf file.  Then, using the vcf subsets by gene, I can use my per script to make tab files for each parition with the depth haplotype.
 
