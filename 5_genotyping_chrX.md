@@ -87,10 +87,21 @@ So now I need to feed these through the X_to_A script, via various versions of t
 
 # HiSeqX output chrX
 
-I have some vcf files made at the NYGenome center here (on iqaluk):
+I am now working only in this directory:
+```
+/net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/
+```
+
+I have some old vcf files made at the NYGenome center here (on iqaluk).  These need to be deleted.
 ```
 /work/ben/2015_SulaRADtag/vcf-constitutional
 ```
+
+OK the files Andre genotyped are mapped to an unmasked genome.  The initial genotyping set ploidy=1 for the two males, but I then asked Andre to redo this with ploidy=2.  So chr1-20 are fine from the first genotyping and chrX is fine for only M. nigra (the female) from the first genotyping.  The chrX from M. nigra needs to be combined with ploidy=2 chrX of the two males which was done more recently.  Then this combined vcf file can be recalled using my script.
+
+First, combine only chr1-20 from three vcf files:
+
+
 ```
 -rw-rw-r-- 1 ben ben 6238245944 Sep  2 00:32 nemestrina-PM664.g.vcf.gz
 -rw-rw-r-- 1 ben ben 6125321940 Sep  2 00:32 nigra-PM664.g.vcf.gz
