@@ -27,7 +27,7 @@ and has this name:
 
 `FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab`
 
-I am going to run the ABBABABA script and the popgen script on this file now.  I did this with this command:
+I am going to run the ABBABABA script on this file now.  I did this with this command with nem+pag, tonk, nigra:
 
 ```
 ./Performs_ABBA_BABA_on_populations.pl FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab 0000000000000000000000000000000000000000 3_6_14-15-16-17-18-19-20-21_32-33-34-35-36-37-38-39-40_22-23-25 repeat_nothing FINAL_TONK_NIGRA_ABBA/H3nempag_H1tonk_H2nigra.j FINAL_TONK_NIGRA_ABBA/H3nempag_H1tonk_H2nigra.stats
@@ -37,7 +37,10 @@ And also for only borneo nem like this:
 ```
 ./Performs_ABBA_BABA_on_populations.pl FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab 0000000000000000000000000000000000000000 3_6_14-18-19-20_32-33-34-35-36-37-38-39-40_22-23-25 repeat_nothing FINAL_TONK_NIGRA_ABBA/H3born_H1tonk_H2nigra.j FINAL_TONK_NIGRA_ABBA/H3born_H1tonk_H2nigra.stats
 ```
-
+and for chrX with nem+pag, tonk, nigra like this:
+```
+Performs_ABBA_BABA_on_populations_onlychrX.pl FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab 0000000000000000000000000000000000000000 3_6_14-15-16-17-18-19-20-21_32-33-34-35-36-37-38-39-40_22-23-25 FINAL_TONK_NIGRA_ABBA/H3nempag_H1tonk_H2nigra_chrX.j FINAL_TONK_NIGRA_ABBA/H3nempag_H1tonk_H2nigra_chrX.stats
+```
 
 Now I am going to calculate the X/A ratio for all RADseq data.  I did this with this command:
 ```
