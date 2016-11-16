@@ -1,6 +1,17 @@
 # Analysis with Kai's program
 
-The first step to analyze each species/population with Kai's program is to generate an input file.  I wrote a script to do this (19_generates_input_for_Kai_program.pl):
+The first step to analyze each species/population with Kai's program is to generate an input file.  I wrote a script to do this (19_generates_input_for_Kai_program.pl) below.  The command lines I used are:
+
+```
+./19_Generates_input_for_Kai_program.pl nonrecal_51000plus.vcf.gz.gz.tab_with_baboon.tab_and_human_andchrXdepth.tab 0000000000000000000000000000000000000000 4_6_32_33_34_35_36_37_38_39_40 tonk_kai_newdepth.input
+
+./19_Generates_input_for_Kai_program.pl nonrecal_51000plus.vcf.gz.gz.tab_with_baboon.tab_and_human_andchrXdepth.tab 0000000000000000000000000000000000000000 4_6_8_9_10_11_12_13 maura_kai_newdepth.input
+
+./19_Generates_input_for_Kai_program.pl nonrecal_51000plus.vcf.gz.gz.tab_with_baboon.tab_and_human_andchrXdepth.tab 0000000000000000000000000000000000000000 4_6_2_3_4_5_6_7 hecki_kai_newdepth.input
+
+./19_Generates_input_for_Kai_program.pl nonrecal_51000plus.vcf.gz.gz.tab_with_baboon.tab_and_human_andchrXdepth.tab 0000000000000000000000000000000000000000 4_6_18_19_20_21 borneo_kai_newdepth.input
+
+```
 
 ```perl
 #!/usr/bin/env perl
