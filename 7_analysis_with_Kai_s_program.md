@@ -41,49 +41,50 @@ use List::MoreUtils qw/ uniq /;
 # Here is the order of the samples for the SulaRad project:
 
 
-#	1	brunescens_PF707_stampy_sorted
-#	2	hecki_PF643_stampy_sorted
-#	3	hecki_PF644_stampy_sorted
-#	4	hecki_PF648_stampy_sorted
-#	5	hecki_PF651_stampy_sorted
-#	6	hecki_PM639_stampy_sorted
-#	7	hecki_PM645_stampy_sorted
-#	8	maura_PF615_stampy_sorted
-#	9	maura_PF713_stampy_sorted
-#	10	maura_PM613_stampy_sorted
-#	11	maura_PM614_stampy_sorted
-#	12	maura_PM616_stampy_sorted
-#	13	maura_PM618_stampy_sorted
-#	14	nem_Gumgum_stampy_sorted
-#	15	nem_Kedurang_stampy_sorted
-#	16	nem_Malay_stampy_sorted
-#	17	nem_Ngasang_stampy_sorted
-#	18	nem_PM664_stampy_sorted
-#	19	nem_PM665_stampy_sorted
-#	20	nem_Sukai_male_stampy_sorted
-#	21	nem_pagensis_stampy_sorted
-#	22	nigra_PF1001_stampy_sorted
-#	23	nigra_PF660_stampy_sorted
-#	24	nigrescens_PM1000_stampy_sorted
-#	25	nigra_PM1003_stampy_sorted
-#	26	nigrescens_PF654_stampy_sorted
-#	27	ochreata_PF625_stampy_sorted
-#	28	ochreata_PM571_stampy_sorted
-#	29	ochreata_PM596_stampy_sorted
-#	30	togeanus_PF549_stampy_sorted
-#	31	togeanus_PM545_stampy_sorted
-#	32	tonk_PF515_stampy_sorted
-#	33	tonk_PM561_stampy_sorted
-#	34	tonk_PM565_stampy_sorted
-#	35	tonk_PM566_stampy_sorted
-#	36	tonk_PM567_stampy_sorted
-#	37	tonk_PM582_stampy_sorted
-#	38	tonk_PM584_stampy_sorted
-#	39	tonk_PM592_stampy_sorted
-#	40	tonk_PM602_stampy_sorted
+#   1   brunescens_PF707_stampy_sorted
+#   2   hecki_PF643_stampy_sorted
+#   3   hecki_PF644_stampy_sorted
+#   4   hecki_PF648_stampy_sorted
+#   5   hecki_PF651_stampy_sorted
+#   6   hecki_PM639_stampy_sorted
+#   7   hecki_PM645_stampy_sorted
+#   8   maura_PF615_stampy_sorted
+#   9   maura_PF713_stampy_sorted
+#   10  maura_PM613_stampy_sorted
+#   11  maura_PM614_stampy_sorted
+#   12  maura_PM616_stampy_sorted
+#   13  maura_PM618_stampy_sorted
+#   14  nem_Gumgum_stampy_sorted
+#   15  nem_Kedurang_stampy_sorted
+#   16  nem_Malay_stampy_sorted
+#   17  nem_Ngasang_stampy_sorted
+#   18  nem_PM664_stampy_sorted
+#   19  nem_PM665_stampy_sorted
+#   20  nem_Sukai_male_stampy_sorted
+#   21  nem_pagensis_stampy_sorted
+#   22  nigra_PF1001_stampy_sorted
+#   23  nigra_PF660_stampy_sorted
+#   24  nigrescens_PM1000_stampy_sorted
+#   25  nigra_PM1003_stampy_sorted
+#   26  nigrescens_PF654_stampy_sorted
+#   27  ochreata_PF625_stampy_sorted
+#   28  ochreata_PM571_stampy_sorted
+#   29  ochreata_PM596_stampy_sorted
+#   30  togeanus_PF549_stampy_sorted
+#   31  togeanus_PM545_stampy_sorted
+#   32  tonk_PF515_stampy_sorted
+#   33  tonk_PM561_stampy_sorted
+#   34  tonk_PM565_stampy_sorted
+#   35  tonk_PM566_stampy_sorted
+#   36  tonk_PM567_stampy_sorted
+#   37  tonk_PM582_stampy_sorted
+#   38  tonk_PM584_stampy_sorted
+#   39  tonk_PM592_stampy_sorted
+#   40  tonk_PM602_stampy_sorted
 
 # tonk
 # 32_33_34_35_36_37_38_39_40 
+
 # hecki
 # 2_3_4_5_6_7  
 
@@ -124,13 +125,13 @@ my $input3 = $ARGV[2];
 my $outputfile = $ARGV[3];
 
 unless (open DATAINPUT, $inputfile) {
-	print "Can not find the input file.\n";
-	exit;
+    print "Can not find the input file.\n";
+    exit;
 }
 
 unless (open(OUTFILE, ">$outputfile"))  {
-	print "I can\'t write to $outputfile\n";
-	exit;
+    print "I can\'t write to $outputfile\n";
+    exit;
 }
 
 print "Creating output file: $outputfile\n";
@@ -142,15 +143,15 @@ my $number_of_individuals_genotyped=($#whotoinclude - 1);
 
 print "The number of individuals to assess is ",$number_of_individuals_genotyped,"\n";
 
-my $number_of_female_individuals_genotyped;
+my $number_of_female_individuals_genotyped=0;
 my $y;
 
 
 for ($y = 2 ; $y <= $#whotoinclude ; $y++ ) {
-	if($sexes[$whotoinclude[$y]-1] == 1){
-		$number_of_female_individuals_genotyped +=1;
-	}	
-}	
+    if($sexes[$whotoinclude[$y]-1] == 1){
+        $number_of_female_individuals_genotyped +=1;
+    }   
+}   
 
 
 print "This includes ",$number_of_female_individuals_genotyped," female(s)\n";
@@ -171,120 +172,149 @@ my $w;
 
 # initialize the ahash 
 for ($y = 2 ; $y <= ($number_of_individuals_genotyped*2) ; $y+=2 ) {
-	$ahash{$y}[0]=$y;
-	for ($x = 1 ; $x <= ($y+1) ; $x++ ) {
-		$ahash{$y}[$x]=0;
-	}
+    $ahash{$y}[0]=$y;
+    for ($x = 1 ; $x <= ($y+1) ; $x++ ) {
+        $ahash{$y}[$x]=0;
+    }
 }
 # initialize the xhash 
 for ($y = 2 ; $y <= ($number_of_individuals_genotyped*2 - ($number_of_individuals_genotyped - $number_of_female_individuals_genotyped)) ; $y++ ) {
-	$xhash{$y}[0]=$y;
-	for ($x = 1 ; $x <= ($y+1) ; $x++ ) {
-		$xhash{$y}[$x]=0;
-	}
+    $xhash{$y}[0]=$y;
+    for ($x = 1 ; $x <= ($y+1) ; $x++ ) {
+        $xhash{$y}[$x]=0;
+    }
 }
 
 
 # Read in datainput file
 while ( my $line = <DATAINPUT>) {
-	chomp($line);
-	@temp=split(/[\/'\t']+/,$line);
-	if($temp[0] ne '#CHROM'){
-		if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")&&($temp[0] ne "chrM")&&(length($temp[2]) == 1)){
-			# load the autosomal data
-			$string=();
-			for ($y = 0 ; $y < $number_of_individuals_genotyped; $y++ ) {
-				# load the first allele
-				if($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '.'){
-					$w = uc $temp[$whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ];
-					$string=$string.$w;
-				}	
-				# now load the second allele
-				if($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '.'){
-					$w = uc $temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]];
-					$string=$string.$w;
-				}			
-			}
-			if(defined($string)){
-				@temp1=split('',$string);
-				if($#temp1 >0){					
-					# count up the number of each class of nucleotide.
-					# the first class is G or C
-					# the second class is A or T
-					# so if there is a G and a C segregating, for example, this is a non-polymorphic site
-					$type1=0;
-					$type2=0;
+    chomp($line);
+    @temp=split(/[\/'\t']+/,$line);
+    if($temp[0] ne '#CHROM'){
+        if(($temp[0] ne "chrX")&&($temp[0] ne "chrY")&&($temp[0] ne "chrM")&&(length($temp[2]) == 1)){
+            # load the autosomal data
+            $string=();
+            for ($y = 0 ; $y < $number_of_individuals_genotyped; $y++ ) {
+                # load the first allele
+                if(
+                    ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '.')&&
+                    ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '.')&&
+                    ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '*')&&
+                    ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '*') &&
+                    ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '<NON_REF>')&&
+                    ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '<NON_REF>')
+                    )
+                    {
+                    $w = uc $temp[$whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ];
+                    $string=$string.$w;
+                    $w = uc $temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]];
+                    $string=$string.$w;
+                }   
+            }
+            if(defined($string)){
+                @temp1=split('',$string);
+                if($#temp1 >0){                 
+                    # count up the number of each class of nucleotide.
+                    # the first class is G or C
+                    # the second class is A or T
+                    # so if there is a G and a C segregating, for example, this is a non-polymorphic site
+                    $type1=0;
+                    $type2=0;
 
-					for ($y = 0 ; $y <= $#temp1 ; $y++ ) {
-						if((uc $temp1[$y] eq "G")||(uc $temp1[$y] eq "C")){
-							$type1+=1;
-						}
-						elsif((uc $temp1[$y] eq "A")||(uc $temp1[$y] eq "T")){
-							$type2+=1;
-						}
-						else{
-							print "Problemo1! ",$line,"g\n";
-						}
-					}
-					$ahash{($#temp1+1)}[$type1+1]+=1;
-				}		
-			}	
-		}
-		elsif(($temp[0] eq "chrX")&&(length($temp[2]) == 1)){
-		 # load the chrX data			
-			$string=();
-			for ($y = 0 ; $y < $number_of_individuals_genotyped; $y++ ) {
-				# load both alleles if the individual is a female
-				if($sexes[$whotoinclude[$y+2]-1] eq "1"){
-					# load the first allele
-					if($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '.'){
-						$w = uc $temp[$whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ];
-						$string=$string.$w;
-					}	
-					# now load the second allele
-					if($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '.'){
-						$w = uc $temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]];
-						$string=$string.$w;
-					}	
-				}
-				# load one allele if the individual is a male
-				elsif($sexes[$whotoinclude[$y+2]-1] eq "0"){
-					# load only the first allele
-					if($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '.'){
-						$w = uc $temp[$whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ];
-						$string=$string.$w;
-					}	
-				}
-				else{
-					print "Something is wrong with figuring out what sex each individual is X ",$sexes[$whotoinclude[$y+2]-1]," ",$whotoinclude[$y+2],"\n";
-				}
-			} # end of cycling through each individual for chrX	
-			if(defined($string)){
-				@temp1=split('',$string);
-				if($#temp1 >0){					
-					# count up the number of each class of nucleotide.
-					# the first class is G or C
-					# the second class is A or T
-					# so if there is a G and a C segregating, for example, this is a non-polymorphic site
-					$type1=0;
-					$type2=0;
-		
-					for ($y = 0 ; $y <= $#temp1 ; $y++ ) {
-						if((uc $temp1[$y] eq "G")||(uc $temp1[$y] eq "C")){
-							$type1+=1;
-						}
-						elsif((uc $temp1[$y] eq "A")||(uc $temp1[$y] eq "T")){
-							$type2+=1;
-						}
-						else{
-							print "Problemo2!\n";
-						}
-					}
-					$xhash{($#temp1+1)}[$type1+1]+=1;
-				}		
-			}	
-		}
-	} # endif to check for first line
+                    for ($y = 0 ; $y <= $#temp1 ; $y++ ) {
+                        if((uc $temp1[$y] eq "G")||(uc $temp1[$y] eq "C")){
+                            $type1+=1;
+                        }
+                        elsif((uc $temp1[$y] eq "A")||(uc $temp1[$y] eq "T")){
+                            $type2+=1;
+                        }
+                        else{
+                            print "Problemo1! ",$line,"g\n";
+                        }
+                    }
+                    $ahash{($#temp1+1)}[$type1+1]+=1;
+                }       
+            }   
+        }
+        elsif(($temp[0] eq "chrX")&&(length($temp[2]) == 1)){
+         # load the chrX data           
+            $string=();
+            # Need to assess whether the male genotypes have two "A/A" or one "A/" allele
+            # if one, we need to modify @temp
+            #print "before temp array @temp ttttt\n";
+            if($#temp != (($#sexes+1)*2+$whotoinclude[1]-2)){
+                # males have only one allele
+                my $counterramma=0;
+                foreach(@sexes){
+                    if($_ == 0){
+                        # insert strategically into @temp
+                        splice( @temp, ($whotoinclude[1]+$counterramma), 0, "." );
+                    }
+                    $counterramma+=2;
+                }
+            }
+            for ($y = 0 ; $y < $number_of_individuals_genotyped; $y++ ) {
+                # load both alleles if the individual is a female
+                if($sexes[$whotoinclude[$y+2]-1] eq "1"){
+                    # load both alleles
+                    if(
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '.')&&
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '.')&&
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '*')&&
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '*')&&
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '<NON_REF>')&&
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]] ne '<NON_REF>')
+                        )
+                        {
+                        $w = uc $temp[$whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ];
+                        $string=$string.$w;
+                        $w = uc $temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]];
+                        $string=$string.$w;
+                    }   
+                }
+                # load one allele if the individual is a male
+                elsif($sexes[$whotoinclude[$y+2]-1] eq "0"){
+                    # load only the first allele
+                    if(
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '.')&&
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '*')&&
+                        ($temp[ $whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ] ne '<NON_REF>')
+                        )
+                        {
+                        $w = uc $temp[$whotoinclude[1]-2 + 2*$whotoinclude[$y+2]-1 ];
+                        $string=$string.$w;
+                    }   
+                }
+                else{
+                    print "Something is wrong with figuring out what sex each individual is X ",$sexes[$whotoinclude[$y+2]-1]," ",$whotoinclude[$y+2],"\n";
+                }
+            } # end of cycling through each individual for chrX 
+            if(defined($string)){
+                @temp1=split('',$string);
+                if($#temp1 >0){                 
+                    # count up the number of each class of nucleotide.
+                    # the first class is G or C
+                    # the second class is A or T
+                    # so if there is a G and a C segregating, for example, this is a non-polymorphic site
+                    $type1=0;
+                    $type2=0;
+
+                    for ($y = 0 ; $y <= $#temp1 ; $y++ ) {
+                        if((uc $temp1[$y] eq "G")||(uc $temp1[$y] eq "C")){
+                            $type1+=1;
+                        }
+                        elsif((uc $temp1[$y] eq "A")||(uc $temp1[$y] eq "T")){
+                            $type2+=1;
+                        }
+                        else{
+                            print "Problemo2!\n";
+                        }
+                    }
+                    $xhash{($#temp1+1)}[$type1+1]+=1;
+                }       
+            }   
+        }
+    } # endif to check for first line
 } # end while
 
 close DATAINPUT;
@@ -293,21 +323,21 @@ close DATAINPUT;
 print OUTFILE "X\n";
 print OUTFILE ($number_of_individuals_genotyped*2 - ($number_of_individuals_genotyped - $number_of_female_individuals_genotyped) -1),"\n";
 for ($y = 2 ; $y <= ($number_of_individuals_genotyped*2 - ($number_of_individuals_genotyped - $number_of_female_individuals_genotyped)) ; $y++ ) {
-	print OUTFILE $xhash{$y}[0],"\t";
-	for ($x = 1 ; $x <= $y ; $x++ ) {
-		print OUTFILE $xhash{$y}[$x],"\t";
-	}
-	print OUTFILE $xhash{$y}[$y+1],"\n";
+    print OUTFILE $xhash{$y}[0],"\t";
+    for ($x = 1 ; $x <= $y ; $x++ ) {
+        print OUTFILE $xhash{$y}[$x],"\t";
+    }
+    print OUTFILE $xhash{$y}[$y+1],"\n";
 }
 
 print OUTFILE "A\n";
 print OUTFILE $number_of_individuals_genotyped,"\n";
 for ($y = 2 ; $y <= $number_of_individuals_genotyped*2 ; $y+=2 ) {
-	print OUTFILE $ahash{$y}[0],"\t";
-	for ($x = 1 ; $x <= $y ; $x++ ) {
-		print OUTFILE $ahash{$y}[$x],"\t";
-	}
-	print OUTFILE $ahash{$y}[$y+1],"\n";
+    print OUTFILE $ahash{$y}[0],"\t";
+    for ($x = 1 ; $x <= $y ; $x++ ) {
+        print OUTFILE $ahash{$y}[$x],"\t";
+    }
+    print OUTFILE $ahash{$y}[$y+1],"\n";
 }
 
 
@@ -322,9 +352,9 @@ print "Done with input file 1\n";
 sub in_array {
 my ($arr,$search_for) = @_;
 foreach my $value (@$arr) {
-	return 1 if $value eq $search_for;
+    return 1 if $value eq $search_for;
 }
- 	return 0;
+    return 0;
 }
 
 
