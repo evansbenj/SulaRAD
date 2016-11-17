@@ -17,6 +17,10 @@ This was also done for chrX using a diploid genotyping. I then plan to use my pe
 
 Because I am using a hardmasked rhesus reference genome, the repetitive regions identified with repeat masker also will be filtered out.
 
+# ABBABABA
+
+And then I used the abbababa script on each chromosome...
+
 
 # BELOW WAS NOT USED SORTOF
 
