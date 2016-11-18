@@ -17,7 +17,14 @@ This was also done for chrX using a diploid genotyping. I then plan to use my pe
 
 Because I am using a hardmasked rhesus reference genome, the repetitive regions identified with repeat masker also will be filtered out.
 
-# Combining filtered chr files
+# Converting to tab files
+
+```
+~/tabix-0.2.6/bgzip nonrecal_filtered_chr11_final.vcf
+~/tabix-0.2.6/tabix -f -p vcf nonrecal_filtered_chr11_final.vcf.gz
+zcat nonrecal_filtered_chr20_final.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nonrecal_filtered_chr20_final.vcf.tab
+```
+I did not combine them first (see command below) because this generated a huge and redundant file.
 
 ```
 ~/jre1.8.0_111/bin/java -cp /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar org.broadinstitute.gatk.tools.CatVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant nonrecal_filtered_chr1_final.vcf --variant nonrecal_filtered_chr2_final.vcf --variant nonrecal_filtered_chr3_final.vcf --variant nonrecal_filtered_chr4_final.vcf --variant nonrecal_filtered_chr5_final.vcf --variant nonrecal_filtered_chr6_final.vcf --variant nonrecal_filtered_chr7_final.vcf --variant nonrecal_filtered_chr8_final.vcf --variant nonrecal_filtered_chr9_final.vcf --variant nonrecal_filtered_chr10_final.vcf --variant nonrecal_filtered_chr11_final.vcf --variant nonrecal_filtered_chr12_final.vcf --variant nonrecal_filtered_chr13_final.vcf --variant nonrecal_filtered_chr14_final.vcf --variant nonrecal_filtered_chr15_final.vcf --variant nonrecal_filtered_chr16_final.vcf --variant nonrecal_filtered_chr17_final.vcf --variant nonrecal_filtered_chr18_final.vcf --variant nonrecal_filtered_chr19_final.vcf --variant nonrecal_filtered_chr20_final.vcf --outputFile HiSeq_GenotypeVCFs_noBSQR_filtered_chr1_to_20_final.vcf -assumeSorted
