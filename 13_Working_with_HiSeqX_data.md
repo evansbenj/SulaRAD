@@ -24,6 +24,7 @@ Because I am using a hardmasked rhesus reference genome, the repetitive regions 
 ~/tabix-0.2.6/tabix -f -p vcf nonrecal_filtered_chr11_final.vcf.gz
 zcat nonrecal_filtered_chr20_final.vcf.gz | /usr/local/vcftools/src/perl/vcf-to-tab > nonrecal_filtered_chr20_final.vcf.tab
 ```
+
 I did not combine them first (see command below) because this generated a huge and redundant file.
 
 ```
@@ -41,7 +42,8 @@ I noticed that the new ABBABABA test produced statistically similar results (i.e
 
 * Isolate the nem-664 sample from the jointly genotyped chr10 file:
 
-```zcat /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/GenotypeVCFs_noBSQR_chr10.vcf.gz | ~/vcftools/bin/vcf-subset -c nemestrina-PM664 > nemestrina-PM664_after_jointGenotyping.vcf
+```
+zcat /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/GenotypeVCFs_noBSQR_chr10.vcf.gz | ~/vcftools/bin/vcf-subset -c nemestrina-PM664 > nemestrina-PM664_after_jointGenotyping.vcf
 ```
 
 * Run GenotypeGVCFs on only one sample (nem-664):
