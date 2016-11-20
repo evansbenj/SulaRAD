@@ -66,6 +66,16 @@ this can also be done (quickly) with bcftools:
 
 This analysis indicated 4742 out of 77170544 sites were different (0.00614%) so very few.
 
+So, what is the difference?  To investigate this, I looked at the original vcf files I analyzed.  I extracted chr10 like this with vcftools on iqaluk:
+
+```
+/work/ben/vcftools/bin/vcftools --gzvcf nemHiSeqchrX.vcf.noblock.vcf.gz --chr chr10 --out nemestrina-PM664_chr10.vcf.gz
+
+```
+
+Then I copied this file over to info and did the bcftools comparison.
+
+
 # BELOW WAS NOT USED SORTOF
 
 Use unified genotyper to call bases:
