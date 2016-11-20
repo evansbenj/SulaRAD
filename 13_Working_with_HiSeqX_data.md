@@ -40,18 +40,24 @@ And then I used the abbababa script on each chromosome...
 I noticed that the new ABBABABA test produced statistically similar results (i.e. evidence of geneflow between nem and tonk) but the divergence between nem and tonk was much higher than before.  The main difference, I think, is that I used Genotypegvcfs to joint genotype the 3 WGS gvcf files from each species.  To compare the genotypes with and without joint genotyping, I am doing the following:
 
 * Isolate the nem-664 sample from the jointly genotyped chr10 file:
+
 ```zcat /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/GenotypeVCFs_noBSQR_chr10.vcf.gz | ~/vcftools/bin/vcf-subset -c nemestrina-PM664 > nemestrina-PM664_after_jointGenotyping.vcf
 ```
+
 * Run GenotypeGVCFs on only one sample (nem-664):
+
 ```
 ~/jre1.8.0_111/bin/java -Xmx1G -jar  /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant nemestrina-PM664.g.vcf.gz --includeNonVariantSites -stand_call_conf 0 -stand_emit_conf 0 -L chr10 -o GenotypeVCFs_noBSQR_chr10_solo.vcf.gz
 ```
 
 * Compare these files 
+
 ```
 ~/jre1.8.0_111/bin/java -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeConcordance -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -eval nemestrina-PM664_after_jointGenotyping.vcf -comp GenotypeVCFs_noBSQR_chr10_solo.vcf.gz -o output.grp
 ```
+
 this can also be done (quickly) with bcftools:
+
 ```
 ~/bcftools-1.2/bcftools gtcheck -a -p -G 1 -g GenotypeVCFs_noBSQR_chr10_solo.vcf.gz -s nemestrina-PM664 -S nemestrina-PM664 nemestrina-PM664_after_jointGenotyping_b0.vcf.gz
 ```
