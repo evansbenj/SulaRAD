@@ -51,7 +51,12 @@ I noticed that the new ABBABABA test produced statistically similar results (i.e
 ```
 ~/jre1.8.0_111/bin/java -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeConcordance -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -eval nemestrina-PM664_after_jointGenotyping.vcf -comp GenotypeVCFs_noBSQR_chr10_solo.vcf.gz -o output.grp
 ```
+this can also be done (quickly) with bcftools:
+```
+~/bcftools-1.2/bcftools gtcheck -a -p -G 1 -g GenotypeVCFs_noBSQR_chr10_solo.vcf.gz -s nemestrina-PM664 -S nemestrina-PM664 nemestrina-PM664_after_jointGenotyping_b0.vcf.gz
+```
 
+This analysis indicated 4742 out of 77170544 sites were different (0.00614%) so very few.
 
 # BELOW WAS NOT USED SORTOF
 
