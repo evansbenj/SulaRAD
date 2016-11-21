@@ -15,7 +15,31 @@ Andre Corvalo did the data filtering genotyping through haplotypecaller.  I then
 
 This was also done for chrX using a diploid genotyping. I then plan to use my perl script to genotype based on maximum coverage, irrespective of the sex of the individual.
 
-Because I am using a hardmasked rhesus reference genome, the repetitive regions identified with repeat masker also will be filtered out.
+Because I am using a hardmasked rhesus reference genome, the repetitive regions identified with repeat masker also will be filtered out.  I did this using a script called 3.21_Removes_WGS_repeats_chr4.pl:
+
+```perl
+#!/usr/bin/perl
+# This script will read in a vcf file and 
+# to filter repeats using a bed file
+my $status;
+my $chr="4";
+$files = "nonrecal_filtered_chr".$chr."_final.vcf.gz";
+my $bedfilepath = "~/2015_SulaRADtag/good_merged_samples/repeat_masker_chromOut/chr".$chr.".bed";
+my $outfile1 = "temp".$chr."_norecal.vcf";
+
+# Mark repeats
+my $commandline = "~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+$commandline = $commandline." -o ".$outfile1." --variant ".$files;
+$commandline = $commandline." --mask ".$bedfilepath." --maskName REPEAT";
+print $commandline,"\n";
+    $status = system($commandline);
+
+    # Print out the filtered file
+    $commandline = "~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta"; 
+    $commandline = $commandline." -o ".$files."_norepeat.vcf.gz --variant ".$outfile1." -select 'vc.isNotFiltered()'";
+    print $commandline,"\n";
+    $status = system($commandline);
+```
 
 # Converting to tab files
 
