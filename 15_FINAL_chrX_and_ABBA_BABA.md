@@ -1,3 +1,30 @@
+# ChrX
+
+Nov 27, 2o16.  I am working with a vcf that I have already filtered to get rid of repeats.  It is in this directory:
+
+```
+/net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07
+```
+and this is the file name:
+```
+nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf
+```
+
+This file was called for male and female individuals using ploidy = 2.
+
+I have generated a tab file using highest depth for males and females from this file.  It is called:
+```
+nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.tab
+```
+
+The output from the ABBABABA script is called:
+```
+H1nigra_H2tonk_H3nem_chrX_highestdepth_M_and_F_norepeat.stats
+```
+
+
+
+
 # Final files with repeat masker
 
 So my preliminary analyses with the HiSeq and RADseq data suggested that there are some pretty serious issues with mis-mapped repeats in my data. For example, this may have caused many heterozygous sites in males on chrX.  The solution I came up with is to do the following
