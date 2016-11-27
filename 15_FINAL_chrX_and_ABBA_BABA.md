@@ -7,7 +7,7 @@ Nov 27, 2o16.  I am working with a vcf that I have already filtered to get rid o
 ```
 and this is the file name:
 ```
-nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf
+nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab
 ```
 
 This file was called for male and female individuals using ploidy = 2.
@@ -16,12 +16,15 @@ I have generated a tab file using highest depth for males and females from this 
 ```
 nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.tab
 ```
-
 The output from the ABBABABA script is called:
 ```
 H1nigra_H2tonk_H3nem_chrX_highestdepth_M_and_F_norepeat.stats
 ```
 
+I am also generating a diploid vcf file from the diploid calls.  It is called:
+```
+nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz.tab
+```
 
 
 
