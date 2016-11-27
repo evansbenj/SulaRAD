@@ -25,7 +25,10 @@ I am also generating a diploid vcf file from the diploid calls.  It is called:
 ```
 nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz.tab
 ```
-This one could be used to identify heterozygous SNPs in males and exclude them plus a mask?
+This one could be used to identify heterozygous SNPs in males and exclude them plus a mask? Here is how I selected the heterozygous positions:
+```
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz -select 'vc.getGenotype("nemestrina-PM664").isHet()' -select 'vc.getGenotype("tonkeana-PM592").isHet()' -o hetsites_nemtonk_chrX.vcf.gz
+```
  
 I also generated a combined file with males (nem and tonk) genotyped with ploidy=1 and nigra with ploidy=2 (on iqaluk):
 
