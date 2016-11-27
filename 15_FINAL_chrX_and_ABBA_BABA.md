@@ -25,15 +25,16 @@ I am also generating a diploid vcf file from the diploid calls.  It is called:
 ```
 nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz.tab
 ```
- This one could be used to identify heterozygous SNPs in males and exclude them plus a mask?
+This one could be used to identify heterozygous SNPs in males and exclude them plus a mask?
  
-I also generated a combined file with males (nem and tonk) genotyped with ploidy=1 and nigra with ploidy=2:
+I also generated a combined file with males (nem and tonk) genotyped with ploidy=1 and nigra with ploidy=2 (on iqaluk):
 
 ```
 /usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant /work/ben/2015_SulaRADtag/bam-constitutional/nemestrina-PM664.final.bam_haploid_X.g.vcf --variant /work/ben/2015_SulaRADtag/vcf-constitutional/nigra-PM664.g.vcf.gz_chrX.g.vcf --variant /work/ben/2015_SulaRADtag/bam-constitutional/tonkeana-PM592.final.bam_haploid_X.g.vcf --includeNonVariantSites -o nem_tonk_nigra_HiSeq_combined_chrX_nemtonk_ploidy1_nigra_ploidy2.vcf
 ```
 
-This one needs to have the repeats removed.
+This one needs to have the repeats removed. 
+
 
 
 # Final files with repeat masker
