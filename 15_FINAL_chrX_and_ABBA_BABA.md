@@ -25,7 +25,12 @@ I am also generating a diploid vcf file from the diploid calls.  It is called:
 ```
 nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz.tab
 ```
-This one could be used to identify heterozygous SNPs in males and exclude them plus a mask? Here is how I selected the heterozygous positions:
+I got the abbabbaba stats for this file like this:
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz.tab 010 3_4_1_2_3 H1nigra_H2tonk_H3nem_chrX_norepeat_ploidy2.jk H1nigra_H2tonk_H3nem_chrX_norepeat_ploidy2.stats
+```
+
+The vcf precursor to that tab file was used to identify heterozygous SNPs in males and then exclude them plus a mask of 3bp. Here is how I selected the heterozygous positions:
 ```
 ~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz -select 'vc.getGenotype("nemestrina-PM664").isHet()' -select 'vc.getGenotype("tonkeana-PM592").isHet()' -o hetsites_nemtonk_chrX.vcf.gz
 ```
@@ -41,6 +46,11 @@ And the tab delimited file is:
 nonrecal_filtered_chrX_final.vcf.gz_norepeat_nomalehgz.tab
 ```
 
+I got the abbabbaba stats for this file like this:
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_filtered_chrX_final.vcf.gz_norepeat_nomalehgz.tab 010 3_4_1_2_3 H1nigra_H2tonk_H3nem_chrX_norepeat_nomalehgz_ploidy2.jk H1nigra_H2tonk_H3nem_chrX_norepeat_nomalehgz_ploidy2.stats
+```
+
  
 I also generated a combined file with males (nem and tonk) genotyped with ploidy=1 and nigra with ploidy=2 (on iqaluk):
 
@@ -48,7 +58,7 @@ I also generated a combined file with males (nem and tonk) genotyped with ploidy
 /usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant /work/ben/2015_SulaRADtag/bam-constitutional/nemestrina-PM664.final.bam_haploid_X.g.vcf --variant /work/ben/2015_SulaRADtag/vcf-constitutional/nigra-PM664.g.vcf.gz_chrX.g.vcf --variant /work/ben/2015_SulaRADtag/bam-constitutional/tonkeana-PM592.final.bam_haploid_X.g.vcf --includeNonVariantSites -o nem_tonk_nigra_HiSeq_combined_chrX_nemtonk_ploidy1_nigra_ploidy2.vcf
 ```
 
-This one needs to have the repeats removed. 
+This one needs to have the repeats removed and needs to be converted to a tab file. 
 
 
 
