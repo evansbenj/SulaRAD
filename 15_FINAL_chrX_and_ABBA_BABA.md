@@ -58,8 +58,10 @@ I also generated a combined file with males (nem and tonk) genotyped with ploidy
 /usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/java -Xmx32G -jar /work/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T GenotypeGVCFs -R /work/ben/2015_SulaRADtag/HiSeqX/Project_MEL_11554_B01_CUS_WGS.2016-07-27/rheMac2_YM/rheMac2.fa --variant /work/ben/2015_SulaRADtag/bam-constitutional/nemestrina-PM664.final.bam_haploid_X.g.vcf --variant /work/ben/2015_SulaRADtag/vcf-constitutional/nigra-PM664.g.vcf.gz_chrX.g.vcf --variant /work/ben/2015_SulaRADtag/bam-constitutional/tonkeana-PM592.final.bam_haploid_X.g.vcf --includeNonVariantSites -o nem_tonk_nigra_HiSeq_combined_chrX_nemtonk_ploidy1_nigra_ploidy2.vcf
 ```
 
-This one needs to have the repeats removed and needs to be converted to a tab file. 
-
+I removed repeats with this script: 3.21_Removes_WGS_repeats_chrX_ploidy1_and_2.pl which generates a vcf file called:
+```
+nem_tonk_nigra_HiSeq_combined_chrX_nemtonk_ploidy1_nigra_ploidy2.vcf.gz_norepeat.vcf.gz 
+```
 
 
 # Final files with repeat masker
