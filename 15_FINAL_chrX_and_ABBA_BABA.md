@@ -36,6 +36,10 @@ Here is how I marked and removed them plus a buffer of 3bp:
 ~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o nonrecal_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf.gz --variant nonrecal_filtered_chrX_final.vcf.gz_norepeat_malehets_are_marked.vcf.gz -select 'vc.isNotFiltered()'";
 ```
 
+And the tab delimited file is:
+```
+nonrecal_filtered_chrX_final.vcf.gz_norepeat_nomalehgz.tab
+```
 
  
 I also generated a combined file with males (nem and tonk) genotyped with ploidy=1 and nigra with ploidy=2 (on iqaluk):
