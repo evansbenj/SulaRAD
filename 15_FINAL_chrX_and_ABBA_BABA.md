@@ -14,7 +14,7 @@ This file was called for male and female individuals using ploidy = 2.
 
 I have generated a tab file using highest depth for males and females from this file.  It is called:
 ```
-nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.tab
+nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab
 ```
 The output from the ABBABABA script is called:
 ```
