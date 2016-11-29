@@ -35,7 +35,7 @@ I got the abbabbaba stats for this file like this:
 
 The vcf precursor to that tab file was used to identify heterozygous SNPs in males and then exclude them plus a mask of 3bp. Here is how I selected the heterozygous positions:
 ```
-~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz -select 'vc.getGenotype("nemestrina-PM664").isHet()' -select 'vc.getGenotype("tonkeana-PM592").isHet()' -o hetsites_nemtonk_chrX.vcf.gz
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz -select 'vc.getGenotype("nemestrina-PM664").isHet() || vc.getGenotype("tonkeana-PM592").isHet()' -o hetsites_nemtonk_chrX.vcf.gz
 ```
 Here is how I marked and removed them plus a buffer of 3bp:
 ```
