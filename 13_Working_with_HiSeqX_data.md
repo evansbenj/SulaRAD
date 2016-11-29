@@ -13,7 +13,7 @@ This indicated that the coverage was >40X for each of the three samples.  Cool!
 
 Andre Corvalo did the data filtering genotyping through haplotypecaller.  I then used the g.vcf files and put them through the same genotyping (genotypegvcfs) and filtering steps that I used for the RADseq data, including replacing genotypes with no calls when a depth of less than 5 was detected using select variants and my custom script (because the GATK genotype filter does not seem to work).
 
-This was also done for chrX using a diploid genotyping. I then plan to use my perl script to genotype based on maximum coverage, irrespective of the sex of the individual.
+This was also done for chrX using a diploid genotyping. 
 
 Because I am using a hardmasked rhesus reference genome, the repetitive regions identified with repeat masker also will be filtered out.  I did this using a script called 3.21_Removes_WGS_repeats_chr4.pl:
 
