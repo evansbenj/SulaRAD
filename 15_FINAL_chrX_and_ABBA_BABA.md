@@ -15,6 +15,21 @@ nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf.gz.tab
 ```
 This file was called for male and female individuals using ploidy = 2.
 
+Based on lots of effort, it looks like eliminating sites in only males skews the ABBABABA statistic.  So instead I'm deleting all heterozygous sites to see what happens.  Here how:
+
+```
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf -select 'vc.getGenotype("nemestrina-PM664").isHet()|| vc.getGenotype("nigra-PM664").isHet() || vc.getGenotype("tonkeana-PM592").isHet()' -o hetsites_anyhet_chrX.vcf.gz
+
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_hets_are_marked.vcf.gz --variant nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf --mask hetsites_anyhet_chrX.vcf.gz --maskName make_hets 
+
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf.gz --variant nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_hets_are_marked.vcf.gz -select 'vc.isNotFiltered()'
+
+zcat nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf.gz | ~/vcftools/bin/vcf-to-tab > nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf.gz.tab
+```
+
+
+
+
 For comparative purposes, I  generated a tab file using highest depth for males and females from this file.  It is called:
 ```
 nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab
