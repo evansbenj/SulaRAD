@@ -1,18 +1,21 @@
 # ChrX
 
-Nov 27, 2o16.  I am working with a vcf that I have already filtered to get rid of repeats.  It is in this directory:
+Nov 27, 2016.  I am working with a vcf that I have already filtered to get rid of repeats and also to remove genotypes with less than 5X coverage using this script 14_Vcf_filter_gnu_xDNA_only.pl.  It is in this directory:
 
 ```
 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07
 ```
 and this is the file name:
 ```
-nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab
+nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf
 ```
-
+the tab file is:
+```
+nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf.gz.tab
+```
 This file was called for male and female individuals using ploidy = 2.
 
-I have generated a tab file using highest depth for males and females from this file.  It is called:
+For comparative purposes, I  generated a tab file using highest depth for males and females from this file.  It is called:
 ```
 nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab
 ```
