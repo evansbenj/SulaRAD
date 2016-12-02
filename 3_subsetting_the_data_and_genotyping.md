@@ -445,7 +445,7 @@ $status = system("perl -p -i -e 's/XXXX/$count/g' $outputfile");
 
 ```
 
-# Phylogenetic analysis with iqtree
+# Phylogenetic analysis of aDNA with iqtree
 
 I used iqtree version 1.5.0a to estimate a phylogeny using ML for the entire aDNA dataset. A model of evolution was selected by iqtree.
 Here is the commandline on info from within this directory: '2015_SulaRADtag/good_merged_samples/iqtree-1.5.0a-Linux/': 
@@ -504,7 +504,7 @@ NOTE: minimal branch length is reduced to 0.000000009399 for long alignment
 
 ```
 
-## Bootstrapping with iqtree
+## Bootstrapping aDNA with iqtree
 ```
 ./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.nxs -m GTR+G4 -alrt 1000 -bb 1000 -pre boot_
 ```
@@ -513,6 +513,14 @@ The -pre flag adds the prefix `boot_` to the output files.  The -alrt and -bb sp
 for regular parametric bootstraping:
 ```
 ./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.nxs -m GTR+G4 -b 1000 -pre paraboot_
+```
+
+## Phylogenetic analysis of xDNA with iqtree
+
+Here's the command for model selection and phylogenetic analysis:
+
+```
+./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_xDNA_only_genotyped_based_on_depth_with_baboon_and_human.nxs -m TEST -nt 1 -pre iqtree_chrX
 ```
 
 ## Subsetting with respect to genes
