@@ -523,6 +523,14 @@ Here's the command for model selection and phylogenetic analysis:
 ./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_xDNA_only_genotyped_based_on_depth_with_baboon_and_human.nxs -m TEST -nt 1 -pre iqtree_chrX
 ```
 
+## Bootstrapping of xDNA with iqtree
+
+Here's the command for bootstrapping xDNA:
+```
+./iqtree -s ../../GenotypeVCFs_noBSQR_filtered_aDNA_only.vcf.gz.tab_with_baboon_and_human.nxs -m TVM+F+I+G4 -alrt 1000 -bb 1000 -pre boot_chrX
+```
+
+
 ## Subsetting with respect to genes
 I wrote a script to split up the master vcf file using the bedfiles I made for the 2014 paper.  I had to concatenate and sort some bed files to make a pooled file for the >51000 sites like this:
 
