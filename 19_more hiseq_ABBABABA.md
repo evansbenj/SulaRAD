@@ -824,7 +824,7 @@ close OUTFILE2;
 
 ```
 
-Also I made this R script to plot a histogram and calculate the standard error:
+Also I made this R script to plot a histogram and calculate the standard error (weighted_hist_and_jackknife.R):
 
 ```R
 # read the data
@@ -877,7 +877,7 @@ cat("The Zstat from stdev is :",Z_stat_from_stdev)
 
 ```
 
-And I made this script to plot the fDM values versus genetic distance to H3:
+And I made this script to plot the fDM values versus genetic distance to H3 (fdm_plot_aDNA_vs_xDNA.R):
 
 ```R
 # This R script will make a plot of f_dm from the Malinksy paper plotted
