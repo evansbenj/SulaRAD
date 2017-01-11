@@ -746,3 +746,13 @@ foreach my $value (@$arr) {
 
 
 ```
+
+# Bootstrap analysis
+
+First I made a directory called `epoch2_full_bootstrap`.  Then I ran this script: `Generates_lots_of_control_and_commando_files_for_bootstraps.pl`
+
+In order to run the next of the script I needed to load the Math::Random module on sharcnet like this:
+```
+module load cpan/2.10
+```
+Then I could run this script:`Generates_bootstraps_of_tab_delimited_data_for_kai_program.pl`.  Then I modified the `directory_commando` script to make the commando files executable.  ANd then I changed it again to make it launch the runs on sharcnet.
