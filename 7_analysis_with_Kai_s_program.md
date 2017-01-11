@@ -755,4 +755,4 @@ In order to run the next of the script I needed to load the Math::Random module 
 ```
 module load cpan/2.10
 ```
-Then I could run this script:`Generates_bootstraps_of_tab_delimited_data_for_kai_program.pl`.  Then I modified the `directory_commando` script to make the commando files executable.  ANd then I changed it again to make it launch the runs on sharcnet.
+Then I could run this script:`Generates_bootstraps_of_tab_delimited_data_for_kai_program.pl`.  Then I modified the `directory_commando` script to make the commando files executable.  ANd then I changed it again to make it launch the runs on sharcnet.  Then (on iqaluk because it does not work on kraken) I ran the parsefolder_commando script after making sure the `Parsefolder_class` program was in the `epoch2_full_bootstrap` directory.
