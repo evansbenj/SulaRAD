@@ -103,6 +103,7 @@ Then I copied this file over to info and did the bcftools comparison. Actually t
 /home/ben/gvcftools-0.16/bin/twins --ref /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --twin1 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/Sample_nigra-PM664/deliverables/nigra-PM664.g.vcf.gz --twin2 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/Sample_nigra-PM664/deliverables/constitutional_nigra-PM664.g.vcf.gz --conflict-file twins.out
 ```
 
+This difference was because in the more recent files I had not removed repeats.  After I did remove them, the results were very similar.
 
 # BELOW WAS NOT USED SORTOF
 
