@@ -1,5 +1,10 @@
 # Counting CBBA_BCBA sites
 
+working in this directory:
+`
+/net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07
+`
+
 I made two scripts to do this. For haploid chrX files (/Performs_CBBA_BCBA_on_populations_onlychrX_haploid_outgroup.pl), use this command:
 
 
