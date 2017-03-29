@@ -882,7 +882,7 @@ while ( my $line = <DATAINPUT>) {
 
 							# $BABA_hash{$window_counter."_".$current_chromosome."_".$current_window}+=($H1_derived_freq*(1-$H2_derived_freq)*$H3_derived_freq);
 
-							$BBAA_hash{$window_counter."_".$current_chromosome."_".$current_window}+=($H1_C*$H2_B*$H3_B);
+							$BBAA_hash{$window_counter."_".$current_chromosome."_".$current_window}+=($H1_C*$H2_C*$H3_derived_freq);
 
 							if($H2_derived_freq > $H3_derived_freq){
 								$peak_H2_H3_derived_freq = $H2_derived_freq;
@@ -986,7 +986,7 @@ if($#out == -1){
 close OUTFILE;
 
 
-print OUTFILE2 "chromosome\tbegin\tend\tCBBA\tBCBA\tCBBA_real\tD\tfdH2H3\tfH1H3\tf_dm\tdH2H3\tnum_sites_per_windowH2H3\tdH1H3\tnum_sites_per_windowH1H3\tH2pi\tnumsitesH2pi\tH1pi\tnumsitesH1pi\n";
+print OUTFILE2 "chromosome\tbegin\tend\tCBBA\tBCBA\tCCBA\tD\tfdH2H3\tfH1H3\tf_dm\tdH2H3\tnum_sites_per_windowH2H3\tdH1H3\tnum_sites_per_windowH1H3\tH2pi\tnumsitesH2pi\tH1pi\tnumsitesH1pi\n";
 foreach (@out) {
 	@temp1=split('_',$_);
 	print OUTFILE2 $temp1[1],"\t",$temp1[2]+1,"\t",$temp1[2]+$sliding_window,"\t";
@@ -1096,6 +1096,7 @@ if($#out == -1){
 }
 
 close OUTFILE2;
+
 
 
 ```
@@ -1922,7 +1923,7 @@ while ( my $line = <DATAINPUT>) {
 
 							# $BABA_hash{$window_counter."_".$current_chromosome."_".$current_window}+=($H1_derived_freq*(1-$H2_derived_freq)*$H3_derived_freq);
 
-							$BBAA_hash{$window_counter."_".$current_chromosome."_".$current_window}+=($H1_C*$H2_B*$H3_B);
+							$BBAA_hash{$window_counter."_".$current_chromosome."_".$current_window}+=($H1_C*$H2_C*$H3_derived_freq);
 
 							if($H2_derived_freq > $H3_derived_freq){
 								$peak_H2_H3_derived_freq = $H2_derived_freq;
@@ -2026,7 +2027,7 @@ if($#out == -1){
 close OUTFILE;
 
 
-print OUTFILE2 "chromosome\tbegin\tend\tCBBA\tBCBA\tCBBA_real\tD\tfdH2H3\tfH1H3\tf_dm\tdH2H3\tnum_sites_per_windowH2H3\tdH1H3\tnum_sites_per_windowH1H3\tH2pi\tnumsitesH2pi\tH1pi\tnumsitesH1pi\n";
+print OUTFILE2 "chromosome\tbegin\tend\tCBBA\tBCBA\tCCBA\tD\tfdH2H3\tfH1H3\tf_dm\tdH2H3\tnum_sites_per_windowH2H3\tdH1H3\tnum_sites_per_windowH1H3\tH2pi\tnumsitesH2pi\tH1pi\tnumsitesH1pi\n";
 foreach (@out) {
 	@temp1=split('_',$_);
 	print OUTFILE2 $temp1[1],"\t",$temp1[2]+1,"\t",$temp1[2]+$sliding_window,"\t";
