@@ -1,4 +1,4 @@
-# COunting CBBA_BCBA sites
+# Counting CBBA_BCBA sites
 
 I made two scripts to do this. For haploid chrX files (/Performs_CBBA_BCBA_on_populations_onlychrX_haploid_outgroup.pl), use this command:
 
