@@ -150,9 +150,19 @@ print OUTFILE "The number of genotyped sites on the X is ",$number_of_genotypes,
 
 
 ```
+For tonkeaha PM592
+
 The number_of_sites_with_at_least_one_het_male is 29208
 The number of genotyped sites on the X is 58578113
 Percentage: 0.05%
 proportion: 0.0005
 5 out of every 10,000 genotypes
+
+For nemestrina PM664
+The number_of_sites_with_at_least_one_het_male is 30422
+The number of genotyped sites on the X is 58578113
+Percentage: 0.05%
+proportion: 0.0005
+5 out of every 10,000 genotypes
+
 
