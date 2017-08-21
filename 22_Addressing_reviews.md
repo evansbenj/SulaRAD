@@ -12,3 +12,10 @@ in this directory:
 ```
 
 Another question concerned the number of heterozygous genotype calls in males on the X in the HiSeqX data.  This is also a very interesting request.  
+
+This information is in these files:
+```
+-rw-rw-r-- 1 ben ben     970213 Nov 29  2016 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/hetsites_nemtonk_chrX.vcf.gz.tab
+-rw-rw-r-- 1 ben ben 1657155767 Nov 27  2016 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.gz.tab
+
+```
