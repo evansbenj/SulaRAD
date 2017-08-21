@@ -63,9 +63,10 @@ my @temp;
 
 # first define the males (0s)
 my @sexes=split('',$ARGV[1]);
-my $counter;
+my $counter=0;
 my @males;
 my @bases;
+
 
 foreach(@sexes){
 	if($_ == 0){
@@ -79,6 +80,7 @@ foreach(@sexes){
 
 my @namez;
 my @number_of_hets;
+my $number_of_genotypes=0;
 my %number_of_heterozygous_males_per_chrX_site;
 my @number_of_het_sites_per_male;
 my $number_of_sites_with_at_least_one_het_male=0;
@@ -94,19 +96,22 @@ while ( my $line = <DATAINPUT>) {
 	chomp($line);
 	@temp=split('\t',$line);
 	if(($temp[0] ne '#CHROM')&&($temp[0] eq 'chrX')){
-		$counter=0;
-		foreach(@males){
-			@bases=split('/',$temp[$_+$rhesus_and_begin[1]-1]);
-			if($bases[0] ne $bases[1]){
-				$number_of_heterozygous_males_per_chrX_site{$temp[0].'_'.$temp[1]}+=1;
-				$number_of_het_sites_per_male[$counter]+=1;
+			$number_of_genotypes+=1;
+			$counter=0;
+			foreach(@males){
+				@bases=split('/',$temp[$_+$rhesus_and_begin[1]-1]);
+				if($temp[$_+$rhesus_and_begin[1]-1] ne './.'){ # ignore sites with missing genotypes
+					if(($bases[0] ne $bases[1])&&($bases[0] ne '*')&&($bases[1] ne '*')){
+						$number_of_heterozygous_males_per_chrX_site{$temp[0].'_'.$temp[1]}+=1;
+						$number_of_het_sites_per_male[$counter]+=1;
+					}
+				$counter+=1;
+				}	
 			}
-			$counter+=1;
-		}
-		if(defined($number_of_heterozygous_males_per_chrX_site{$temp[0].'_'.$temp[1]})){
-			$number_of_sites_with_at_least_one_het_male+=1;
-		}
-		# so $hetsites{chr_pos}[] refers to each male sequentially
+			if(defined($number_of_heterozygous_males_per_chrX_site{$temp[0].'_'.$temp[1]})){
+				$number_of_sites_with_at_least_one_het_male+=1;
+			}
+			# so $hetsites{chr_pos}[] refers to each male sequentially
 	}
 	elsif($temp[0] eq '#CHROM'){
 		$counter=0;
@@ -120,20 +125,34 @@ while ( my $line = <DATAINPUT>) {
 close DATAINPUT;
 
 print "The number_of_sites_with_at_least_one_het_male is ",$number_of_sites_with_at_least_one_het_male,"\n";
+print "The number of genotyped sites on the X is ",$number_of_genotypes,"\n";
 
-foreach my $chr_and_position (keys %number_of_heterozygous_males_per_chrX_site ) {
-	print $chr_and_position,"\t",$number_of_heterozygous_males_per_chrX_site{$chr_and_position},"\n";
-}	
+
+
+#foreach my $chr_and_position (keys %number_of_heterozygous_males_per_chrX_site ) {
+#	print $chr_and_position,"\t",$number_of_heterozygous_males_per_chrX_site{$chr_and_position},"\n";
+#}	
 
 $counter=0;
 foreach (@number_of_het_sites_per_male) {
 	if(defined($number_of_het_sites_per_male[$counter])){
-		print $namez[$counter],"\t",$number_of_het_sites_per_male[$counter],"\n";
+		print OUTFILE $namez[$counter],"\t",$number_of_het_sites_per_male[$counter],"\n";
 	}
 	else{
-		print $namez[$counter],"\t0\n";
+		print OUTFILE $namez[$counter],"\t0\n";
 	}
 	$counter+=1;	
 }
 
+print OUTFILE "The number_of_sites_with_at_least_one_het_male is ",$number_of_sites_with_at_least_one_het_male,"\n";
+print OUTFILE "The number of genotyped sites on the X is ",$number_of_genotypes,"\n";
+
+
+
 ```
+The number_of_sites_with_at_least_one_het_male is 29208
+The number of genotyped sites on the X is 58578113
+Percentage: 0.05%
+proportion: 0.0005
+5 out of every 10,000 genotypes
+
