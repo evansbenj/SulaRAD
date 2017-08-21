@@ -165,4 +165,11 @@ Percentage: 0.05%
 proportion: 0.0005
 5 out of every 10,000 genotypes
 
+For nigra female PF660 - heterozygosity is twice as high as the males
+The number_of_sites_with_at_least_one_het_male is 61379
+The number of genotyped sites on the X is 58578113
+Percentage: 0.1%
+proportion: 0.001
+1 out of every 1,000 genotypes
+
 
