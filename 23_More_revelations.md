@@ -166,3 +166,9 @@ And was generated in that directory using this command:
 ../Counts_chrX_het_sites_in_males.pl GenotypeVCFs_noBSQR_filtered_xDNA_only.vcf.gz.tab 1111100110000111100011100110010100000000 3_4 positions_of_male_chrX_hets_in_RADseqdata.tab
 ```
 
+I am now making a new RADseq file with this command:
+```
+./Pulls_only_certain_lines_out.pl FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab fastq/positions_of_male_chrX_hets_in_RADseqdata.tab FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X_nomaleXhets.tab
+```
+
+
