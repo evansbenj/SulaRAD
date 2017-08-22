@@ -389,3 +389,12 @@ my $status;
 $status = system("perl -p -i -e 's/XXXX/$count/g' $outputfile");
 
 ```
+# Phylogeny with iqtree
+
+```
+~/2015_SulaRADtag/good_merged_samples/iqtree-1.5.0a-Linux/bin/iqtree -s FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X_nomaleXhets.nxs -m TEST -nt 1 -pre FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X_nomaleXhets.nxs_
+```
+```
+~/2015_SulaRADtag/good_merged_samples/iqtree-1.5.0a-Linux/bin/iqtree -s FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X_nomaleXhets.nxs -m K3Pu+G4 -bb 1000
+```
+
