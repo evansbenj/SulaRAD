@@ -171,4 +171,9 @@ I am now making a new RADseq file with this command:
 ./Pulls_only_certain_lines_out.pl FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab fastq/positions_of_male_chrX_hets_in_RADseqdata.tab FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X_nomaleXhets.tab
 ```
 
+So the newly filtered RADseq file is:
+```
+FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab
+```
+
 
