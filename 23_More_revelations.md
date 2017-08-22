@@ -1,4 +1,4 @@
-# Excluding sites with heterozygous genotypes on the X changes things considerably
+# Excluding sites with heterozygous genotypes on the X changes things somewhat, at least in the HiseqX data.
 
 Well, after chasing down some of the reviewer concerns I now have identified a potentially serious problem.  When I looked at site patterns in the depth calls that had heterozygous calls on the non-PAR of the X in males, preliminary runs suggest that many more of the sites have ABBA patterns (tonk+nem gene flow) as compared to BABA patterns (nigra+nem gene flow). So these sites have high coverage reads in both males that are diverged from the outgroup and often from M. nigra.  A likely explanation is that they are from the Y.  This is spectacularly unfortunate because it means that all analyses that involve the X need to be repeated after excluding these sites.  This includes the phylogenetic estimation with the X, the RADseq analysis of polymorphism with Kai's models, the polymorphism tables, and the ABBABABA test on the X. This is surprising to me because I have previously done analyses where I excluded these sites.
 
