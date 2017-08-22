@@ -156,3 +156,13 @@ The worst part is that this will really take a lot of my time and a lot of time 
 ```
 ./Performs_ABBA_BABA_on_populations_onlychrX_haploid_alleles_haploid_outgroup_excludes_list_of_sites.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab 000 3_4_1_2_3 H1nigra_H2tonk_H3nem_chrX_depth_excludeeithermalehetsites.jk H1nigra_H2tonk_H3nem_chrX_depth_excludeeithermalehetsites.stats hets_on_one_or_both_male_Xs.txt hets_on_one_or_both_male_Xs_patterns.out
 ```
+
+In the RADseq data, this seems to be less of a problem. I found 317 sites with a heterozygous genotype in at least one male out of 230496 total genotypes. The position of these sites is in this file:
+```
+/home/ben/2015_SulaRADtag/good_merged_samples/fastq/positions_of_male_chrX_hets_in_RADseqdata.tab
+```
+And was generated in that directory using this command:
+```
+../Counts_chrX_het_sites_in_males.pl GenotypeVCFs_noBSQR_filtered_xDNA_only.vcf.gz.tab 1111100110000111100011100110010100000000 3_4 positions_of_male_chrX_hets_in_RADseqdata.tab
+```
+
