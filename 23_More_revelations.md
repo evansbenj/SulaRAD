@@ -176,4 +176,13 @@ So the newly filtered RADseq file is:
 FINAL_RADseq_alldata_noBSQR_2016_haploiddepth_X.tab
 ```
 
+I made a new hiseqX file with this command:
+```
+./Pulls_only_certain_lines_out.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab /home/ben/2015_SulaRADtag/good_merged_samples/hets_on_one_or_both_male_Xs.txt /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele_nomalaehetsites.tab
+```
+
+so the newly filtered HiseqX file is:
+```
+/net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele_nomalaehetsites.tab
+```
 
