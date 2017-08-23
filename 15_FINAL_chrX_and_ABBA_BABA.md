@@ -30,7 +30,7 @@ zcat nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf.gz | ~/vcfto
 
 
 
-For comparative purposes, I  generated a tab file using highest depth for males and females from this file.  It is called:
+For comparative purposes, I  generated a tab file using highest depth haploid for males and females from the file before removing positions with het sites.  It is called:
 ```
 nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab
 ```
