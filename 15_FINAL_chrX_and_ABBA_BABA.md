@@ -61,12 +61,12 @@ Here is how I marked and removed them plus a buffer of 3bp:
 
 And the tab delimited file is:
 ```
-nonrecal_filtered_chrX_final.vcf.gz_norepeat_nomalehgz.tab
+nonrecal_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf.gz.tab
 ```
 
 I got the abbabbaba stats for this file like this:
 ```
-./Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_filtered_chrX_final.vcf.gz_norepeat_nomalehgz.tab 010 3_4_1_2_3 H1nigra_H2tonk_H3nem_chrX_norepeat_nomalehgz_ploidy2.jk H1nigra_H2tonk_H3nem_chrX_norepeat_nomalehgz_ploidy2.stats
+./Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf.gz.tab 010 3_4_1_2_3 H1nigra_H2tonk_H3nem_chrX_norepeat_nomalehgz_ploidy2.jk H1nigra_H2tonk_H3nem_chrX_norepeat_nomalehgz_ploidy2.stats
 ```
 
  
