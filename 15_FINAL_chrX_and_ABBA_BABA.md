@@ -1,6 +1,6 @@
 # ChrX
 
-Aug. 25, 2017.  In general I did a bad job of documenting my work so I have had to redo some analyses to make sure I did what I think I did.  Here are the command lines:
+Aug. 25, 2017.  In general I did a bad job of documenting my work so I have had to redo some analyses to make sure I did what I think I did.  Here are the command lines executed from this directory: `/net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07`:
 ```
 ~/2015_SulaRADtag/good_merged_samples/Genotypes_only_male_chrX_based_on_allelic_depth.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf 000 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab
 ```
