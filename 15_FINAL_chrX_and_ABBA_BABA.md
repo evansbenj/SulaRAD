@@ -1,5 +1,43 @@
 # ChrX
 
+Aug. 25, 2017.  In general I did a bad job of documenting my work so I have had to redo some analyses to make sure I did what I think I did.  Here are the command lines:
+```
+~/2015_SulaRADtag/good_merged_samples/Genotypes_only_male_chrX_based_on_allelic_depth.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf 000 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab
+```
+```
+
+~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab 000 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab.stats
+```
+```
+~/2015_SulaRADtag/good_merged_samples/Genotypes_only_male_chrX_based_on_allelic_depth.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf 010 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_diploidfemale.vcf.tab
+```
+```
+~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_diploidfemale.vcf.tab 010 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_diploidfemale.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_diploidfemale.vcf.tab.stats
+```
+```
+~/2015_SulaRADtag/good_merged_samples/Genotypes_only_male_chrX_based_on_allelic_depth.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf 000 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female.vcf.tab
+```
+```
+~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female.vcf.tab 000 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female.vcf.tab.stats
+```
+```
+
+~/2015_SulaRADtag/good_merged_samples/Genotypes_only_male_chrX_based_on_allelic_depth.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf 010 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_diploidfemale.vcf.tab
+```
+```
+~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_diploidfemale.vcf.tab 010 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_diploidfemale.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_diploidfemale.vcf.tab.stats
+```
+```
+~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female.vcf.tab 000 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female.vcf.tab.stats
+```
+```
+~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab 000 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab.stats
+```
+
+
+Below is earlier stuff
+
+
 Nov 27, 2016.  I am working with a vcf that I have already filtered to get rid of repeats and also to remove genotypes with less than 5X coverage using this script 14_Vcf_filter_gnu_xDNA_only.pl.  It is in this directory:
 
 ```
