@@ -127,6 +127,9 @@ Add the baboon seq:
 ```
 
 And then do chrXabbababa
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploid_males_and_female_with_baboon.tab 000 4_5_1_2_3 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploid_males_and_female_with_baboon.tab.jk /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploid_males_and_female_with_baboon.tab.stats
+```
 
 Below is earlier stuff
 
