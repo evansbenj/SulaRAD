@@ -105,6 +105,15 @@ Now to do the test with all het sites removed from the 12X filter:
 ```
 ~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nohets.vcf --variant nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_allhets_are_marked.vcf.gz -select 'vc.isNotFiltered()'
 ```
+do the abbababa test:
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nohets.vcf_haploid_males_and_female.tab 000 3_4_1_2_3 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nohets.vcf_haploid_males_and_female.tab.jk /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nohets.vcf_haploid_males_and_female.tab.stats
+```
+
+Add the baboon seq:
+```
+./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nohets.vcf_haploid_males_and_female.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nohets.vcf_haploid_males_and_female_with_baboon.tab
+```
 
 And then do chrXabbababa
 
