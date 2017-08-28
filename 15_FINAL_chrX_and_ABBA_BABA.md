@@ -48,6 +48,16 @@ to do the abbababa test on this file, which is haploid genotypes, some of which 
 ./Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab 000 4_5_1_2_3 nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab.jk nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab.stats
 ```
 
+Also need to add baboon seqs to the tab files made above like this from within the baboon axt folder:
+
+```
+./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab
+```
+and do ABBABABA test:
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab 000 4_5_1_2_3 nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab.jk nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab.stats
+```
+
 
 To delete sites with male hets use GATK:
 ```
@@ -59,12 +69,13 @@ To delete sites with male hets use GATK:
 ```
 ~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf --variant nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_malehets_are_marked.vcf.gz -select 'vc.isNotFiltered()'
 ```
-
-Also need to add baboon seqs to the tab files made above like this from within the baboon axt folder:
-
+Call by depth:
 ```
-./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab
+./Genotypes_only_male_chrX_based_on_allelic_depth.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf 000 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploid_males_and_female.tab
 ```
+
+
+
 Now to do the test with all het sites removed from the 12X filter:
 
 12X identify and remove all het sites
