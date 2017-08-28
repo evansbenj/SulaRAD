@@ -5,7 +5,6 @@ Aug. 25, 2017.  In general I did a bad job of documenting my work so I have had 
 ~/2015_SulaRADtag/good_merged_samples/Genotypes_only_male_chrX_based_on_allelic_depth.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf 000 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab
 ```
 ```
-
 ~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab 000 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab.stats
 ```
 ```
@@ -32,6 +31,34 @@ Aug. 25, 2017.  In general I did a bad job of documenting my work so I have had 
 ```
 ```
 ~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab 000 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab.stats
+```
+
+
+Aug 28, 2017.  I am also doing the analysis with a 12X coverage cutoff
+
+First generate the vcf file with individual genotypes converted to './.' if the coverage was below 12X (this is hardcoded in the 14_Vcf_filter_gnu_aDNA_only.pl script:
+
+```
+./14_Vcf_filter_gnu_aDNA_only.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf 111 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf.gz
+Creating output file: /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf
+```
+
+
+To delete sites with male hets use GATK:
+```
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf -select 'vc.getGenotype("nemestrina-PM664").isHet() || vc.getGenotype("tonkeana-PM592").isHet()' -o hetsites_12X_nemtonk_chrX.vcf.gz
+```
+```
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_malehets_are_marked.vcf.gz --variant /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf --mask hetsites_12X_nemtonk_chrX.vcf.gz --maskName make_hets --maskExtension 3 
+```
+```
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf --variant nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_malehets_are_marked.vcf.gz -select 'vc.isNotFiltered()'";
+```
+
+Also need to add baboon seqs to the tab files made above like this from within the baboon axt folder:
+
+```
+./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab
 ```
 
 
