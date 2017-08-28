@@ -84,7 +84,10 @@ Call by depth:
 ```
 ./Genotypes_only_male_chrX_based_on_allelic_depth.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf 000 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploid_males_and_female.tab
 ```
-
+and do the abbababa test:
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploid_males_and_female.tab 000 3_4_1_2_3 nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploid_males_and_female.tab.jk nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploid_males_and_female.tab.stats
+```
 
 
 Now to do the test with all het sites removed from the 12X filter:
