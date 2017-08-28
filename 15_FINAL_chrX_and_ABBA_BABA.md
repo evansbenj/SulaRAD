@@ -44,6 +44,17 @@ So add the baboon seqs to the haploid tab files like this:
 ```
 ./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female.vcf.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female_with_baboon.tab
 ```
+And do the abbababa test on each one:
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female_with_baboon.tab 000 4_5_1_2_3 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female_with_baboon.tab.jk /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female_with_baboon.tab.stats
+```
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female_with_baboon.tab 000 4_5_1_2_3 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female_with_baboon.tab.jk /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female_with_baboon.tab.stats
+```
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female_with_baboon.tab  000 4_5_1_2_3 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female_with_baboon.tab.jk /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female_with_baboon.tab.stats
+```
+
 
 Aug 28, 2017.  I am also doing the analysis with a 12X coverage cutoff
 
