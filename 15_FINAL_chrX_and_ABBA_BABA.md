@@ -32,7 +32,18 @@ Aug. 25, 2017.  In general I did a bad job of documenting my work so I have had 
 ```
 ~/2015_SulaRADtag/good_merged_samples/Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab 000 3_4_1_2_3 nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab.jk nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_diploidfemale.vcf.tab.stats
 ```
+Aug 28, 2017. I am also doing the haploid analyses using the baboons as an outgroup.  
 
+So add the baboon seqs to the haploid tab files like this:
+```
+./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female.vcf.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female_with_baboon.tab
+```
+```
+./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female.vcf.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploidmales_and_female_with_baboon.tab
+```
+```
+./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female.vcf.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat.vcf_nohets.vcf._haploidmales_and_female_with_baboon.tab
+```
 
 Aug 28, 2017.  I am also doing the analysis with a 12X coverage cutoff
 
