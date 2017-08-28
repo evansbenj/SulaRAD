@@ -42,6 +42,11 @@ First generate the vcf file with individual genotypes converted to './.' if the 
 ./14_Vcf_filter_gnu_aDNA_only.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf 111 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf.gz
 Creating output file: /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf
 ```
+to do the abbababa test on this file, which is haploid genotypes, some of which were heterozygous diploid genotypes in males:
+
+```
+./Performs_ABBA_BABA_on_populations_onlychrX.pl nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab 000 4_5_1_2_3 nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab.jk nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab.stats
+```
 
 
 To delete sites with male hets use GATK:
