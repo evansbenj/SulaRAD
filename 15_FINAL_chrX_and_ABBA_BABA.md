@@ -57,7 +57,7 @@ To delete sites with male hets use GATK:
 ~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_malehets_are_marked.vcf.gz --variant /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf --mask hetsites_12X_nemtonk_chrX.vcf.gz --maskName make_hets --maskExtension 3 
 ```
 ```
-~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf --variant nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_malehets_are_marked.vcf.gz -select 'vc.isNotFiltered()'";
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf --variant nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_malehets_are_marked.vcf.gz -select 'vc.isNotFiltered()'
 ```
 
 Also need to add baboon seqs to the tab files made above like this from within the baboon axt folder:
@@ -65,7 +65,20 @@ Also need to add baboon seqs to the tab files made above like this from within t
 ```
 ./16_Gets_outgroup_sequence_from_axt_files_NEW2015.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female.tab /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf_haploid_males_and_female_with_baboon.tab
 ```
+Now to do the test with all het sites removed from the 12X filter:
 
+12X identify and remove all het sites
+```
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta --variant /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf -select 'vc.getGenotype("nemestrina-PM664").isHet() || vc.getGenotype("tonkeana-PM592").isHet() || vc.getGenotype("tonkeana-PM592").isHet()' -o allhetsites_12X_nemtonk_chrX.vcf.gz
+```
+```
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T VariantFiltration -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_allhets_are_marked.vcf.gz --variant /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat.vcf --mask allhetsites_12X_nemtonk_chrX.vcf.gz --maskName make_hets --maskExtension 3 
+```
+```
+~/jre1.8.0_111/bin/java -Xmx2g -jar /home/ben/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar -T SelectVariants -R /home/ben/2015_BIO720/rhesus_genome/macaque_masked_chromosomes_ym.fasta -o /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_nohets.vcf --variant nonrecal_12X_filtered_chrX_final.vcf.gz_norepeat_allhets_are_marked.vcf.gz -select 'vc.isNotFiltered()'
+```
+
+And then do chrXabbababa
 
 Below is earlier stuff
 
