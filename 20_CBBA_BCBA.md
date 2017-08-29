@@ -10,6 +10,14 @@ I made two scripts to do this. For haploid chrX files (/Performs_CBBA_BCBA_on_po
 
 `./Performs_CBBA_BCBA_on_populations_onlychrX_haploid_outgroup.pl nonrecal_filtered_chrX_final.vcf.gz_norepeat.vcf.all_with_one_highestdepth_allele.tab 000 3_4_1_2_3 H1nigra_H2tonk_H3nem_chrX_norepeat_CBBA_BCBA_highest.jk H1nigra_H2tonk_H3nem_chrX_norepeat_CBBA_BCBA_highest.stats`
 
+I also did this after excluding male hets and with the baboon outgroup:
+```
+/net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/Performs_CBBA_BCBA_on_populations_onlychrX.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female.vcf.tab 000 3_4_1_2_3 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female.vcf.tab_CBBCBCBA.jk /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female.vcf.tab_CBBCBCBA.stats
+```
+```
+/net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/Performs_CBBA_BCBA_on_populations_onlychrX.pl /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female_with_baboon.tab 000 3_4_1_2_3 /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female_with_baboon.tab.CBBCBCBA.jk /net/infofile4-inside/volume1/scratch/ben/2016_FINAL_Sulawesi_nem_WGS/Project_MEL_11554_B01_CUS_WGS.2016-10-07/nonrecal_5X_filtered_chrX_final.vcf.gz_norepeat_nomalehets.vcf_haploidmales_and_female_with_baboon.tab.CBBCBCBA.stats
+```
+
 and this script:
 
 ```perl
